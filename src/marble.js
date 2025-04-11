@@ -42,7 +42,7 @@ class Marble {
         let angle = this.body.angle;
         push();
         translate(pos.x, pos.y);
-        rotate(-angle);
+        rotate(-angle * 0.8);
         imageMode(CENTER);
         image(this.img, 0, 0, this.r*2, this.r*2);
         pop();

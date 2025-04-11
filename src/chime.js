@@ -5,6 +5,7 @@ class Chime {
         this.r = r;
         this.freq = freq;
         this.lastPlayed = Date.now();
+        this.dampening = 1;
 
         let options = {
             friction: 0,
@@ -46,7 +47,10 @@ class Chime {
             const sample = (i < noiseBurst) ? Math.random() * 2 * 0.2 - 0.2 : 0;
 
             // Apply lowpass by averaging adjacent delay line samples
-            delayBuffer[dbIndex] = sample + 0.997 * (delayBuffer[dbIndex] + delayBuffer[(dbIndex + 1) % delaySamples]) / 2;
+            delayBuffer[dbIndex] = sample + 0.997 * (delayBuffer[dbIndex] + delayBuffer[(dbIndex + this.dampening) % delaySamples]) / 2;
+
+            // 8 bit
+            // delayBuffer[dbIndex] = sample + 0.997 * (delayBuffer[dbIndex] + delayBuffer[(dbIndex) % delaySamples]) / 2; 
             output[i] = delayBuffer[dbIndex];
 
             // Loop delay buffer
