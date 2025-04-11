@@ -63,6 +63,23 @@ function setupUI() {
         // { id: 'stop-sound-btn', text: 'Stop Chimes', handler: stopChimes }
     ];
 
+    const dampeningSlider = document.createElement('input');
+    dampeningSlider.type = 'range';
+    dampeningSlider.id = 'dampening-slider';
+    dampeningSlider.min = '0.5';
+    dampeningSlider.max = '5';
+    dampeningSlider.value = '1';
+    dampeningSlider.step = '0.1';
+
+    dampeningSlider.addEventListener('input', (event) => {
+        const value = parseFloat(event.target.value); // Get the slider value as a number
+        // chime.dampening = value; // Update the variable
+        // console.log(`Dampening set to: ${value}`); // Optional: Log the value for debugging
+        for (const chime of chimes) {
+            chime.dampening = value;
+        }
+    });
+
     buttons.forEach(({ id, text, handler }) => {
         const btn = document.createElement('button');
         btn.id = id;
@@ -73,6 +90,7 @@ function setupUI() {
 
         btn.addEventListener('click', handler);
         controlsContainer.appendChild(btn);
+        controlsContainer.appendChild(dampeningSlider);
     });
 
     body.appendChild(controlsContainer);

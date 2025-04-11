@@ -141,7 +141,11 @@ function mousePressed() {
 
         // Place marbles
         if (mode.marbles) {
-            marbles.push(new Marble(mouseX, mouseY, 30));
+            if (marbles.length >= 10) {
+                return;
+            } else {
+                marbles.push(new Marble(mouseX, mouseY, 30));
+            }
         }
     }
 }
