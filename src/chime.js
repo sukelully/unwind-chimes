@@ -4,6 +4,7 @@ class Chime {
         this.y = y;
         this.r = r;
         this.freq = freq;
+        this.lastPlayed = Date.now();
 
         let options = {
             friction: 0,

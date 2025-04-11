@@ -16,6 +16,8 @@ let dragStart = null;
 // Mode toggles for placing marbles or creating strings
 const mode = { marbles: true, grid: false };
 
+
+
 // Call drawCanvas in setup and on resize
 function setup() {
     setupUI();
@@ -36,6 +38,22 @@ function setup() {
     // Add collision event listener
     Matter.Events.on(engine, 'collisionStart', handleCollision);
     redrawCanvas();   // Resize canvas 
+}
+
+// Main draw loop
+function draw() {
+    clear();
+    background(255);
+    // frameRate(30);
+    Engine.update(engine);
+
+    if (mode.grid) grid.forEach(gridLine => gridLine.draw());
+    // borders.forEach(border => border.draw());
+    chimes.forEach(chime => chime.draw());
+    bassMarble.draw();
+    marbles.forEach(marble => {
+        marble.draw();
+    });
 }
 
 // Handles collisions between marbles and strings
@@ -60,7 +78,12 @@ function handleCollision(event) {
             // Find the corresponding String instance and play sound
             const chimeInstance = chimes.find(chime => chime.body === chimeBody);
             if (chimeInstance) {
-                chimeInstance.play();
+                // Prevent multiple plays if within a certain time
+                const now = Date.now();
+                if (!chimeInstance.lastPlayed || now - chimeInstance.lastPlayed > 50) {
+                    chimeInstance.play();
+                    chimeInstance.lastPlayed = now;
+                }
             }
         }
 
@@ -70,29 +93,33 @@ function handleCollision(event) {
             
             // Switch chime notes and play root note
             if (chimeInstance) {
-                switch (chimeInstance.body.label) {
-                    case 'chime-1':
-                        createChimes(cMaj.first, cMaj.third, cMaj.fifth, cMaj.seventh, cMaj.extended);
-                        chimes[0].play(1/2);
-                        break;
-                    case 'chime-2':
-                        createChimes(dMin.first, dMin.third, dMin.fifth, dMin.seventh, dMin.extended);
-                        chimes[0].play(1/2);
-                        break;
-                    case 'chime-3':
-                        createChimes(fMaj.first, fMaj.third, fMaj.fifth, fMaj.seventh, fMaj.extended);
-                        chimes[0].play(1/2);
-                        break;
-                    case 'chime-4':
-                        createChimes(gMaj.first, gMaj.third, gMaj.fifth, gMaj.seventh, gMaj.extended);
-                        chimes[0].play(1/2);
-                        break;
-                    case 'chime-5':
-                        createChimes(aMin.first, aMin.third, aMin.fifth, aMin.seventh, aMin.extended);
-                        chimes[0].play(1/2);
-                        break;
-                    default:
-                        break;
+                const now = Date.now();
+                if (!chimeInstance.lastPlayed || now - chimeInstance.lastPlayed > 50) {
+                    switch (chimeInstance.body.label) {
+                        case 'chime-1':
+                            createChimes(cMaj.first, cMaj.third, cMaj.fifth, cMaj.seventh, cMaj.extended);
+                            chimes[0].play(1/2);
+                            break;
+                        case 'chime-2':
+                            createChimes(dMin.first, dMin.third, dMin.fifth, dMin.seventh, dMin.extended);
+                            chimes[0].play(1/2);
+                            break;
+                        case 'chime-3':
+                            createChimes(fMaj.first, fMaj.third, fMaj.fifth, fMaj.seventh, fMaj.extended);
+                            chimes[0].play(1/2);
+                            break;
+                        case 'chime-4':
+                            createChimes(gMaj.first, gMaj.third, gMaj.fifth, gMaj.seventh, gMaj.extended);
+                            chimes[0].play(1/2);
+                            break;
+                        case 'chime-5':
+                            createChimes(aMin.first, aMin.third, aMin.fifth, aMin.seventh, aMin.extended);
+                            chimes[0].play(1/2);
+                            break;
+                        default:
+                            break;
+                    }
+                    chimeInstance.lastPlayed = now;
                 }
             }
         }
@@ -124,23 +151,6 @@ function touchStarted() {
     if (mode.marbles) {
         marbles.push(new Marble(mouseX, mouseY, 30));
     }
-}
-
-// Main draw loop
-function draw() {
-    clear();
-    background(255);
-    // frameRate(30);
-    Engine.update(engine);
-
-    if (mode.grid) grid.forEach(gridLine => gridLine.draw());
-    // borders.forEach(border => border.draw());
-    chimes.forEach(chime => chime.draw());
-    bassMarble.draw();
-    marbles.forEach(marble => {
-        marble.draw();
-        // marble.drawMarble();
-    });
 }
 
 function redrawCanvas() {

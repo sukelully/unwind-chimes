@@ -3,6 +3,7 @@ class BassMarble extends Marble {
         super(x, y, r); // Call the parent class constructor
 
         this.body.label = 'bass-marble';
+        this.img = loadImage('img/marble.png');
 
         this.color = 'black';
 

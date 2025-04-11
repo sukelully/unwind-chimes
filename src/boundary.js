@@ -13,6 +13,7 @@ class Boundary {
         this.body = Bodies.rectangle(this.x, this.y, this.w, this.h, options);
         // this.body.collisionFilter = {
         //     category: worldCategory,
+        //     mask: marbleCategory
         // }
         Composite.add(world, this.body);
     }
@@ -24,9 +25,6 @@ class Boundary {
         translate(pos.x, pos.y);
         rotate(angle);
         rectMode(CENTER);
-        strokeWeight(1);
-        noStroke();
-        fill(0);
         rect(0, 0, this.w, this.h);
         pop();
     }
