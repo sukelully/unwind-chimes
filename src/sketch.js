@@ -16,8 +16,6 @@ let dragStart = null;
 // Mode toggles for placing marbles or creating strings
 const mode = { marbles: true, grid: false };
 
-
-
 // Call drawCanvas in setup and on resize
 function setup() {
     setupUI();

@@ -1,17 +1,17 @@
 class Chime {
-    constructor(x, y, r, freq, chime) {
+    constructor(x, y, r, freq, label, dampening = 1) {
         this.x = x;
         this.y = y;
         this.r = r;
         this.freq = freq;
         this.lastPlayed = Date.now();
-        this.dampening = 1;
+        this.dampening = dampening;
 
         let options = {
             friction: 0,
             restitution: 1,
             isStatic: true,
-            label: chime
+            label: label
         }
 
         this.body = Bodies.circle(this.x, this.y, this.r / 2, options);

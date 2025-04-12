@@ -3,6 +3,7 @@ let buttonHighlight = '#252525';
 let buttonHighlightText = 'white';
 let stringPos1, stringPos2;
 let mouseCount = 0;
+const dampeningSlider = document.createElement('input');
 const audioContext = new (window.AudioContext || window.webkitAudioContext)({
     latencyHint: 'interactive',
     sampleRate: 44100,
@@ -63,7 +64,6 @@ function setupUI() {
         // { id: 'stop-sound-btn', text: 'Stop Chimes', handler: stopChimes }
     ];
 
-    const dampeningSlider = document.createElement('input');
     dampeningSlider.type = 'range';
     dampeningSlider.id = 'dampening-slider';
     dampeningSlider.min = '0.5';
@@ -71,14 +71,13 @@ function setupUI() {
     dampeningSlider.value = '1';
     dampeningSlider.step = '0.1';
 
-    dampeningSlider.addEventListener('input', (event) => {
-        const value = parseFloat(event.target.value); // Get the slider value as a number
-        // chime.dampening = value; // Update the variable
-        // console.log(`Dampening set to: ${value}`); // Optional: Log the value for debugging
-        for (const chime of chimes) {
-            chime.dampening = value;
-        }
-    });
+    // dampeningSlider.addEventListener('input', (event) => {
+    //     const value = parseFloat(event.target.value); // Get the slider value as a number
+    //     // console.log(`Dampening set to: ${value}`); // Optional: Log the value for debugging
+    //     // for (const chime of chimes) {
+    //     //     chime.dampening = value;
+    //     // }
+    // });
 
     buttons.forEach(({ id, text, handler }) => {
         const btn = document.createElement('button');
