@@ -6,6 +6,7 @@ class Chime {
         this.freq = freq;
         this.lastPlayed = Date.now();
         this.dampening = dampening;
+        this.img = loadImage('img/chime.png');
 
         let options = {
             friction: 0,
@@ -18,14 +19,23 @@ class Chime {
         Composite.add(world, this.body);
     }
 
+    // draw() {
+    //     let pos = this.body.position;
+    //     push();
+    //     translate(pos.x, pos.y);
+    //     strokeWeight(1);
+    //     stroke(0);
+    //     fill(0);
+    //     ellipse(0, 0, this.r);
+    //     pop();
+    // }
+
     draw() {
         let pos = this.body.position;
         push();
         translate(pos.x, pos.y);
-        strokeWeight(1);
-        stroke(0);
-        fill(0);
-        ellipse(0, 0, this.r);
+        imageMode(CENTER);
+        image(this.img, 0, 0, this.r*2, this.r*2);
         pop();
     }
 
