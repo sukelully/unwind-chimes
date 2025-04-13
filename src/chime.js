@@ -15,7 +15,7 @@ class Chime {
             label: label
         }
 
-        this.body = Bodies.circle(this.x, this.y, this.r / 2, options);
+        this.body = Bodies.circle(this.x, this.y, this.r/2, options);
         Composite.add(world, this.body);
     }
 
@@ -35,7 +35,7 @@ class Chime {
         push();
         translate(pos.x, pos.y);
         imageMode(CENTER);
-        image(this.img, 0, 0, this.r*2, this.r*2);
+        image(this.img, 0, 0, this.r, this.r);
         pop();
     }
 
