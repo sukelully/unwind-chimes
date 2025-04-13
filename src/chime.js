@@ -15,7 +15,7 @@ class Chime {
             label: label
         }
 
-        this.body = Bodies.circle(this.x, this.y, this.r/2, options);
+        this.body = Bodies.circle(this.x, this.y, this.r / 2, options);
         Composite.add(world, this.body);
     }
 
