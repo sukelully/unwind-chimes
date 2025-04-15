@@ -54,8 +54,8 @@ class Chime {
         for (let i = 0; i < bufferSize; i++) {
             const variationInSamples = Math.round((Math.random() * 10 - 5) * audioContext.sampleRate / 1000); // ±5ms in samples
             const noiseBurst = Math.max(0, (audioContext.sampleRate / 100) + variationInSamples); // Ensure non-negative
-            // 0.2 is volume
-            const sample = (i < noiseBurst) ? Math.random() * 2 * 0.2 - 0.2 : 0;
+            // 0.5 is volume
+            const sample = (i < noiseBurst) ? Math.random() * 2 * 0.5 - 0.5 : 0;
 
             // Apply lowpass by averaging adjacent delay line samples
             delayBuffer[dbIndex] = sample + 0.997 * (delayBuffer[dbIndex] + delayBuffer[(dbIndex + this.dampening) % delaySamples]) / 2;
