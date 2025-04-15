@@ -1,3 +1,9 @@
+let chimeImage;
+
+function preload() {
+    chimeImage = loadImage('img/chime.png');
+}
+
 class Chime {
     constructor(x, y, r, freq, label, dampening = 1) {
         this.x = x;
@@ -6,7 +12,7 @@ class Chime {
         this.freq = freq;
         this.lastPlayed = Date.now();
         this.dampening = dampening;
-        this.img = loadImage('img/chime.png');
+        this.img = chimeImage;
 
         let options = {
             friction: 0,
