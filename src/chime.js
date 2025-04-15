@@ -52,7 +52,8 @@ class Chime {
         const output = outputBuffer.getChannelData(0);
 
         for (let i = 0; i < bufferSize; i++) {
-            const noiseBurst = audioContext.sampleRate / 100;
+            const variationInSamples = Math.round((Math.random() * 10 - 5) * audioContext.sampleRate / 1000); // ±5ms in samples
+            const noiseBurst = Math.max(0, (audioContext.sampleRate / 100) + variationInSamples); // Ensure non-negative
             // 0.2 is volume
             const sample = (i < noiseBurst) ? Math.random() * 2 * 0.2 - 0.2 : 0;
 
@@ -68,15 +69,15 @@ class Chime {
                 dbIndex = 0;
             }
         }
-        
+
         // Signal routing
         const source = audioContext.createBufferSource();
         const filter = audioContext.createBiquadFilter();
-        
+
         filter.type = 'lowpass';
         filter.frequency.setValueAtTime(500, audioContext.currentTime);
         source.buffer = outputBuffer;
-        
+
         source.connect(filter);
         filter.connect(audioContext.destination);
 
