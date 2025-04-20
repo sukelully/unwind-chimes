@@ -162,8 +162,6 @@ function touchStarted() {
             }
         }
     }
-
-
 }
 
 function redrawCanvas() {
