@@ -28,6 +28,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div id="info-modal" class="modal">
+        <div class="modal-content">
+            <h2>Welcome to Unwind Chimes</h2>
+            <p>Unwind Chimes is an interactive ambience generator that uses randomness to create evolving, relaxing soundscapes.</p>
+            <ul>
+                <li>Click to place marbles on the canvas.</li>
+                <li>The marbles you place will strike "chimes" and play a sound.</li>
+                <li>The larger, bass marble will play a sound but also change the chord and the notes of the available chimes for regular marbles.</li>
+                <li>Use the controls to clear the marbles or stop the sound.</li>
+            </ul>
+            <button id="close-modal-btn">Got it!</button>
+        </div>
+    </div>
     <script src="src/utils.js"></script>
     <script src="src/sketch.js"></script>
     <script src="src/marble.js"></script>

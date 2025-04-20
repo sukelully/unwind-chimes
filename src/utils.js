@@ -53,6 +53,19 @@ aMin = {
     extended: 987.77
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('info-modal');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+
+    // Show the modal when the page loads
+    modal.classList.add('show');
+
+    // Close the modal when the button is clicked
+    closeModalBtn.addEventListener('click', () => {
+        modal.classList.remove('show');
+    });
+});
+
 // Sets up the UI with buttons for different actions
 function setupUI() {
     const controlsContainer = document.createElement('div');
