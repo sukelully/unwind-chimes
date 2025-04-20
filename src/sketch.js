@@ -7,6 +7,7 @@ const worldCategory = 0x0003;
 
 // DOM and global variables
 const body = document.querySelector('body');
+const marbleLimit = 7;
 let engine, world;
 let marbles = [], borders = [], grid = [], chimes = [];
 let isDragging = false;
@@ -139,7 +140,7 @@ function mousePressed() {
 
         // Place marbles
         if (mode.marbles) {
-            if (marbles.length >= 10) {
+            if (marbles.length >= marbleLimit) {
                 return;
             } else {
                 marbles.push(new Marble(mouseX, mouseY, 30));
@@ -155,7 +156,7 @@ function touchStarted() {
 
         // Place marbles
         if (mode.marbles) {
-            if (marbles.length >= 10) {
+            if (marbles.length >= marbleLimit) {
                 return;
             } else {
                 marbles.push(new Marble(mouseX, mouseY, 30));
