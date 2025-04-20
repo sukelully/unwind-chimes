@@ -149,22 +149,21 @@ function setMode(marblesActive) {
 }
 
 function drawCanvas() {
-    let screenWidth;
-    let screenHeight;
+    const controlsHeight = document.getElementById('controls-container')?.offsetHeight || 0;
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
 
-    if (screen.width > 1600) {
-        screenWidth = screen.height - screen.height / 2;
-        screenHeight = screen.height - screen.height / 2;
-    } else {
-        screenWidth = screen.height - screen.height / 2;
-        screenHeight = screen.height - screen.height / 2;
-    }
-
-    if (screen.width > screen.height) {
+    if (viewportWidth > viewportHeight) {
+        const screenHeight = viewportHeight - controlsHeight;
         createCanvas(screenHeight, screenHeight);
     } else {
         console.log('mobile');
+        const screenWidth = viewportWidth;
+        const screenHeight = viewportHeight - controlsHeight;
+        createCanvas(screenWidth, screenHeight);
     }
+
+    console.log(`Canvas dimensions: ${canvas.width}x${canvas.height}`);
 }
 
 function clearBorders() {

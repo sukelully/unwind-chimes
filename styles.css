@@ -54,8 +54,6 @@ canvas {
     position: static;
     flex-direction: column;
     gap: 1em;
-    /* width: 100vw; */
-    /* height: 100vh; */
   }
 
   #controls-container {
@@ -64,12 +62,8 @@ canvas {
     flex-wrap: wrap;
     justify-content: center;
     gap: 1em;
-    /* border: 2px solid black; */
   }
 
-  canvas {
-    /* padding: 1em; */
-  }
 
   button {
     width: calc(100vw / 3);
