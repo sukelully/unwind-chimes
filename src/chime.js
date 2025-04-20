@@ -32,7 +32,7 @@ class Chime {
     //     strokeWeight(1);
     //     stroke(0);
     //     fill(0);
-    //     ellipse(0, 0, this.r);
+    //     ellipse(0, 0, this.r);x
     //     pop();
     // }
 

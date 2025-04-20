@@ -71,14 +71,6 @@ function setupUI() {
     dampeningSlider.value = '1';
     dampeningSlider.step = '0.1';
 
-    // dampeningSlider.addEventListener('input', (event) => {
-    //     const value = parseFloat(event.target.value); // Get the slider value as a number
-    //     // console.log(`Dampening set to: ${value}`); // Optional: Log the value for debugging
-    //     // for (const chime of chimes) {
-    //     //     chime.dampening = value;
-    //     // }
-    // });
-
     buttons.forEach(({ id, text, handler }) => {
         const btn = document.createElement('button');
         btn.id = id;
@@ -178,8 +170,8 @@ function applyButtonHighlight(button, isActive) {
 }
 
 function drawCanvas() {
-    const screenWidth = screen.width - screen.width / 8;
-    const screenHeight = screen.height - screen.height / 8;
+    const screenWidth = screen.width - screen.width / 3;
+    const screenHeight = screen.height - screen.height / 3;
 
     const controlsContainer = document.getElementById('controls-container');
     const adjustedHeight = Math.floor((screenHeight - controlsContainer.offsetHeight) / 10) * 10;
@@ -189,8 +181,12 @@ function drawCanvas() {
 
     if (isLandscape) {
         createCanvas(isLargeScreen ? screenHeight : screenWidth, isLargeScreen ? screenHeight : adjustedHeight);
+        // createCanvas(screenHeight, screenHeight);
+        // createCanvas(screenHeight, screenHeight);
+        console.log('landscape');
     } else {
         createCanvas(screenWidth, isLargeScreen ? screenWidth : adjustedHeight);
+        console.log('portrait');
     }
 
     const canvasControlsWidth = (body.offsetWidth > body.offsetHeight)
