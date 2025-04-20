@@ -159,7 +159,7 @@ function drawCanvas() {
     } else {
         console.log('mobile');
         const screenWidth = viewportWidth;
-        const screenHeight = viewportHeight - controlsHeight;
+        const screenHeight = viewportHeight - controlsHeight - 50;
         createCanvas(screenWidth, screenHeight);
     }
 
