@@ -116,18 +116,18 @@ function createChimes(first, third, fifth, seventh, extended) {
     clearChimes();
     
     // Mobile mode
-    if (screen.width > 640) {
+    if (screen.width < 738) {
         chimes.push(new Chime(width/2, height/2, width/4, first, 'chime-1'));  // Center
         chimes.push(new Chime(width, 0, width/4, third, 'chime-2'));                // Top right
         chimes.push(new Chime(width, height, width/4, fifth, 'chime-3'));           // Bottom right
         chimes.push(new Chime(0, height, width/4, seventh, 'chime-4'));             // Bottom left
         chimes.push(new Chime(0, 0, width/4, extended, 'chime-5'));                 // Top left
     } else {
-        chimes.push(new Chime(width/2, height/2, 100, first, 'chime-1'));      // Center
-        chimes.push(new Chime(width, 0, 150, third, 'chime-2'));                    // Top right
-        chimes.push(new Chime(width, height, 150, fifth, 'chime-3'));               // Bottom right
-        chimes.push(new Chime(0, height, 150, seventh, 'chime-4'));                 // Bottom left
-        chimes.push(new Chime(0, 0, 150, extended, 'chime-5'));                     // Top left
+        chimes.push(new Chime(width/2, height/2, 75, first, 'chime-1'));      // Center
+        chimes.push(new Chime(width, 0, 100, third, 'chime-2'));                    // Top right
+        chimes.push(new Chime(width, height, 100, fifth, 'chime-3'));               // Bottom right
+        chimes.push(new Chime(0, height, 100, seventh, 'chime-4'));                 // Bottom left
+        chimes.push(new Chime(0, 0, 100, extended, 'chime-5'));                     // Top left
     }
 }
 

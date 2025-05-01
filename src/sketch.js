@@ -52,7 +52,6 @@ function draw() {
     bassMarble.draw();
     marbles.forEach(marble => {
         marble.draw();
-        marbleIsWithinCanvas(marble);
     });
 }
 
@@ -124,12 +123,6 @@ function handleCollision(event) {
             }
         }
     });
-}
-
-function applySpin(body) {
-    // Random spin direction and magnitude
-    const spin = (Math.random() - 0.5) * 0.2; // tweak the value as needed
-    Body.setAngularVelocity(body, spin);
 }
 
 function mousePressed() {
