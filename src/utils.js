@@ -170,13 +170,10 @@ function drawCanvas() {
         const screenHeight = viewportHeight - controlsHeight;
         createCanvas(screenHeight, screenHeight);
     } else {
-        console.log('mobile');
         const screenWidth = viewportWidth;
         const screenHeight = viewportHeight - controlsHeight - 50;
         createCanvas(screenWidth, screenHeight);
     }
-
-    console.log(`Canvas dimensions: ${canvas.width}x${canvas.height}`);
 }
 
 function clearBorders() {

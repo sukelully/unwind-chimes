@@ -52,6 +52,7 @@ function draw() {
     bassMarble.draw();
     marbles.forEach(marble => {
         marble.draw();
+        marbleIsWithinCanvas(marble);
     });
 }
 
