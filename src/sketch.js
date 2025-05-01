@@ -133,7 +133,7 @@ function applySpin(body) {
 
 function mousePressed() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        touchStarted();
+        return;
     } else {
         // Limit mouse presses to canvas area
         if (mouseX < 0 || mouseY < 0 || mouseX >= width || mouseY >= height) return;
@@ -152,13 +152,13 @@ function mousePressed() {
 function touchStarted() {
     // Place marbles
     if (mode.marbles) {
-        marbles.push(new Marble(mouseX, mouseY, 30));
 
         // Place marbles
         if (mode.marbles) {
             if (marbles.length >= marbleLimit) {
                 return;
             } else {
+                console.log('test');
                 marbles.push(new Marble(mouseX, mouseY, 30));
             }
         }

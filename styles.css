@@ -111,6 +111,10 @@ canvas {
     gap: 1em;
   }
 
+  canvas {
+    border-radius: 50px;
+  }
+
 
   button {
     width: calc(100vw / 3);
