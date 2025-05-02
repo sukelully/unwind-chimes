@@ -4,10 +4,11 @@ class BassMarble extends Marble {
 
         this.body.label = 'bass-marble';
         this.img = loadImage('img/bassMarble.png');
+        this.speed = 2.5;
 
         this.color = 'black';
 
-        const randomVelocity = Marble.getRandomVelocity();
+        const randomVelocity = Marble.getRandomVelocity(this.speed);
         Body.setVelocity(this.body, randomVelocity);
 
         this.body.collisionFilter = {

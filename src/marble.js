@@ -5,6 +5,7 @@ class Marble {
         this.r = r;
         this.color = Marble.getRandomColor();
         this.img = loadImage('img/marble.png');
+        this.speed = 2.5;
 
         let options = {
             friction: 0,
@@ -19,7 +20,7 @@ class Marble {
         }
         Composite.add(world, this.body);
 
-        const randomVelocity = Marble.getRandomVelocity();
+        const randomVelocity = Marble.getRandomVelocity(this.speed);
         Body.setVelocity(this.body, randomVelocity);
     }
 
@@ -29,8 +30,8 @@ class Marble {
         return colors[Math.floor(Math.random() * colors.length)];
     }
 
-    static getRandomVelocity() {
-        const maxSpeed = 5;
+    static getRandomVelocity(speed) {
+        const maxSpeed = speed;
         const vx = (Math.random() - 0.5) * 2 * maxSpeed;
         const vy = (Math.random() - 0.5) * 2 * maxSpeed;
         return { x: vx, y: vy };
@@ -48,9 +49,13 @@ class Marble {
         pop();
         
         // Prevent marbles from losing enough speed to stop
-        if (Body.getSpeed(this.body) < 5) {
-            Body.setSpeed(this.body, 5);
+        if (Body.getSpeed(this.body) < this.speed) {
+            Body.setSpeed(this.body, this.speed);
         }
+    }
+
+    setSpeed(speed) {
+        this.speed = speed;
     }
     
 

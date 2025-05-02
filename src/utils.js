@@ -3,7 +3,7 @@ let buttonHighlight = '#252525';
 let buttonHighlightText = 'white';
 let stringPos1, stringPos2;
 let mouseCount = 0;
-const dampeningSlider = document.createElement('input');
+const speedSlider = document.createElement('input');
 const audioContext = new (window.AudioContext || window.webkitAudioContext)({
     latencyHint: 'interactive',
     sampleRate: 44100,
@@ -76,12 +76,12 @@ function setupUI() {
         // { id: 'stop-sound-btn', text: 'Stop Chimes', handler: stopChimes }
     ];
 
-    dampeningSlider.type = 'range';
-    dampeningSlider.id = 'dampening-slider';
-    dampeningSlider.min = '0.5';
-    dampeningSlider.max = '5';
-    dampeningSlider.value = '1';
-    dampeningSlider.step = '0.1';
+    speedSlider.type = 'range';
+    speedSlider.id = 'dampening-slider';
+    speedSlider.min = '0.5';
+    speedSlider.max = '5';
+    speedSlider.value = '2.5'
+    speedSlider.step = '0.1';
 
     buttons.forEach(({ id, text, handler }) => {
         const btn = document.createElement('button');
@@ -90,7 +90,7 @@ function setupUI() {
 
         btn.addEventListener('click', handler);
         controlsContainer.appendChild(btn);
-        // controlsContainer.appendChild(dampeningSlider);
+        // controlsContainer.appendChild(speedSlider);
     });
 
     body.appendChild(controlsContainer);
@@ -115,8 +115,9 @@ function createLineBetweenPoints(arr, pos1, pos2, thickness = 5) {
 function createChimes(first, third, fifth, seventh, extended) {
     clearChimes();
     
+    // NEEDS FIXING
     // Mobile mode
-    if (screen.width < 738) {
+    if (screen.width > 640) {
         chimes.push(new Chime(width/2, height/2, width/4, first, 'chime-1'));  // Center
         chimes.push(new Chime(width, 0, width/4, third, 'chime-2'));                // Top right
         chimes.push(new Chime(width, height, width/4, fifth, 'chime-3'));           // Bottom right
