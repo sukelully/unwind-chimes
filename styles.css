@@ -70,10 +70,14 @@ canvas {
   margin-bottom: 1em;
 }
 
+.modal-content p {
+  text-align: left;
+}
+
 .modal-content ul {
   text-align: left;
   margin: 1em 0;
-  padding-left: 1.5em;
+  padding-left: 1em;
 }
 
 .modal-content button {

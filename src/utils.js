@@ -90,7 +90,7 @@ function setupUI() {
 
         btn.addEventListener('click', handler);
         controlsContainer.appendChild(btn);
-        // controlsContainer.appendChild(speedSlider);
+        controlsContainer.appendChild(speedSlider);
     });
 
     body.appendChild(controlsContainer);

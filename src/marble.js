@@ -1,11 +1,11 @@
 class Marble {
-    constructor(x, y, r) {
+    constructor(x, y, r, speed) {
         this.x = x;
         this.y = y;
         this.r = r;
+        this.speed = speed;
         this.color = Marble.getRandomColor();
         this.img = loadImage('img/marble.png');
-        this.speed = 2.5;
 
         let options = {
             friction: 0,
