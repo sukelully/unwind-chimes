@@ -118,6 +118,7 @@ function handleCollision(event) {
 
 function mousePressed() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+
         return;
     } else {
         // Limit mouse presses to canvas area
@@ -134,6 +135,17 @@ function mousePressed() {
     }
 }
 
+// Spawn marble at mouse coordinates with different sizes depending on mobile/desktop mode
+function createMarble() {
+    // Desktop mode
+    if (width > 640) {
+        marbles.push(new Marble(mouseX, mouseY, 30, 2.5));
+    } else {
+        marbles.push(new Marble(mouseX, mouseY, 15, 2.5));
+    }
+}
+
+// Create marble for mobile mode
 function touchStarted() {
     // Place marbles
     if (mode.marbles) {
@@ -143,7 +155,7 @@ function touchStarted() {
             if (marbles.length >= marbleLimit) {
                 return;
             } else {
-                marbles.push(new Marble(mouseX, mouseY, 30, 2.5));
+                createMarble();
             }
         }
     }
@@ -154,7 +166,7 @@ function redrawCanvas() {
     if (width > 640) {
         bassMarble = new BassMarble(width / 2, height / 2 + 200, 50, 2.5);
     } else {
-        bassMarble = new BassMarble(width / 2, height / 2 + 200, 30, 2.5);
+        bassMarble = new BassMarble(width / 2, height / 2 + 200, 25, 2.5);
     }
     clearBorders();
     clearChimes();
