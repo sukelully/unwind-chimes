@@ -24,7 +24,7 @@ cMaj = {
 dMin = {
     first: 293.66,
     third: 349.23,
-    fifth:  440,
+    fifth: 440,
     seventh: 523.25,
     extended: 659.25
 }
@@ -114,17 +114,17 @@ function createLineBetweenPoints(arr, pos1, pos2, thickness = 5) {
 
 function createChimes(first, third, fifth, seventh, extended) {
     clearChimes();
-    
+
     // NEEDS FIXING
     // Mobile mode
     if (screen.width > 640) {
-        chimes.push(new Chime(width/2, height/2, width/4, first, 'chime-1'));  // Center
-        chimes.push(new Chime(width, 0, width/4, third, 'chime-2'));                // Top right
-        chimes.push(new Chime(width, height, width/4, fifth, 'chime-3'));           // Bottom right
-        chimes.push(new Chime(0, height, width/4, seventh, 'chime-4'));             // Bottom left
-        chimes.push(new Chime(0, 0, width/4, extended, 'chime-5'));                 // Top left
+        chimes.push(new Chime(width / 2, height / 2, width / 4, first, 'chime-1'));  // Center
+        chimes.push(new Chime(width, 0, width / 4, third, 'chime-2'));                // Top right
+        chimes.push(new Chime(width, height, width / 4, fifth, 'chime-3'));           // Bottom right
+        chimes.push(new Chime(0, height, width / 4, seventh, 'chime-4'));             // Bottom left
+        chimes.push(new Chime(0, 0, width / 4, extended, 'chime-5'));                 // Top left
     } else {
-        chimes.push(new Chime(width/2, height/2, 75, first, 'chime-1'));      // Center
+        chimes.push(new Chime(width / 2, height / 2, 75, first, 'chime-1'));      // Center
         chimes.push(new Chime(width, 0, 100, third, 'chime-2'));                    // Top right
         chimes.push(new Chime(width, height, 100, fifth, 'chime-3'));               // Bottom right
         chimes.push(new Chime(0, height, 100, seventh, 'chime-4'));                 // Bottom left
@@ -191,3 +191,12 @@ function clearMarbles() {
     marbles.forEach(marble => marble.remove());
     marbles = [];
 }
+
+function setMarbleSpeed(speed) {
+    marbles.forEach(marble => {
+        marble.setSpeed(speed);
+    });
+    bassMarble.setSpeed(speed);
+}
+
+speedSlider.addEventListener('input', () => setMarbleSpeed(speedSlider.value));

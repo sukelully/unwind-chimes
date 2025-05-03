@@ -58,7 +58,6 @@ class Marble {
         this.speed = speed;
     }
     
-
     // Remove marble from world
     remove() {
         Composite.remove(world, this.body);
