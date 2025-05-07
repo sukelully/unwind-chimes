@@ -120,70 +120,8 @@ function detectBassMarbleCollision() {
     });
 }
 
-// Handles collisions between marbles and strings
-// function handleCollision(event) {
-//     const pairs = event.pairs;
-
-//     pairs.forEach(pair => {
-//         const { bodyA, bodyB } = pair;
-
-//         // Check if one body is a marble and the other is a string
-//         const isMarbleAndChime =
-//             (bodyA.label === 'marble' && bodyB.label.startsWith('chime')) ||
-//             (bodyA.label.startsWith('chime') && bodyB.label === 'marble');
-
-//         const isBassMarbleAndChime =
-//             (bodyA.label === 'bass-marble' && bodyB.label.startsWith('chime')) ||
-//             (bodyA.label.startsWith('chime') && bodyB.label === 'bass-marble');
-
-//         if (isMarbleAndChime) {
-//             const chimeBody = bodyA.label.startsWith('chime') ? bodyA : bodyB;
-
-//             // Find the corresponding String instance and play sound
-//             const chimeInstance = chimes.find(chime => chime.body === chimeBody);
-//             if (chimeInstance) {
-//                 chimeInstance.play();
-//             }
-//         }
-
-//         if (isBassMarbleAndChime) {
-//             const chimeBody = bodyA.label.startsWith('chime') ? bodyA : bodyB;
-//             const chimeInstance = chimes.find(chime => chime.body === chimeBody);
-
-//             // Switch chime notes and play root note
-//             if (chimeInstance) {
-//                 switch (chimeInstance.body.label) {
-//                     case 'chime-1':
-//                         createChimes(cMaj.first, cMaj.third, cMaj.fifth, cMaj.seventh, cMaj.extended);
-//                         chimes[0].play(1 / 2);
-//                         break;
-//                     case 'chime-2':
-//                         createChimes(dMin.first, dMin.third, dMin.fifth, dMin.seventh, dMin.extended);
-//                         chimes[0].play(1 / 2);
-//                         break;
-//                     case 'chime-3':
-//                         createChimes(fMaj.first, fMaj.third, fMaj.fifth, fMaj.seventh, fMaj.extended);
-//                         chimes[0].play(1 / 2);
-//                         break;
-//                     case 'chime-4':
-//                         createChimes(gMaj.first, gMaj.third, gMaj.fifth, gMaj.seventh, gMaj.extended);
-//                         chimes[0].play(1 / 2);
-//                         break;
-//                     case 'chime-5':
-//                         createChimes(aMin.first, aMin.third, aMin.fifth, aMin.seventh, aMin.extended);
-//                         chimes[0].play(1 / 2);
-//                         break;
-//                     default:
-//                         break;
-//                 }
-//             }
-//         }
-//     });
-// }
-
 function mousePressed() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-
         return;
     } else {
         // Limit mouse presses to canvas area
@@ -194,7 +132,7 @@ function mousePressed() {
             if (marbles.length >= marbleLimit) {
                 return;
             } else {
-                marbles.push(new Marble(mouseX, mouseY, 30, 2.5));
+                marbles.push(new Marble(mouseX, mouseY, 30, speedSlider.value));
             }
         }
     }
@@ -204,9 +142,9 @@ function mousePressed() {
 function createMarble() {
     // Desktop mode
     if (width > 640) {
-        marbles.push(new Marble(mouseX, mouseY, 30, 2.5));
+        marbles.push(new Marble(mouseX, mouseY, 30, speedSlider.value));
     } else {
-        marbles.push(new Marble(mouseX, mouseY, 15, 2.5));
+        marbles.push(new Marble(mouseX, mouseY, 15, speedSlider.value));
     }
 }
 
