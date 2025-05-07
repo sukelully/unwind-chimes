@@ -13,7 +13,7 @@ class Chime {
         this.lastPlayed = Date.now();
         this.dampening = dampening;
         this.img = chimeImage;
-        this.bufferCache = new Map(); // Cache for generated audio buffers
+        this.bufferCache = new Map();
 
         const options = {
             friction: 0,
@@ -35,6 +35,7 @@ class Chime {
         pop();
     }
 
+    // Generates a buffer for the required pitch and stores it for future use
     generateBuffer(octave = 1) {
         const cacheKey = `${this.freq}_${octave}`;
         if (this.bufferCache.has(cacheKey)) {
@@ -66,6 +67,7 @@ class Chime {
         return outputBuffer;
     }
 
+    // Plays a note at the set frequency
     play(octave = 1) {
         const buffer = this.generateBuffer(octave);
 
@@ -87,7 +89,7 @@ class Chime {
 
     setFreq(freq) {
         this.freq = freq;
-        this.bufferCache.clear(); // Clear cache since frequency has changed
+        this.bufferCache.clear();
     }
 
     remove() {

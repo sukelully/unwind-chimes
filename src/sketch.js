@@ -8,6 +8,7 @@ const worldCategory = 0x0003;
 // DOM and global variables
 const body = document.querySelector('body');
 const marbleLimit = 7;
+const marbleCollisionTimes = new Map();
 let engine, world;
 let marbles = [], borders = [], grid = [], chimes = [];
 let isDragging = false;
@@ -63,15 +64,18 @@ function draw() {
 function detectMarbleCollision(marble) {
     const now = Date.now();
 
-    // Prevent excess collisions
-    if (now - lastMarbleCollision < 500) {
+    // Get the last collision time for this specific marble
+    const lastCollisionTime = marbleCollisionTimes.get(marble) || 0;
+
+    // Prevent excess collisions for this marble
+    if (now - lastCollisionTime < 500) {
         return;
     }
 
     chimes.forEach(chime => {
         if (Matter.Collision.collides(marble.body, chime.body)) {
-            console.log(`${marble.body.label} collided with ${chime.body.label}`);
-            lastMarbleCollision = now;
+            chime.play();
+            marbleCollisionTimes.set(marble, now);
         }
     });
 }
@@ -87,7 +91,6 @@ function detectBassMarbleCollision() {
 
     chimes.forEach(chime => {
         if (Matter.Collision.collides(bassMarble.body, chime.body)) {
-            // console.log(`${bassMarble.body.label} collided with ${chime.body.label}`);
             chime.play(1/2);
             lastBassMarbleCollision = now;
         }
