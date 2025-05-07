@@ -64,7 +64,7 @@ function detectMarbleCollision(marble) {
     const now = Date.now();
 
     // Prevent excess collisions
-    if (now - lastMarbleCollision < 100) {
+    if (now - lastMarbleCollision < 500) {
         return;
     }
 
@@ -81,13 +81,14 @@ function detectBassMarbleCollision() {
     const now = Date.now();
 
     // Prevent excess collisions
-    if (now - lastBassMarbleCollision < 100) {
+    if (now - lastBassMarbleCollision < 500) {
         return;
     }
 
     chimes.forEach(chime => {
         if (Matter.Collision.collides(bassMarble.body, chime.body)) {
-            console.log(`${bassMarble.body.label} collided with ${chime.body.label}`);
+            // console.log(`${bassMarble.body.label} collided with ${chime.body.label}`);
+            chime.play(1/2);
             lastBassMarbleCollision = now;
         }
     });
