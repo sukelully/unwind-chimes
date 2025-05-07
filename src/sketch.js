@@ -12,6 +12,8 @@ let engine, world;
 let marbles = [], borders = [], grid = [], chimes = [];
 let isDragging = false;
 let bassMarble;
+let lastBassMarbleCollision = 0;
+let lastMarbleCollision = 0;
 let dragStart = null;
 
 // Mode toggles for placing marbles or creating strings
@@ -57,20 +59,38 @@ function draw() {
     });
 }
 
+// Detects collisions between a given marble and any chime
 function detectMarbleCollision(marble) {
+    const now = Date.now();
+
+    // Prevent excess collisions
+    if (now - lastMarbleCollision < 100) {
+        return;
+    }
+
     chimes.forEach(chime => {
         if (Matter.Collision.collides(marble.body, chime.body)) {
             console.log(`${marble.body.label} collided with ${chime.body.label}`);
+            lastMarbleCollision = now;
         }
-    })
+    });
 }
 
+// Detects collisions between the bass marble and any chime
 function detectBassMarbleCollision() {
+    const now = Date.now();
+
+    // Prevent excess collisions
+    if (now - lastBassMarbleCollision < 100) {
+        return;
+    }
+
     chimes.forEach(chime => {
         if (Matter.Collision.collides(bassMarble.body, chime.body)) {
             console.log(`${bassMarble.body.label} collided with ${chime.body.label}`);
+            lastBassMarbleCollision = now;
         }
-    })
+    });
 }
 
 // Handles collisions between marbles and strings
