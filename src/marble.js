@@ -48,8 +48,8 @@ class Marble {
         image(this.img, 0, 0, this.r*2, this.r*2);
         pop();
         
-        // Prevent marbles from losing enough speed to stop
-        if (Body.getSpeed(this.body) < this.speed) {
+        // Ensure marble speed is limited to set speed
+        if (Body.getSpeed(this.body) !== this.speed) {
             Body.setSpeed(this.body, this.speed);
         }
     }

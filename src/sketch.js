@@ -91,8 +91,31 @@ function detectBassMarbleCollision() {
 
     chimes.forEach(chime => {
         if (Matter.Collision.collides(bassMarble.body, chime.body)) {
-            chime.play(1/2);
             lastBassMarbleCollision = now;
+            switch(chime.body.label) {
+                case 'chime-1':
+                    changeChimesFreq(cMaj.first, cMaj.third, cMaj.fifth, cMaj.seventh, cMaj.extended);
+                    chime.play(1/2);
+                    break;
+                case 'chime-2':
+                    changeChimesFreq(dMin.first, dMin.third, dMin.fifth, dMin.seventh, dMin.extended);
+                    chime.play(1/2);
+                    break;
+                case 'chime-3':
+                    changeChimesFreq(fMaj.first, fMaj.third, fMaj.fifth, fMaj.seventh, fMaj.extended);
+                    chime.play(1/2);
+                    break;
+                case 'chime-4':
+                    changeChimesFreq(gMaj.first, gMaj.third, gMaj.fifth, gMaj.seventh, gMaj.extended);
+                    chime.play(1/2);
+                    break;
+                case 'chime-5':
+                    changeChimesFreq(aMin.first, aMin.third, aMin.fifth, aMin.seventh, aMin.extended);
+                    chime.play(1/2);
+                    break;
+                default:
+                    break;
+            }
         }
     });
 }

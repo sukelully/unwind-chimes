@@ -132,6 +132,14 @@ function createChimes(first, third, fifth, seventh, extended) {
     }
 }
 
+function changeChimesFreq(first, third, fifth, seventh, extended) {
+    chimes[0].setFreq(first);
+    chimes[1].setFreq(third);
+    chimes[2].setFreq(fifth);
+    chimes[3].setFreq(seventh);
+    chimes[4].setFreq(extended);
+}
+
 // Generates borders around the canvas
 function createBorders() {
     const thickness = 50;
