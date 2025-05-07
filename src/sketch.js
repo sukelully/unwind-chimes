@@ -35,7 +35,7 @@ function setup() {
     bassMarble = new BassMarble(width / 2, height / 2 + 200, 50);
 
     // Add collision event listener
-    Matter.Events.on(engine, 'collisionStart', handleCollision);
+    // Matter.Events.on(engine, 'collisionStart', handleCollision);
     redrawCanvas();   // Resize canvas 
 }
 
@@ -45,76 +45,94 @@ function draw() {
     background(255);
     // frameRate(30);
     Engine.update(engine);
-
-    if (mode.grid) grid.forEach(gridLine => gridLine.draw());
-    // borders.forEach(border => border.draw());
+    // if (Matter.Collision.collides(bassMarble.body, chimes[0].body)) {
+    //     console.log('collision');
+    // }
+    detectBassMarbleCollision();
     chimes.forEach(chime => chime.draw());
     bassMarble.draw();
     marbles.forEach(marble => {
         marble.draw();
+        detectMarbleCollision(marble);
     });
+}
+
+function detectMarbleCollision(marble) {
+    chimes.forEach(chime => {
+        if (Matter.Collision.collides(marble.body, chime.body)) {
+            console.log(`${marble.body.label} collided with ${chime.body.label}`);
+        }
+    })
+}
+
+function detectBassMarbleCollision() {
+    chimes.forEach(chime => {
+        if (Matter.Collision.collides(bassMarble.body, chime.body)) {
+            console.log(`${bassMarble.body.label} collided with ${chime.body.label}`);
+        }
+    })
 }
 
 // Handles collisions between marbles and strings
-function handleCollision(event) {
-    const pairs = event.pairs;
+// function handleCollision(event) {
+//     const pairs = event.pairs;
 
-    pairs.forEach(pair => {
-        const { bodyA, bodyB } = pair;
+//     pairs.forEach(pair => {
+//         const { bodyA, bodyB } = pair;
 
-        // Check if one body is a marble and the other is a string
-        const isMarbleAndChime =
-            (bodyA.label === 'marble' && bodyB.label.startsWith('chime')) ||
-            (bodyA.label.startsWith('chime') && bodyB.label === 'marble');
+//         // Check if one body is a marble and the other is a string
+//         const isMarbleAndChime =
+//             (bodyA.label === 'marble' && bodyB.label.startsWith('chime')) ||
+//             (bodyA.label.startsWith('chime') && bodyB.label === 'marble');
 
-        const isBassMarbleAndChime =
-            (bodyA.label === 'bass-marble' && bodyB.label.startsWith('chime')) ||
-            (bodyA.label.startsWith('chime') && bodyB.label === 'bass-marble');
+//         const isBassMarbleAndChime =
+//             (bodyA.label === 'bass-marble' && bodyB.label.startsWith('chime')) ||
+//             (bodyA.label.startsWith('chime') && bodyB.label === 'bass-marble');
 
-        if (isMarbleAndChime) {
-            const chimeBody = bodyA.label.startsWith('chime') ? bodyA : bodyB;
+//         if (isMarbleAndChime) {
+//             const chimeBody = bodyA.label.startsWith('chime') ? bodyA : bodyB;
 
-            // Find the corresponding String instance and play sound
-            const chimeInstance = chimes.find(chime => chime.body === chimeBody);
-            if (chimeInstance) {
-                chimeInstance.play();
-            }
-        }
+//             // Find the corresponding String instance and play sound
+//             const chimeInstance = chimes.find(chime => chime.body === chimeBody);
+//             if (chimeInstance) {
+//                 chimeInstance.play();
+//             }
+//         }
 
-        if (isBassMarbleAndChime) {
-            const chimeBody = bodyA.label.startsWith('chime') ? bodyA : bodyB;
-            const chimeInstance = chimes.find(chime => chime.body === chimeBody);
+//         if (isBassMarbleAndChime) {
+//             const chimeBody = bodyA.label.startsWith('chime') ? bodyA : bodyB;
+//             const chimeInstance = chimes.find(chime => chime.body === chimeBody);
 
-            // Switch chime notes and play root note
-            if (chimeInstance) {
-                switch (chimeInstance.body.label) {
-                    case 'chime-1':
-                        createChimes(cMaj.first, cMaj.third, cMaj.fifth, cMaj.seventh, cMaj.extended);
-                        chimes[0].play(1 / 2);
-                        break;
-                    case 'chime-2':
-                        createChimes(dMin.first, dMin.third, dMin.fifth, dMin.seventh, dMin.extended);
-                        chimes[0].play(1 / 2);
-                        break;
-                    case 'chime-3':
-                        createChimes(fMaj.first, fMaj.third, fMaj.fifth, fMaj.seventh, fMaj.extended);
-                        chimes[0].play(1 / 2);
-                        break;
-                    case 'chime-4':
-                        createChimes(gMaj.first, gMaj.third, gMaj.fifth, gMaj.seventh, gMaj.extended);
-                        chimes[0].play(1 / 2);
-                        break;
-                    case 'chime-5':
-                        createChimes(aMin.first, aMin.third, aMin.fifth, aMin.seventh, aMin.extended);
-                        chimes[0].play(1 / 2);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-    });
-}
+//             // Switch chime notes and play root note
+//             if (chimeInstance) {
+//                 switch (chimeInstance.body.label) {
+//                     case 'chime-1':
+//                         createChimes(cMaj.first, cMaj.third, cMaj.fifth, cMaj.seventh, cMaj.extended);
+//                         chimes[0].play(1 / 2);
+//                         break;
+//                     case 'chime-2':
+//                         createChimes(dMin.first, dMin.third, dMin.fifth, dMin.seventh, dMin.extended);
+//                         chimes[0].play(1 / 2);
+//                         break;
+//                     case 'chime-3':
+//                         createChimes(fMaj.first, fMaj.third, fMaj.fifth, fMaj.seventh, fMaj.extended);
+//                         chimes[0].play(1 / 2);
+//                         break;
+//                     case 'chime-4':
+//                         createChimes(gMaj.first, gMaj.third, gMaj.fifth, gMaj.seventh, gMaj.extended);
+//                         chimes[0].play(1 / 2);
+//                         break;
+//                     case 'chime-5':
+//                         createChimes(aMin.first, aMin.third, aMin.fifth, aMin.seventh, aMin.extended);
+//                         chimes[0].play(1 / 2);
+//                         break;
+//                     default:
+//                         break;
+//                 }
+//             }
+//         }
+//     });
+// }
 
 function mousePressed() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
