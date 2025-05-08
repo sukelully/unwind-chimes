@@ -51,12 +51,12 @@ function draw() {
     // if (Matter.Collision.collides(bassMarble.body, chimes[0].body)) {
     //     console.log('collision');
     // }
-    detectBassMarbleCollision();
     chimes.forEach(chime => chime.draw());
+    detectBassMarbleCollision();
     bassMarble.draw();
     marbles.forEach(marble => {
-        marble.draw();
         detectMarbleCollision(marble);
+        marble.draw();
     });
 }
 
