@@ -10,47 +10,44 @@ const body = document.querySelector('body');
 const marbleLimit = 7;
 const marbleCollisionTimes = new Map();
 let engine, world;
-let marbles = [], borders = [], grid = [], chimes = [];
+let marbles = [], borders = [], chimes = [];
 let isDragging = false;
 let bassMarble;
 let lastBassMarbleCollision = 0;
-let lastMarbleCollision = 0;
 let dragStart = null;
 
 // Mode toggles for placing marbles or creating strings
-const mode = { marbles: true};
+const mode = { marbles: true };
 
-// Call drawCanvas in setup and on resize
+// Chord mapping
+const chordMap = {
+    'chime-1': cMaj,
+    'chime-2': dMin,
+    'chime-3': fMaj,
+    'chime-4': gMaj,
+    'chime-5': aMin,
+};
+
 function setup() {
     setupUI();
     drawCanvas();
 
-    // Initialize Matter.js engine and world
     engine = Engine.create();
-    engine.gravity.y = 0
+    engine.gravity.y = 0;
     world = engine.world;
 
-    // Generate borders and add initial objects
     createBorders();
     createChimes();
 
-    // Create bass marble
     bassMarble = new BassMarble(width / 2, height / 2 + 200, 50);
-
-    // Add collision event listener
-    // Matter.Events.on(engine, 'collisionStart', handleCollision);
-    redrawCanvas();   // Resize canvas 
+    redrawCanvas();
 }
 
-// Main draw loop
 function draw() {
     clear();
     background(255);
-    // frameRate(30);
     Engine.update(engine);
-    // if (Matter.Collision.collides(bassMarble.body, chimes[0].body)) {
-    //     console.log('collision');
-    // }
+
     chimes.forEach(chime => chime.draw());
     detectBassMarbleCollision();
     bassMarble.draw();
@@ -60,117 +57,69 @@ function draw() {
     });
 }
 
-// Detects collisions between a given marble and any chime
-function detectMarbleCollision(marble) {
+function checkAndPlayChimeCollision(body, lastCollisionTimeRef, cooldown = 500, isBass = false) {
     const now = Date.now();
-
-    // Get the last collision time for this specific marble
-    const lastCollisionTime = marbleCollisionTimes.get(marble) || 0;
-
-    // Prevent excess collisions for this marble
-    if (now - lastCollisionTime < 500) {
-        return;
-    }
+    if (now - lastCollisionTimeRef.value < cooldown) return;
 
     chimes.forEach(chime => {
-        if (Matter.Collision.collides(marble.body, chime.body)) {
-            chime.play();
-            marbleCollisionTimes.set(marble, now);
+        if (Matter.Collision.collides(body, chime.body)) {
+            lastCollisionTimeRef.value = now;
+            if (isBass) {
+                handleChordChange(chime);
+                chime.play(1 / 2);
+            } else {
+                chime.play();
+            }
         }
     });
 }
 
-// Detects collisions between the bass marble and any chime
-function detectBassMarbleCollision() {
-    const now = Date.now();
-
-    // Prevent excess collisions
-    if (now - lastBassMarbleCollision < 500) {
-        return;
-    }
-
-    chimes.forEach(chime => {
-        if (Matter.Collision.collides(bassMarble.body, chime.body)) {
-            lastBassMarbleCollision = now;
-            switch(chime.body.label) {
-                case 'chime-1':
-                    changeChimesFreq(cMaj.first, cMaj.third, cMaj.fifth, cMaj.seventh, cMaj.extended);
-                    chime.play(1/2);
-                    break;
-                case 'chime-2':
-                    changeChimesFreq(dMin.first, dMin.third, dMin.fifth, dMin.seventh, dMin.extended);
-                    chime.play(1/2);
-                    break;
-                case 'chime-3':
-                    changeChimesFreq(fMaj.first, fMaj.third, fMaj.fifth, fMaj.seventh, fMaj.extended);
-                    chime.play(1/2);
-                    break;
-                case 'chime-4':
-                    changeChimesFreq(gMaj.first, gMaj.third, gMaj.fifth, gMaj.seventh, gMaj.extended);
-                    chime.play(1/2);
-                    break;
-                case 'chime-5':
-                    changeChimesFreq(aMin.first, aMin.third, aMin.fifth, aMin.seventh, aMin.extended);
-                    chime.play(1/2);
-                    break;
-                default:
-                    break;
-            }
-        }
+function detectMarbleCollision(marble) {
+    checkAndPlayChimeCollision(marble.body, {
+        value: marbleCollisionTimes.get(marble) || 0,
+        set value(val) { marbleCollisionTimes.set(marble, val); }
     });
+}
+
+function detectBassMarbleCollision() {
+    checkAndPlayChimeCollision(bassMarble.body, {
+        get value() { return lastBassMarbleCollision; },
+        set value(val) { lastBassMarbleCollision = val; }
+    }, 500, true);
+}
+
+function handleChordChange(chime) {
+    const chord = chordMap[chime.body.label];
+    
+    if (chord) {
+        changeChimesFreq(chord.first, chord.third, chord.fifth, chord.seventh, chord.extended);
+    }
+}
+
+function tryPlaceMarble(x, y) {
+    if (!mode.marbles || marbles.length >= marbleLimit) return;
+    const size = width > 640 ? 30 : 15;
+    marbles.push(new Marble(x, y, size, speedSlider.value));
 }
 
 function mousePressed() {
-    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        return;
-    } else {
-        // Limit mouse presses to canvas area
-        if (mouseX < 0 || mouseY < 0 || mouseX >= width || mouseY >= height) return;
-
-        // Place marbles
-        if (mode.marbles) {
-            if (marbles.length >= marbleLimit) {
-                return;
-            } else {
-                marbles.push(new Marble(mouseX, mouseY, 30, speedSlider.value));
-            }
-        }
-    }
+    if (isTouchDevice()) return;
+    if (mouseX < 0 || mouseY < 0 || mouseX >= width || mouseY >= height) return;
+    tryPlaceMarble(mouseX, mouseY);
 }
 
-// Spawn marble at mouse coordinates with different sizes depending on mobile/desktop mode
-function createMarble() {
-    // Desktop mode
-    if (width > 640) {
-        marbles.push(new Marble(mouseX, mouseY, 30, speedSlider.value));
-    } else {
-        marbles.push(new Marble(mouseX, mouseY, 15, speedSlider.value));
-    }
-}
-
-// Create marble for mobile mode
 function touchStarted() {
-    // Place marbles
-    if (mode.marbles) {
+    tryPlaceMarble(mouseX, mouseY);
+}
 
-        // Place marbles
-        if (mode.marbles) {
-            if (marbles.length >= marbleLimit) {
-                return;
-            } else {
-                createMarble();
-            }
-        }
-    }
+function isTouchDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 
 function redrawCanvas() {
     bassMarble.remove();
-    if (width > 640) {
-        bassMarble = new BassMarble(width / 2, height / 2 + 200, 50, 2.5);
-    } else {
-        bassMarble = new BassMarble(width / 2, height / 2 + 200, 25, 2.5);
-    }
+    const size = width > 640 ? 50 : 25;
+    bassMarble = new BassMarble(width / 2, height / 2 + 200, size, 2.5);
     clearBorders();
     clearChimes();
     drawCanvas();
