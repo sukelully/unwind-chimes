@@ -1,12 +1,17 @@
 import './App.css';
 import type { WeatherData } from './types';
 import { useState, useEffect } from 'react';
+import FetchWeatherButton from './components/FetchWeatherButton';
+import Canvas from './components/Canvas';
 
-function App() {
+export default function App() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
-  const [location, setLocation] = useState<{ latitude: number; longitude: number} | null>(null);
+  const [location, setLocation] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
   const API_KEY: string = import.meta.env.VITE_API_KEY;
 
   useEffect(() => {
@@ -29,6 +34,7 @@ function App() {
           conditions: today.conditions,
         };
 
+        // setWeather(json);
         setWeather(weatherData);
         setLoading(false);
       } catch (error) {
@@ -42,7 +48,9 @@ function App() {
 
   const handleLocationClick = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition);
+      navigator.geolocation.getCurrentPosition(showPosition, () =>
+        console.log('Unable to retrieve location')
+      );
     } else {
       console.log('Geolocation not supported');
     }
@@ -51,22 +59,19 @@ function App() {
   const showPosition = (position: GeolocationPosition) => {
     const latitude: number = position.coords.latitude;
     const longitude: number = position.coords.longitude;
-    setLocation({ latitude, longitude })
+    setLocation({ latitude, longitude });
     console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
   };
 
   return (
-    <>
-      <div>
-        {loading && 'Loading weather data...'}
-        {error && 'Error fetching weather data'}
-        {weather && !loading && !error && (
-          <pre>{JSON.stringify(weather, null, 2)}</pre>
-        )}
-        <button onClick={handleLocationClick}>Click me</button>
-      </div>
-    </>
+    <main className="dark:bg-neutral-900 bg-slate-100 h-screen">
+      <FetchWeatherButton
+        onChange={handleLocationClick}
+        weather={weather}
+        loading={loading}
+        error={error}
+      />
+      <Canvas />
+    </main>
   );
 }
-
-export default App;
