@@ -3,18 +3,20 @@ import type { WeatherData } from './types';
 import { useState, useEffect } from 'react';
 
 function App() {
-  const [data, setData] = useState<WeatherData | null>(null);
+  const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
-  const [location, setLocation] = useState<string>('york');
+  const [location, setLocation] = useState<{ latitude: number; longitude: number} | null>(null);
   const API_KEY: string = import.meta.env.VITE_API_KEY;
 
   useEffect(() => {
     const getWeatherData = async () => {
       try {
         setLoading(true);
+        if (!location) return;
+        const { latitude, longitude } = location;
         const response = await fetch(
-          `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}/today?key=${API_KEY}`,
+          `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${latitude},${longitude}/today?key=${API_KEY}`,
           { mode: 'cors' }
         );
         const json = await response.json();
@@ -26,8 +28,8 @@ function App() {
           winddir: today.winddir,
           conditions: today.conditions,
         };
-        
-        setData(weatherData);
+
+        setWeather(weatherData);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching weather data: ', error);
@@ -38,12 +40,30 @@ function App() {
     getWeatherData();
   }, [location, API_KEY]);
 
+  const handleLocationClick = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+      console.log('Geolocation not supported');
+    }
+  };
+
+  const showPosition = (position: GeolocationPosition) => {
+    const latitude: number = position.coords.latitude;
+    const longitude: number = position.coords.longitude;
+    setLocation({ latitude, longitude })
+    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+  };
+
   return (
     <>
       <div>
         {loading && 'Loading weather data...'}
         {error && 'Error fetching weather data'}
-        {data && !loading && !error && <pre>{JSON.stringify(data, null, 2)}</pre>}
+        {weather && !loading && !error && (
+          <pre>{JSON.stringify(weather, null, 2)}</pre>
+        )}
+        <button onClick={handleLocationClick}>Click me</button>
       </div>
     </>
   );

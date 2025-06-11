@@ -3,4 +3,4 @@ export interface WeatherData {
     windspeed: number;
     winddir: number;
     conditions: string;
-}
+};
