@@ -1,8 +1,9 @@
 import './App.css';
+import type { WeatherData } from './types';
 import { useState, useEffect } from 'react';
 
 function App() {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
   const [location, setLocation] = useState<string>('york');
@@ -13,19 +14,29 @@ function App() {
       try {
         setLoading(true);
         const response = await fetch(
-          `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?key=${API_KEY}`,
+          `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}/today?key=${API_KEY}`,
           { mode: 'cors' }
         );
+        const json = await response.json();
+
+        const today = json.days[0];
+        const weatherData = {
+          datetime: today.datetime,
+          windspeed: today.windspeed,
+          winddir: today.winddir,
+          conditions: today.conditions,
+        };
+        
+        setData(weatherData);
         setLoading(false);
-        setData(await response.json());
       } catch (error) {
-        // Handle error
+        console.error('Error fetching weather data: ', error);
         setLoading(false);
         setError(true);
       }
     };
     getWeatherData();
-  }, [location]);
+  }, [location, API_KEY]);
 
   return (
     <>
