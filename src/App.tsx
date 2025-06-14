@@ -2,7 +2,7 @@ import './App.css';
 import type { WeatherData } from './types';
 import { useState, useEffect } from 'react';
 import FetchWeatherButton from './components/FetchWeatherButton';
-import Canvas from './components/Canvas';
+import Chime from './components/Chime';
 
 export default function App() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
@@ -71,7 +71,7 @@ export default function App() {
         loading={loading}
         error={error}
       />
-      <Canvas />
+      <Chime />
     </main>
   );
 }
