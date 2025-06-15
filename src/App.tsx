@@ -2,6 +2,7 @@ import './App.css';
 import type { WeatherData } from './types';
 import { useState, useEffect } from 'react';
 import Chime from './components/Chime';
+import randomCities from './cities';
 
 export default function App() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
@@ -68,6 +69,7 @@ export default function App() {
       );
       const data = await res.json();
       const address = data.address;
+      console.log(JSON.stringify(data, null, 2));
       // setLocation(data);
       // return(data);
       return {
@@ -84,13 +86,11 @@ export default function App() {
     const lat: number = position.coords.latitude;
     const long: number = position.coords.longitude;
     setCoords({ lat, long });
-
     const cityLocation = await getLocationFromCoords(lat, long);
     if (cityLocation) {
       setLocation(cityLocation);
     }
     await getWeatherData();
-    console.log(`Latitude: ${lat}, Longitude: ${long}`);
   };
 
   const handleLocationClick = (): void => {
@@ -102,6 +102,13 @@ export default function App() {
       console.log('Geolocation not supported');
     }
   };
+
+  const handleRandomCityClick = async (): Promise<void> => {
+    const randomCity = randomCities[Math.floor(Math.random() * randomCities.length)];
+    setCoords({ lat: randomCity.lat, long: randomCity.long} );
+    setLocation({ city: randomCity.city, country: randomCity.country} );
+    await getWeatherData();
+  }
 
   return (
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col bg-slate-100 p-6 dark:bg-neutral-900">
@@ -126,10 +133,14 @@ export default function App() {
           )}
         </>
         <button
-          className="w-64 rounded-md bg-indigo-600 p-2 font-semibold text-white hover:bg-indigo-700"
+          className="btn"
           onClick={handleLocationClick}
         >
           Get weather data
+        </button>
+        <button className='btn'
+        onClick={handleRandomCityClick}>
+          Get random city
         </button>
       </section>
       <section id="chimes" className="flex flex-col items-center">

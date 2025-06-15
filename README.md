@@ -1,3 +1,3 @@
 # unwind-chimes
 
-Wind chime simulator
+Wind chime simulator / weather data sonifier
