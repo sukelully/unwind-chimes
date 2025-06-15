@@ -1,7 +1,7 @@
 [
-  { "city": "London", country: "UK", lat: 51.5074, long: -0.1278 },
-  { city: 'Tokyo', country: 'Japan', lat: 35.6895, long: 139.6917 },
-  { city: 'New York', country: 'USA', lat: 40.7128, long: -74.006 },
-  { city: 'Sydney', country: 'Australia', lat: -33.8688, long: 151.2093 },
-  { city: 'Cape Town', country: 'South Africa', lat: -33.9249, long: 18.4241 },
+  { "city": "London", "country": "UK", "lat": 51.5074, "long": -0.1278 },
+  { "city": "Tokyo", "country": "Japan", "lat": 35.6895, "long": 139.6917 },
+  { "city": "New York", "country": "USA", "lat": 40.7128, "long": -74.006 },
+  { "city": "Sydney", "country": "Australia", "lat": -33.8688, "long": 151.2093 },
+  { "city": "Cape Town", "country": "South Africa", "lat": -33.9249, "long": 18.4241 }
 ]
