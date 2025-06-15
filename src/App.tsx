@@ -5,10 +5,14 @@ import Chime from './components/Chime';
 
 export default function App() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
-  const [city, setCity] = useState<string | null>(null);
+  const [location, setLocation] = useState<{
+    city: string | null;
+    country: string | null;
+  } | null>(null);
+  // const [location, setLocation] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-  const [location, setLocation] = useState<{
+  const [coords, setCoords] = useState<{
     lat: number;
     long: number;
   } | null>(null);
@@ -17,8 +21,8 @@ export default function App() {
   const getWeatherData = async () => {
     try {
       setLoading(true);
-      if (!location) return;
-      const { lat, long } = location;
+      if (!coords) return;
+      const { lat, long } = coords;
       const res = await fetch(
         `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${lat},${long}/today?key=${API_KEY}`,
         { mode: 'cors' }
@@ -44,12 +48,15 @@ export default function App() {
   };
 
   useEffect(() => {
-    if (location) {
+    if (coords) {
       getWeatherData();
     }
-  }, [location]);
+  }, [coords]);
 
-  const getCityFromCoords = async (lat: number, long: number): Promise<string | null> => {
+  const getLocationFromCoords = async (
+    lat: number,
+    long: number
+  ): Promise<{ city: string | null; country: string | null } | null> => {
     try {
       const res = await fetch(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${long}&zoom=10&addressdetails=1`,
@@ -61,7 +68,12 @@ export default function App() {
       );
       const data = await res.json();
       const address = data.address;
-      return address.city || address.town || address.village || address.county || null;
+      // setLocation(data);
+      // return(data);
+      return {
+        city: address.city || address.town || address.village || address.county || null,
+        country: address.country || null,
+      };
     } catch (err) {
       console.error('Could not get city from coords:', err);
       return null;
@@ -71,10 +83,12 @@ export default function App() {
   const showPosition = async (position: GeolocationPosition): Promise<void> => {
     const lat: number = position.coords.latitude;
     const long: number = position.coords.longitude;
-    setLocation({ lat, long });
+    setCoords({ lat, long });
 
-    const cityName = await getCityFromCoords(lat, long);
-    setCity(cityName);
+    const cityLocation = await getLocationFromCoords(lat, long);
+    if (cityLocation) {
+      setLocation(cityLocation);
+    }
     await getWeatherData();
     console.log(`Latitude: ${lat}, Longitude: ${long}`);
   };
@@ -99,9 +113,15 @@ export default function App() {
           {weather && !loading && !error && (
             <>
               <pre>{JSON.stringify(weather, null, 2)}</pre>
-              <span className="text-center">
-                You're listening to <span className="font-semibold">{city}</span>
-              </span>
+              {location && (
+                <span className="text-center">
+                  You're listening to{' '}
+                  <span className="font-semibold">
+                    {location.city || 'an unknown city'},{' '}
+                    {location.country || 'in an unknown country'}
+                  </span>
+                </span>
+              )}
             </>
           )}
         </>
@@ -112,7 +132,9 @@ export default function App() {
           Get weather data
         </button>
       </section>
-      <Chime />
+      <section id="chimes" className="flex flex-col items-center">
+        <Chime />
+      </section>
     </main>
   );
 }
