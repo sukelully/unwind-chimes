@@ -5,16 +5,13 @@ export default function Chime() {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
 
-    osc.type = "triangle";
+    osc.type = 'triangle';
     osc.frequency.value = freq;
 
     // Envelope
     gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
     gain.gain.exponentialRampToValueAtTime(1, audioCtx.currentTime + 0.01);
-    gain.gain.exponentialRampToValueAtTime(
-      0.0001,
-      audioCtx.currentTime + duration,
-    );
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
 
     osc.connect(gain);
     gain.connect(audioCtx.destination);

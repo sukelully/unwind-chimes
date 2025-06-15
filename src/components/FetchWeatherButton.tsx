@@ -1,4 +1,4 @@
-import type { WeatherData } from "../types";
+import type { WeatherData } from '../types';
 
 type Props = {
   onChange: () => void;
@@ -7,21 +7,14 @@ type Props = {
   weather: WeatherData | null;
 };
 
-export default function GetWeatherData({
-  onChange,
-  loading,
-  error,
-  weather,
-}: Props) {
+export default function GetWeatherData({ onChange, loading, error, weather }: Props) {
   return (
     <div>
       {weather && (
         <>
-          {loading && "Loading weather data..."}
-          {error && "Error fetching weather data"}
-          {weather && !loading && !error && (
-            <pre>{JSON.stringify(weather, null, 2)}</pre>
-          )}
+          {loading && 'Loading weather data...'}
+          {error && 'Error fetching weather data'}
+          {weather && !loading && !error && <pre>{JSON.stringify(weather, null, 2)}</pre>}
         </>
       )}
       {!weather && (
