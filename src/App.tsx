@@ -1,7 +1,7 @@
-import './App.css';
-import type { WeatherData } from './types';
-import { useState, useEffect } from 'react';
-import Chime from './components/Chime';
+import "./App.css";
+import type { WeatherData } from "./types";
+import { useState, useEffect } from "react";
+import Chime from "./components/Chime";
 
 export default function App() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
@@ -21,7 +21,7 @@ export default function App() {
       const { lat, long } = location;
       const res = await fetch(
         `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${lat},${long}/today?key=${API_KEY}`,
-        { mode: 'cors' }
+        { mode: "cors" },
       );
       const json = await res.json();
 
@@ -37,7 +37,7 @@ export default function App() {
       setWeather(weatherData);
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching weather data: ', error);
+      console.error("Error fetching weather data: ", error);
       setLoading(false);
       setError(true);
     }
@@ -51,16 +51,16 @@ export default function App() {
 
   const getCityFromCoords = async (
     lat: number,
-    long: number
+    long: number,
   ): Promise<string | null> => {
     try {
       const res = await fetch(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${long}&zoom=10&addressdetails=1`,
         {
           headers: {
-            'User-Agent': 'UnwindChimes (luke@sukelully.dev)',
+            "User-Agent": "UnwindChimes (luke@sukelully.dev)",
           },
-        }
+        },
       );
       const data = await res.json();
       const address = data.address;
@@ -72,7 +72,7 @@ export default function App() {
         null
       );
     } catch (err) {
-      console.error('Could not get city from coords:', err);
+      console.error("Could not get city from coords:", err);
       return null;
     }
   };
@@ -91,29 +91,35 @@ export default function App() {
   const handleLocationClick = (): void => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(showPosition, () =>
-        console.log('Unable to retrieve location')
+        console.log("Unable to retrieve location"),
       );
     } else {
-      console.log('Geolocation not supported');
+      console.log("Geolocation not supported");
     }
   };
 
   return (
-    <main className="dark:bg-neutral-900 bg-slate-100 min-h-screen max-w-4xl mx-auto flex flex-col px-6">
-      <canvas className="bg-indigo-200 p-6 w-full h-full"></canvas>
-      <section id="weather-data" className="flex flex-col gap-4 my-4">
+    <main className="mx-auto flex min-h-screen max-w-4xl flex-col bg-slate-100 p-6 dark:bg-neutral-900">
+      <canvas className="h-full w-full bg-indigo-200 p-6"></canvas>
+      <section
+        id="weather-data"
+        className="my-4 flex flex-col items-center gap-4"
+      >
         <>
-          {loading && 'Loading weather data...'}
-          {error && 'Error fetching weather data'}
+          {loading && "Loading weather data..."}
+          {error && "Error fetching weather data"}
           {weather && !loading && !error && (
             <>
               <pre>{JSON.stringify(weather, null, 2)}</pre>
-              <span className='text-center'>You're listening to <span className='font-semibold'>{city}</span></span>
+              <span className="text-center">
+                You're listening to{" "}
+                <span className="font-semibold">{city}</span>
+              </span>
             </>
           )}
         </>
         <button
-          className="bg-indigo-600 text-white font-semibold p-2 rounded-md hover:bg-indigo-700"
+          className="w-64 rounded-md bg-indigo-600 p-2 font-semibold text-white hover:bg-indigo-700"
           onClick={handleLocationClick}
         >
           Get weather data
