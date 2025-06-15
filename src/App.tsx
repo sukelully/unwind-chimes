@@ -2,7 +2,7 @@ import './App.css';
 import type { WeatherData } from './types';
 import { useState, useEffect } from 'react';
 import Chime from './components/Chime';
-import randomCities from './cities';
+import randomCities from './assets/cities.json';
 
 export default function App() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
@@ -105,10 +105,10 @@ export default function App() {
 
   const handleRandomCityClick = async (): Promise<void> => {
     const randomCity = randomCities[Math.floor(Math.random() * randomCities.length)];
-    setCoords({ lat: randomCity.lat, long: randomCity.long} );
-    setLocation({ city: randomCity.city, country: randomCity.country} );
+    setCoords({ lat: randomCity.lat, long: randomCity.long });
+    setLocation({ city: randomCity.city, country: randomCity.country });
     await getWeatherData();
-  }
+  };
 
   return (
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col bg-slate-100 p-6 dark:bg-neutral-900">
@@ -132,14 +132,10 @@ export default function App() {
             </>
           )}
         </>
-        <button
-          className="btn"
-          onClick={handleLocationClick}
-        >
-          Get weather data
+        <button className="btn" onClick={handleLocationClick}>
+          Get local weather
         </button>
-        <button className='btn'
-        onClick={handleRandomCityClick}>
+        <button className="btn" onClick={handleRandomCityClick}>
           Get random city
         </button>
       </section>
