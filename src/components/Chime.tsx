@@ -27,7 +27,7 @@ export default function Chime() {
   return (
     <>
       <button
-        className="w-64 rounded-md bg-indigo-600 p-2 font-semibold text-white hover:bg-indigo-700"
+        className="btn"
         onClick={handleClick}
       >
         Play chime

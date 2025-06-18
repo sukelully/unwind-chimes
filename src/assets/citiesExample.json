@@ -1,5 +1,5 @@
 [
-  { "city": "London", "country": "UK", "lat": 51.5074, "long": -0.1278 },
+  { "city": "London", "country": "United Kingdom", "lat": 51.5074, "long": -0.1278 },
   { "city": "Tokyo", "country": "Japan", "lat": 35.6895, "long": 139.6917 },
   { "city": "New York", "country": "USA", "lat": 40.7128, "long": -74.006 },
   { "city": "Sydney", "country": "Australia", "lat": -33.8688, "long": 151.2093 },
