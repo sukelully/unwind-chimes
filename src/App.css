@@ -1,5 +1,5 @@
 @import 'tailwindcss';
 
 .btn {
-  @apply w-64 rounded-md bg-indigo-600 p-2 font-semibold text-white hover:bg-indigo-700 duration-200;
+  @apply w-64 cursor-pointer rounded-md bg-indigo-600 p-2 font-semibold text-white duration-200 hover:bg-indigo-700;
 }

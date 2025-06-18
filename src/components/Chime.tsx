@@ -26,10 +26,7 @@ export default function Chime() {
 
   return (
     <>
-      <button
-        className="btn"
-        onClick={handleClick}
-      >
+      <button className="btn" onClick={handleClick}>
         Play chime
       </button>
     </>

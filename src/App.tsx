@@ -23,7 +23,7 @@ function App() {
         () => {
           console.error('Could not get getlocation');
         }
-      )
+      );
     }
   };
 
