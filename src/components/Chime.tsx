@@ -1,6 +1,6 @@
 export default function Chime() {
   const audioCtx: AudioContext = new AudioContext();
-  const bufferCache  = new Map<string, AudioBuffer>();
+  const bufferCache = new Map<string, AudioBuffer>();
 
   function generatePluckBuffer(freq: number, octave: number = 1): AudioBuffer {
     const cacheKey: string = `${freq}_${octave}`;
@@ -14,15 +14,18 @@ export default function Chime() {
 
     const bufferSize = audioCtx.sampleRate * 7; // 7 second buffer
     const outputBuffer: AudioBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-    const output: Float32Array = outputBuffer.getChannelData(0)
+    const output: Float32Array = outputBuffer.getChannelData(0);
 
     for (let i = 0; i < bufferSize; i++) {
-      const variation = Math.round((Math.random() * 10 - 5) * audioCtx.sampleRate / 1000); // ±5ms noise burst
+      const variation = Math.round(((Math.random() * 10 - 5) * audioCtx.sampleRate) / 1000); // ±5ms noise burst
       const dampening = 0.997;
-      const noiseBurst = Math.max(0, (audioCtx.sampleRate / 100) + variation);
-      const sample = (i < noiseBurst) ? Math.random() * 1 - 0.5 : 0; // Produce random noise during burst timeframe otherwise 0
+      const noiseBurst = Math.max(0, audioCtx.sampleRate / 100 + variation);
+      const sample = i < noiseBurst ? Math.random() * 1 - 0.5 : 0; // Produce random noise during burst timeframe otherwise 0
 
-      delayBuffer[dbIndex] = sample + dampening * (delayBuffer[dbIndex] + delayBuffer[(dbIndex + 1) % delaySamples]) / 2;
+      delayBuffer[dbIndex] =
+        // Average adjacent samples (lowpass filter) and dampen result
+        sample +
+        (dampening * (delayBuffer[dbIndex] + delayBuffer[(dbIndex + 1) % delaySamples])) / 2;
       output[i] = delayBuffer[dbIndex];
 
       if (++dbIndex >= delaySamples) dbIndex = 0;
@@ -49,7 +52,6 @@ export default function Chime() {
       source.disconnect();
       filter.disconnect();
     };
-
   }
 
   function playSimpleChime(freq: number, duration: number = 1): void {
@@ -84,7 +86,9 @@ export default function Chime() {
       <button className="btn" onClick={handleSimpleClick}>
         Play chime
       </button>
-      <button className="btn" onClick={handlePluckClick}>Pluck string</button>
+      <button className="btn" onClick={handlePluckClick}>
+        Pluck string
+      </button>
     </>
   );
 }
