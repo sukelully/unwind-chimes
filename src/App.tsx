@@ -60,7 +60,7 @@ function App() {
           Get random city
         </button>
       </section>
-      <section id="chimes" className="flex flex-col items-center">
+      <section id="chimes" className="flex flex-col items-center gap-4">
         <Chime />
       </section>
     </main>
