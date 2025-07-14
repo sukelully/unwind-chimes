@@ -1,6 +1,7 @@
 import './App.css';
 import { useWeatherLocation } from './hooks/useWeatherLocation';
 import Chime from './components/Chime';
+import ChimeCanvas from './components/ChimeCanvas';
 
 function App() {
   const {
@@ -29,7 +30,8 @@ function App() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col bg-slate-100 p-6 dark:bg-neutral-900">
-      <canvas className="h-full w-full bg-indigo-200 p-6"></canvas>
+      {/* <canvas className="h-full w-full bg-indigo-200 p-6"></canvas> */}
+      <ChimeCanvas />
       <section id="weather-data" className="my-4 flex flex-col items-center gap-4">
         <>
           {(weatherLoading || locationLoading) && 'Loading weather data...'}
