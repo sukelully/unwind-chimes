@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import type { WeatherData } from '../types';
 import cities from '../assets/cities.json';
 
 const API_KEY: string = import.meta.env.VITE_API_KEY;
@@ -9,8 +8,15 @@ type Location = {
   country: string | null;
 };
 
+type Weather = {
+  datetime: string;
+  windspeed: number;
+  winddir: number;
+  conditions: string;
+}
+
 export function useWeatherLocation() {
-  const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [weather, setWeather] = useState<Weather | null>(null);
   const [location, setLocation] = useState<Location | null>(null);
   const [weatherLoading, setWeatherLoading] = useState(false);
   const [weatherError, setWeatherError] = useState<Error | null>(null);
