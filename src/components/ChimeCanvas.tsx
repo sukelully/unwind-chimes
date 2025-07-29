@@ -1,29 +1,75 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { type CanvasDimensions } from '../types/canvas.ts';
 import { Chime } from '../models/Chime.ts';
 
 type MouseEventHandler = (e: React.MouseEvent<HTMLCanvasElement>) => void;
 
 export default function ChimeCanvas(): React.JSX.Element {
-  const canvasDimensions: CanvasDimensions = { width: 800, height: 500 };
+  const [canvasDimensions, setCanvasDimensions] = useState<CanvasDimensions>({
+    width: 800,
+    height: 500,
+  });
   const [chimes, setChimes] = useState<Chime[]>([]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number>(null);
   const mousePositionRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const isMouseOverCanvasRef = useRef<boolean>(false);
 
+  // Function to update canvas dimensions based on container size
+  const updateCanvasDimensions = useCallback(() => {
+    if (containerRef.current) {
+      const container = containerRef.current;
+      const rect = container.getBoundingClientRect();
+
+      // Use container dimensions with some padding
+      const newWidth = Math.max(300, rect.width - 32); // min 300px, subtract padding
+      const newHeight = Math.max(200, rect.height - 32); // min 200px, subtract padding
+
+      setCanvasDimensions({ width: newWidth, height: newHeight });
+    }
+  }, []);
+
+  // Update dimensions on mount and window resize
   useEffect(() => {
-    // Initialize chimes with wind chime physics
-    const initialChimes: Chime[] = [
-      new Chime(100, 100, 80, 60, 'rgba(59, 130, 246, 0.8)'),
-      new Chime(200, 150, 60, 80, 'rgba(34, 197, 94, 0.8)'),
-      new Chime(300, 200, 100, 40, 'rgba(239, 68, 68, 0.8)'),
-      new Chime(400, 100, 50, 90, 'rgba(147, 51, 234, 0.8)'),
-      new Chime(150, 250, 70, 50, 'rgba(249, 115, 22, 0.8)'),
+    updateCanvasDimensions();
+
+    const handleResize = () => {
+      updateCanvasDimensions();
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [updateCanvasDimensions]);
+
+  // Initialize chimes when dimensions change
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const centerX = canvasDimensions.width / 2;
+    const centerY = canvasDimensions.height / 2;
+    const outerRadius = Math.min(canvasDimensions.width, canvasDimensions.height) / 4;
+
+    const colors = [
+      'rgba(59, 130, 246, 0.8)',  // Blue
+      'rgba(34, 197, 94, 0.8)',   // Green
+      'rgba(239, 68, 68, 0.8)',   // Red
+      'rgba(147, 51, 234, 0.8)',  // Purple
+      'rgba(249, 115, 22, 0.8)',  // Orange
     ];
 
-    setChimes(initialChimes);
-  }, []);
+    // Angles to form a 5-pointed star
+    const starPoints = [];
+    for (let i = 0; i < 5; i++) {
+      const angle = ((i * 2) % 10) * ((Math.PI * 2) / 10) - Math.PI / 2;
+      const x = centerX + outerRadius * Math.cos(angle);
+      const y = centerY + outerRadius * Math.sin(angle);
+      starPoints.push(new Chime(x, y, colors[i]));
+    }
+    
+    setChimes(starPoints);
+  }, [canvasDimensions]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -39,8 +85,8 @@ export default function ChimeCanvas(): React.JSX.Element {
       if (isMouseOverCanvasRef.current) {
         chimes.forEach((obj: Chime) => {
           const distance = Math.sqrt(
-            Math.pow(mousePositionRef.current.x - (obj.x + obj.width / 2), 2) +
-              Math.pow(mousePositionRef.current.y - (obj.y + obj.height / 2), 2)
+            Math.pow(mousePositionRef.current.x - (obj.x + obj.r), 2) +
+              Math.pow(mousePositionRef.current.y - (obj.y + obj.r), 2)
           );
 
           // Apply force if mouse is within influence range
@@ -80,10 +126,10 @@ export default function ChimeCanvas(): React.JSX.Element {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const rect = canvas.getBoundingClientRect();
+    const chime = canvas.getBoundingClientRect();
     mousePositionRef.current = {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
+      x: e.clientX - chime.left,
+      y: e.clientY - chime.top,
     };
   };
 
@@ -110,40 +156,7 @@ export default function ChimeCanvas(): React.JSX.Element {
       // Change color and apply a strong force
       clickedObject.color = `hsla(${Math.random() * 360}, 70%, 60%, 0.8)`;
       clickedObject.applyForce((Math.random() - 0.5) * 3, (Math.random() - 0.5) * 3);
-    } else {
-      // Add new wind chime rectangle at click position
-      const newRect = new Chime(
-        mouseX - 25,
-        mouseY - 25,
-        40 + Math.random() * 40,
-        40 + Math.random() * 40,
-        `hsla(${Math.random() * 360}, 70%, 60%, 0.8)`
-      );
-
-      // Set up physics for the new object
-      newRect.setPhysicsProperties(0.98, 0.015, 40);
-
-      setChimes((prev: Chime[]) => [...prev, newRect]);
     }
-  };
-
-  const clearCanvas = (): void => {
-    setChimes([]);
-  };
-
-  const addWindChime = (): void => {
-    const newRect = new Chime(
-      Math.random() * (canvasDimensions.width - 100) + 50,
-      Math.random() * (canvasDimensions.height - 100) + 50,
-      40 + Math.random() * 60,
-      40 + Math.random() * 60,
-      `hsla(${Math.random() * 360}, 70%, 60%, 0.8)`
-    );
-
-    // Set up physics properties
-    newRect.setPhysicsProperties(0.98, 0.015, 40);
-
-    setChimes((prev: Chime[]) => [...prev, newRect]);
   };
 
   const applyGustOfWind = (): void => {
@@ -157,26 +170,17 @@ export default function ChimeCanvas(): React.JSX.Element {
     <div className="p-4">
       <div className="mb-4 space-x-2">
         <button
-          onClick={addWindChime}
-          className="rounded bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600"
-        >
-          Add Wind Chime
-        </button>
-        <button
           onClick={applyGustOfWind}
           className="rounded bg-green-500 px-4 py-2 text-white transition-colors hover:bg-green-600"
         >
           Gust of Wind
         </button>
-        <button
-          onClick={clearCanvas}
-          className="rounded bg-red-500 px-4 py-2 text-white transition-colors hover:bg-red-600"
-        >
-          Clear Canvas
-        </button>
       </div>
 
-      <div className="inline-block overflow-hidden rounded-lg border-2 border-gray-300 shadow-lg">
+      <div
+        ref={containerRef}
+        className="h-96 w-full max-w-4xl overflow-hidden rounded-lg border-2 border-gray-300 shadow-lg md:h-[500px] lg:h-[600px]"
+      >
         <canvas
           ref={canvasRef}
           width={canvasDimensions.width}
@@ -185,24 +189,8 @@ export default function ChimeCanvas(): React.JSX.Element {
           onMouseMove={handleMouseMove}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          className="cursor-crosshair bg-gradient-to-br from-sky-50 to-blue-100"
+          className="h-full w-full cursor-crosshair bg-gradient-to-br from-sky-50 to-blue-100"
         />
-      </div>
-
-      <div className="mt-4 space-y-1 text-sm text-gray-600">
-        <p>
-          • <strong>Hover</strong> your mouse over wind chimes to make them sway
-        </p>
-        <p>
-          • <strong>Click</strong> on wind chimes to change color and give them a push
-        </p>
-        <p>
-          • <strong>Click</strong> empty space to add a new wind chime
-        </p>
-        <p>• Watch them gently sway and settle back to their rest positions</p>
-        <p>
-          • Active wind chimes: <span className="font-semibold text-blue-600">{chimes.length}</span>
-        </p>
       </div>
     </div>
   );
