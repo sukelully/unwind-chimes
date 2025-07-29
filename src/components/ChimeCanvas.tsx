@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { type CanvasDimensions } from '../types/canvas.ts';
 import { Chime } from '../models/Chime.ts';
+import { Clapper } from '../models/Clapper.ts';
 
 type MouseEventHandler = (e: React.MouseEvent<HTMLCanvasElement>) => void;
 
@@ -10,6 +11,7 @@ export default function ChimeCanvas(): React.JSX.Element {
     height: 500,
   });
   const [chimes, setChimes] = useState<Chime[]>([]);
+  const [clapper, setClapper] = useState<Clapper | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number>(null);
@@ -49,7 +51,7 @@ export default function ChimeCanvas(): React.JSX.Element {
 
     const centerX = canvasDimensions.width / 2;
     const centerY = canvasDimensions.height / 2;
-    const outerRadius = Math.min(canvasDimensions.width, canvasDimensions.height) / 4;
+    const outerRadius = Math.min(canvasDimensions.width, canvasDimensions.height) / 6;
 
     const colors = [
       'rgba(59, 130, 246, 0.8)',  // Blue
@@ -69,11 +71,14 @@ export default function ChimeCanvas(): React.JSX.Element {
     }
     
     setChimes(starPoints);
+
+    const clapper = new Clapper(centerX, centerY, 'rgba(120, 113, 108, 0.9)', 50);
+    setClapper(clapper);
   }, [canvasDimensions]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || !clapper) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
@@ -81,9 +86,11 @@ export default function ChimeCanvas(): React.JSX.Element {
     const animate = (): void => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Apply mouse force to nearby chimes when mouse is over canvas
+      const allObjects = [...chimes, clapper];
+
+      // Apply mouse force to nearby objects when mouse is over canvas
       if (isMouseOverCanvasRef.current) {
-        chimes.forEach((obj: Chime) => {
+        allObjects.forEach((obj: Chime) => {
           const distance = Math.sqrt(
             Math.pow(mousePositionRef.current.x - (obj.x + obj.r), 2) +
               Math.pow(mousePositionRef.current.y - (obj.y + obj.r), 2)
@@ -96,16 +103,42 @@ export default function ChimeCanvas(): React.JSX.Element {
         });
       }
 
+      // Check for collisions between clapper and chimes
+      chimes.forEach((chime: Chime) => {
+        const dx = clapper.x - chime.x;
+        const dy = clapper.y - chime.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const minDistance = clapper.r + chime.r;
+
+        if (distance < minDistance && distance > 0) {
+          // Collision detected - apply bounce forces
+          const overlap = minDistance - distance;
+          const separationX = (dx / distance) * overlap * 0.5;
+          const separationY = (dy / distance) * overlap * 0.5;
+
+          // Separate the objects
+          clapper.x += separationX;
+          clapper.y += separationY;
+          chime.x -= separationX;
+          chime.y -= separationY;
+
+          // Apply bounce forces
+          const bounceForce = 0.3;
+          clapper.applyForce(separationX * bounceForce, separationY * bounceForce);
+          chime.applyForce(-separationX * bounceForce, -separationY * bounceForce);
+        }
+      });
+
       // Occasionally apply gentle breeze effect
       if (Math.random() < 0.005) {
-        const randomObject = chimes[Math.floor(Math.random() * chimes.length)];
+        const randomObject = allObjects[Math.floor(Math.random() * allObjects.length)];
         if (randomObject) {
           randomObject.applyBreeze(0.15);
         }
       }
 
-      // Update and draw all chimes
-      chimes.forEach((obj: Chime) => {
+      // Update and draw all objects
+      allObjects.forEach((obj: Chime) => {
         obj.update();
         obj.draw(ctx);
       });
@@ -120,7 +153,7 @@ export default function ChimeCanvas(): React.JSX.Element {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [chimes]);
+  }, [chimes, clapper]);
 
   const handleMouseMove: MouseEventHandler = (e) => {
     const canvas = canvasRef.current;
@@ -160,10 +193,10 @@ export default function ChimeCanvas(): React.JSX.Element {
   };
 
   const applyGustOfWind = (): void => {
-    chimes.forEach((obj) => {
-      const windForce = (Math.random() - 0.5) * 2;
-      obj.applyForce(windForce, Math.random() * 0.5);
-    });
+    if (clapper) {
+      const windForce = (Math.random() - 0.5) * 20;
+      clapper.applyForce(windForce, Math.random() * 0.5);
+    };
   };
 
   return (
