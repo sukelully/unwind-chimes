@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "clean": "rm -rf dist/",
     "lint": "eslint .",
-    "prettier": "npx prettier . --write",
+    "prettier": "prettier . --write",
     "preview": "vite preview"
   },
   "dependencies": {

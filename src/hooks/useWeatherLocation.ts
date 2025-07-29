@@ -13,7 +13,7 @@ type Weather = {
   windspeed: number;
   winddir: number;
   conditions: string;
-}
+};
 
 export function useWeatherLocation() {
   const [weather, setWeather] = useState<Weather | null>(null);

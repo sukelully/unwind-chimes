@@ -6,13 +6,13 @@ export class Chime {
   color: string;
 
   // Physics properties for wind chime effect
-  restX: number;                  // Original rest position
+  restX: number; // Original rest position
   restY: number;
   velocityX: number = 0;
   velocityY: number = 0;
-  damping: number = 0.95;         // Resistance to movement (0-1)
-  springStrength: number = 0.02;  // How strong the pull back to rest position is
-  maxDisplacement: number = 50;   // Maximum distance from rest position
+  damping: number = 0.95; // Resistance to movement (0-1)
+  springStrength: number = 0.02; // How strong the pull back to rest position is
+  maxDisplacement: number = 50; // Maximum distance from rest position
 
   constructor(x: number, y: number, width: number, height: number, color: string = 'blue') {
     this.x = x;
@@ -20,7 +20,7 @@ export class Chime {
     this.width = width;
     this.height = height;
     this.color = color;
-    
+
     // Set rest position
     this.restX = x;
     this.restY = y;
@@ -29,14 +29,14 @@ export class Chime {
   draw(ctx: CanvasRenderingContext2D): void {
     ctx.fillStyle = this.color;
     ctx.fillRect(this.x, this.y, this.width, this.height);
-    
+
     // Subtle line to show the rest position
     ctx.strokeStyle = 'rgba(0,0,0,0.1)';
     ctx.lineWidth = 1;
     ctx.setLineDash([2, 2]);
     ctx.beginPath();
-    ctx.moveTo(this.restX + this.width/2, this.restY);
-    ctx.lineTo(this.x + this.width/2, this.y);
+    ctx.moveTo(this.restX + this.width / 2, this.restY);
+    ctx.lineTo(this.x + this.width / 2, this.y);
     ctx.stroke();
     ctx.setLineDash([]);
   }
@@ -45,22 +45,22 @@ export class Chime {
     // Calculate spring force
     const springForceX = (this.restX - this.x) * this.springStrength;
     const springForceY = (this.restY - this.y) * this.springStrength;
-    
+
     // Apply spring force and dampening
     this.velocityX += springForceX;
     this.velocityY += springForceY;
     this.velocityX *= this.damping;
     this.velocityY *= this.damping;
-    
+
     // Pull back to rest position
     this.x += this.velocityX;
     this.y += this.velocityY;
-    
+
     // Limit maximum displacement from rest position
     const distanceFromRest = Math.sqrt(
       Math.pow(this.x - this.restX, 2) + Math.pow(this.y - this.restY, 2)
     );
-    
+
     if (distanceFromRest > this.maxDisplacement) {
       const angle = Math.atan2(this.y - this.restY, this.x - this.restX);
       this.x = this.restX + Math.cos(angle) * this.maxDisplacement;
@@ -76,16 +76,16 @@ export class Chime {
   applyMouseForce(mouseX: number, mouseY: number, strength: number = 0.3): void {
     const centerX = this.x + this.width / 2;
     const centerY = this.y + this.height / 2;
-    
+
     const dirX = mouseX - centerX;
     const dirY = mouseY - centerY;
-    
+
     // Normalize and apply force
     const distance = Math.sqrt(dirX * dirX + dirY * dirY);
     if (distance > 0) {
       const normalizedX = dirX / distance;
       const normalizedY = dirY / distance;
-      
+
       // Apply force proportional to proximity (closer = stronger force)
       const proximityForce = Math.max(0, 100 - distance) / 100;
       this.applyForce(
