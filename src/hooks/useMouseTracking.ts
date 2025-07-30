@@ -1,6 +1,6 @@
 import { useRef, useCallback } from 'react';
 
-type MouseEventHandler = (e: React.MouseEvent<HTMLCanvasElement>) => void;
+export type MouseEventHandler = (e: React.MouseEvent<HTMLCanvasElement>) => void;
 
 const useMouseTracking = () => {
   const mousePositionRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });

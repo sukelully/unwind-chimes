@@ -6,8 +6,7 @@ import useCanvasDimensions from '../hooks/useCanvasDimensions.ts';
 import usePhysics from '../hooks/usePhysics.ts';
 import useCanvasAnimation from '../hooks/useCanvasAnimation.ts';
 import useMouseTracking from '../hooks/useMouseTracking.ts';
-
-type MouseEventHandler = (e: React.MouseEvent<HTMLCanvasElement>) => void;
+import { type MouseEventHandler } from '../hooks/useMouseTracking.ts';
 
 export default function ChimeCanvas(): React.JSX.Element {
   const containerRef = useRef<HTMLDivElement>(null);

@@ -13,7 +13,14 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null) => {
       const minDistance = clapper.r + chime.r;
 
       if (distance < minDistance && distance > 0) {
-        // Collision physics
+        // Only play sound if not already colliding
+        if (!chime.isColliding) {
+          chime.playSimpleChime(chime.freq);
+          chime.isColliding = true;
+          chime.collisionCooldown = 30; // 30 frames cooldown (~0.5 seconds at 60fps)
+        }
+
+        // Collision physics (always apply)
         const overlap = minDistance - distance;
         const separationX = (dx / distance) * overlap * 0.5;
         const separationY = (dy / distance) * overlap * 0.5;
@@ -28,9 +35,6 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null) => {
         const bounceForce = 0.3;
         clapper.applyForce(separationX * bounceForce, separationY * bounceForce);
         chime.applyForce(-separationX * bounceForce, -separationY * bounceForce);
-
-        // Play sound
-        chime.playSimpleChime(chime.freq);
       }
     });
   }, [chimes, clapper]);
