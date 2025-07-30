@@ -1,4 +1,4 @@
-import { useRef, useCallback } from "react";
+import { useRef, useCallback } from 'react';
 
 type MouseEventHandler = (e: React.MouseEvent<HTMLCanvasElement>) => void;
 

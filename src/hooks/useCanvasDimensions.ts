@@ -24,6 +24,6 @@ const useCanvasDimensions = (containerRef: React.RefObject<HTMLDivElement | null
   }, [updateDimensions]);
 
   return dimensions;
-}
+};
 
 export default useCanvasDimensions;

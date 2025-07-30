@@ -85,18 +85,18 @@ const useWeatherLocation = () => {
     await getWeatherData(randomCity.lat, randomCity.long);
   };
 
-    const handleLocationClick = (): void => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            loadWeatherFromLocation(pos.coords.latitude, pos.coords.longitude);
-          },
-          () => {
-            console.error('Could not get getlocation');
-          }
-        );
-      }
-    };
+  const handleLocationClick = (): void => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          loadWeatherFromLocation(pos.coords.latitude, pos.coords.longitude);
+        },
+        () => {
+          console.error('Could not get getlocation');
+        }
+      );
+    }
+  };
 
   return {
     weather,
@@ -106,8 +106,8 @@ const useWeatherLocation = () => {
     locationLoading,
     locationError,
     loadRandomCity,
-    handleLocationClick
+    handleLocationClick,
   };
-}
+};
 
 export default useWeatherLocation;

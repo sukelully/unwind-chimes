@@ -12,7 +12,7 @@ type MouseEventHandler = (e: React.MouseEvent<HTMLCanvasElement>) => void;
 export default function ChimeCanvas(): React.JSX.Element {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  
+
   const canvasDimensions = useCanvasDimensions(containerRef);
   const { getAudioContext } = useAudioContext();
   const { chimes, clapper } = useChimeObjects(canvasDimensions, getAudioContext);
@@ -21,21 +21,24 @@ export default function ChimeCanvas(): React.JSX.Element {
 
   useCanvasAnimation(canvasRef, chimes, clapper, handleCollisions, applyRandomBreeze);
 
-  const handleCanvasClick: MouseEventHandler = useCallback((e) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+  const handleCanvasClick: MouseEventHandler = useCallback(
+    (e) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
 
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
 
-    const clickedObject = chimes.find((obj: Chime) => obj.contains(mouseX, mouseY));
+      const clickedObject = chimes.find((obj: Chime) => obj.contains(mouseX, mouseY));
 
-    if (clickedObject) {
-      clickedObject.color = `hsla(${Math.random() * 360}, 70%, 60%, 0.8)`;
-      clickedObject.applyForce((Math.random() - 0.5) * 3, (Math.random() - 0.5) * 3);
-    }
-  }, [chimes]);
+      if (clickedObject) {
+        clickedObject.color = `hsla(${Math.random() * 360}, 70%, 60%, 0.8)`;
+        clickedObject.applyForce((Math.random() - 0.5) * 3, (Math.random() - 0.5) * 3);
+      }
+    },
+    [chimes]
+  );
 
   const applyGustOfWind = useCallback((): void => {
     if (clapper) {

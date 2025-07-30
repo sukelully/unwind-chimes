@@ -1,6 +1,6 @@
-import { Chime } from "../models/Chime";
-import { Clapper } from "../models/Clapper";
-import { useCallback } from "react";
+import { Chime } from '../models/Chime';
+import { Clapper } from '../models/Clapper';
+import { useCallback } from 'react';
 
 const usePhysics = (chimes: Chime[], clapper: Clapper | null) => {
   const handleCollisions = useCallback(() => {

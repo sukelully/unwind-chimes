@@ -12,7 +12,7 @@ function App() {
     locationLoading,
     locationError,
     loadRandomCity,
-    handleLocationClick
+    handleLocationClick,
   } = useWeatherLocation();
 
   return (

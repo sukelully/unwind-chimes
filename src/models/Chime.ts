@@ -4,7 +4,14 @@ export class Chime extends Clapper {
   freq: number;
   audioCtx: AudioContext;
 
-  constructor(x: number, y: number, color: string, r: number, freq: number, audioCtx: AudioContext) {
+  constructor(
+    x: number,
+    y: number,
+    color: string,
+    r: number,
+    freq: number,
+    audioCtx: AudioContext
+  ) {
     super(x, y, color, r);
     this.freq = freq;
     this.audioCtx = audioCtx;
