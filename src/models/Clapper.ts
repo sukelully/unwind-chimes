@@ -5,23 +5,21 @@ export class Clapper {
   color: string;
 
   // Physics properties for wind chime effect
-  restX: number; // Original rest position
+  restX: number;                  // Original rest position
   restY: number;
   velocityX: number = 0;
   velocityY: number = 0;
-  damping: number = 0.95; // Resistance to movement (0-1)
-  springStrength: number = 0.02; // How strong the pull back to rest position is
-  maxDisplacement: number = 50; // Maximum distance from rest position
+  damping: number = 0.95;         // Resistance to movement (0-1)
+  springStrength: number = 0.02;  // How strong the pull back to rest position is
+  maxDisplacement: number = 50;   // Maximum distance from rest position
 
-  constructor(x: number, y: number, color: string = 'blue', r: number = 30) {
-    this.x = x;
-    this.y = y;
-    this.r = r;
-    this.color = color;
-
-    // Set rest position
+  constructor(x: number, y: number, color: string, r: number) {
     this.restX = x;
     this.restY = y;
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    this.r = r;
   }
 
   draw(ctx: CanvasRenderingContext2D): void {

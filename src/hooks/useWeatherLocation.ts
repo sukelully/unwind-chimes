@@ -15,7 +15,7 @@ type Weather = {
   conditions: string;
 };
 
-export function useWeatherLocation() {
+const useWeatherLocation = () => {
   const [weather, setWeather] = useState<Weather | null>(null);
   const [location, setLocation] = useState<Location | null>(null);
   const [weatherLoading, setWeatherLoading] = useState(false);
@@ -85,6 +85,19 @@ export function useWeatherLocation() {
     await getWeatherData(randomCity.lat, randomCity.long);
   };
 
+    const handleLocationClick = (): void => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            loadWeatherFromLocation(pos.coords.latitude, pos.coords.longitude);
+          },
+          () => {
+            console.error('Could not get getlocation');
+          }
+        );
+      }
+    };
+
   return {
     weather,
     location,
@@ -92,7 +105,9 @@ export function useWeatherLocation() {
     weatherError,
     locationLoading,
     locationError,
-    loadWeatherFromLocation,
     loadRandomCity,
+    handleLocationClick
   };
 }
+
+export default useWeatherLocation;

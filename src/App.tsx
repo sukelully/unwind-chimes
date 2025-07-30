@@ -1,5 +1,5 @@
 import './App.css';
-import { useWeatherLocation } from './hooks/useWeatherLocation';
+import useWeatherLocation from './hooks/useWeatherLocation';
 import Chime from './components/AudioChime';
 import ChimeCanvas from './components/ChimeCanvas';
 
@@ -11,22 +11,9 @@ function App() {
     weatherError,
     locationLoading,
     locationError,
-    loadWeatherFromLocation,
     loadRandomCity,
+    handleLocationClick
   } = useWeatherLocation();
-
-  const handleLocationClick = (): void => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          loadWeatherFromLocation(pos.coords.latitude, pos.coords.longitude);
-        },
-        () => {
-          console.error('Could not get getlocation');
-        }
-      );
-    }
-  };
 
   return (
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col bg-slate-100 p-6 dark:bg-neutral-900">
