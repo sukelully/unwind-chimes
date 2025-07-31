@@ -13,11 +13,10 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null) => {
       const minDistance = clapper.r + chime.r;
 
       if (distance < minDistance && distance > 0) {
-        // Only play sound if not already colliding
         if (!chime.isColliding) {
-          chime.playSimpleChime(chime.freq);
+          chime.playSimpleChime(chime.freq, 5);
           chime.isColliding = true;
-          chime.collisionCooldown = 30; // 30 frames cooldown (~0.5 seconds at 60fps)
+          chime.collisionCooldown = 30;
         }
 
         // Collision physics (always apply)
@@ -44,7 +43,7 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null) => {
       const allObjects = [...chimes, clapper].filter(Boolean);
       const randomObject = allObjects[Math.floor(Math.random() * allObjects.length)];
       if (randomObject) {
-        randomObject.applyBreeze(0.20);
+        randomObject.applyBreeze(0.2);
       }
     }
   }, [chimes, clapper]);

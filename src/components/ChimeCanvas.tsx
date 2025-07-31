@@ -32,7 +32,7 @@ export default function ChimeCanvas(): React.JSX.Element {
       const clickedChime = chimes.find((obj: Chime) => obj.contains(mouseX, mouseY));
 
       if (clickedChime) {
-        clickedChime.playSimpleChime(clickedChime.freq);
+        clickedChime.playSimpleChime(clickedChime.freq, 5);
       }
     },
     [chimes]

@@ -48,28 +48,57 @@ export class Chime extends Clapper {
     if (this.collisionCooldown > 0) {
       this.collisionCooldown--;
     }
-    
+
     if (this.collisionCooldown === 0) {
       this.isColliding = false;
     }
   }
 
-  playSimpleChime(freq: number, duration: number = 1): void {
+  playSimpleChime(
+    freq: number,
+    duration: number = 1,
+    wave: OscillatorType = 'triangle',
+    level: number = 0.7
+  ): void {
     const osc = this.audioCtx.createOscillator();
     const gain = this.audioCtx.createGain();
 
-    osc.type = 'triangle';
+    osc.type = wave;
     osc.frequency.value = freq;
 
     // Envelope
     gain.gain.setValueAtTime(0.0001, this.audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(1, this.audioCtx.currentTime + 0.01);
+    gain.gain.exponentialRampToValueAtTime(level, this.audioCtx.currentTime + 0.01);
     gain.gain.exponentialRampToValueAtTime(0.0001, this.audioCtx.currentTime + duration);
 
     osc.connect(gain);
     gain.connect(this.audioCtx.destination);
 
+    this.saturateColor();
+
     osc.start();
     osc.stop(this.audioCtx.currentTime + duration);
+  }
+
+  // Saturate chime color briefly
+  saturateColor(): void {
+    const origColor = this.color;
+    const hslRegex = /hsl\(\s*(\d+),\s*(\d+)%?,\s*(\d+)%?\)/;
+    const match = origColor.match(hslRegex);
+
+    if (match) {
+      const h = parseInt(match[1], 10);
+      const s = parseInt(match[2], 10);
+      const l = parseInt(match[3], 10);
+
+      const boostedS = Math.min(s + 30, 100);
+      const boostedColor = `hsl(${h}, ${boostedS}%, ${l}%)`;
+
+      this.color = boostedColor;
+
+      setTimeout(() => {
+        this.color = origColor;
+      }, 200);
+    }
   }
 }
