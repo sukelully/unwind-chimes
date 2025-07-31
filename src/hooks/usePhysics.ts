@@ -44,7 +44,7 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null) => {
       const allObjects = [...chimes, clapper].filter(Boolean);
       const randomObject = allObjects[Math.floor(Math.random() * allObjects.length)];
       if (randomObject) {
-        randomObject.applyBreeze(0.15);
+        randomObject.applyBreeze(0.20);
       }
     }
   }, [chimes, clapper]);

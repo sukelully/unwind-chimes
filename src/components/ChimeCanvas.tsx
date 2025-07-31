@@ -29,11 +29,10 @@ export default function ChimeCanvas(): React.JSX.Element {
       const mouseX = e.clientX - rect.left;
       const mouseY = e.clientY - rect.top;
 
-      const clickedObject = chimes.find((obj: Chime) => obj.contains(mouseX, mouseY));
+      const clickedChime = chimes.find((obj: Chime) => obj.contains(mouseX, mouseY));
 
-      if (clickedObject) {
-        clickedObject.color = `hsla(${Math.random() * 360}, 70%, 60%, 0.8)`;
-        clickedObject.applyForce((Math.random() - 0.5) * 3, (Math.random() - 0.5) * 3);
+      if (clickedChime) {
+        clickedChime.playSimpleChime(clickedChime.freq);
       }
     },
     [chimes]

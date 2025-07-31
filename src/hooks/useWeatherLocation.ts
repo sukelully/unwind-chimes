@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import cities from '../assets/cities.json';
+import cities from '../data/cities.json';
 
 const API_KEY: string = import.meta.env.VITE_API_KEY;
 

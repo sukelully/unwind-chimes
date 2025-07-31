@@ -2,6 +2,8 @@ import type { CanvasDimensions } from '../types/canvas';
 import { Chime } from '../models/Chime';
 import { Clapper } from '../models/Clapper';
 import { useState, useEffect } from 'react';
+import { getScaleFrequncies } from '../utils/scaleUtils.ts';
+import { cMajPent } from '../data/noteFrequencies.ts';
 
 const useChimeObjects = (dimensions: CanvasDimensions, getAudioContext: () => AudioContext) => {
   const [chimes, setChimes] = useState<Chime[]>([]);
@@ -25,13 +27,14 @@ const useChimeObjects = (dimensions: CanvasDimensions, getAudioContext: () => Au
     ];
 
     const starPoints = [];
+    const freqs = getScaleFrequncies(cMajPent);
 
     // Create chimes in star formation
     for (let i = 0; i < 5; i++) {
       const angle = ((i * 2) % 10) * ((Math.PI * 2) / 10) - Math.PI / 2;
       const x = centerX + outerRadius * Math.cos(angle);
       const y = centerY + outerRadius * Math.sin(angle);
-      starPoints.push(new Chime(x, y, colors[i], chimeRadius, (i + 1) * 200, audioContext));
+      starPoints.push(new Chime(x, y, colors[i], chimeRadius, freqs[i], audioContext));
     }
 
     setChimes(starPoints);

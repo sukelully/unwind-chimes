@@ -25,4 +25,4 @@ dist-ssr
 
 # API Keys and JSON city data
 .env
-/src/assets/cities.json
+/src/data/cities.json
