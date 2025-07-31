@@ -43,7 +43,8 @@ export default function ChimeCanvas(): React.JSX.Element {
       // Ensure audio context is ready for user interaction
       getAudioContext();
       const windForce = (Math.random() - 0.5) * 20;
-      clapper.applyForce(windForce, Math.random() * 0.5);
+      // const windForce = -5;
+      clapper.applyForce(windForce, windForce);
     }
   }, [clapper, getAudioContext]);
 

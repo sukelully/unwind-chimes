@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 
 const usePhysics = (chimes: Chime[], clapper: Clapper | null) => {
   const handleCollisions = useCallback(() => {
-    if (!clapper) return;
+    if (!clapper || !chimes) return;
 
     chimes.forEach((chime: Chime) => {
       const dx = clapper.x - chime.x;
@@ -13,14 +13,10 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null) => {
       const minDistance = clapper.r + chime.r;
 
       if (distance < minDistance && distance > 0) {
-        if (!chime.isColliding) {
-          chime.playSimpleChime(chime.freq, 5);
-          chime.isColliding = true;
-          chime.collisionCooldown = 30;
-        }
 
         // Collision physics (always apply)
         const overlap = minDistance - distance;
+        console.log(overlap);
         const separationX = (dx / distance) * overlap * 0.5;
         const separationY = (dy / distance) * overlap * 0.5;
 
@@ -34,6 +30,12 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null) => {
         const bounceForce = 0.3;
         clapper.applyForce(separationX * bounceForce, separationY * bounceForce);
         chime.applyForce(-separationX * bounceForce, -separationY * bounceForce);
+
+        if (!chime.isColliding) {
+          chime.playSimpleChime(chime.freq, 5, overlap);
+          chime.isColliding = true;
+          chime.collisionCooldown = 30;
+        }
       }
     });
   }, [chimes, clapper]);
