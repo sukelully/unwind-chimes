@@ -1,4 +1,4 @@
-export const chromaticNotes: Record<string, number> ={
+const chromaticNotes: Record<string, number> ={
   'C4': 261.63,
   'Db4': 277.18,
   'D4': 293.67,
@@ -16,3 +16,7 @@ export const chromaticNotes: Record<string, number> ={
 
 export const cMajPent = ['C4', 'E4', 'G4', 'A4', 'C5'];
 export const cMaj7Pent = ['C4', 'E4', 'G4', 'A4', 'B4']
+
+export function getScaleFrequncies(scale: string[]): number[] {
+  return scale.map(note => chromaticNotes[note]);
+}

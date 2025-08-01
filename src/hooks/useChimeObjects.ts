@@ -2,8 +2,8 @@ import type { CanvasDimensions } from '../types/canvas';
 import { Chime } from '../models/Chime';
 import { Clapper } from '../models/Clapper';
 import { useState, useEffect } from 'react';
-import { getScaleFrequncies } from '../utils/scaleUtils.ts';
-import { cMajPent } from '../data/noteFrequencies.ts';
+import { getScaleFrequncies } from '../utils/scales.ts';
+import { cMajPent } from '../utils/scales.ts';
 
 const useChimeObjects = (dimensions: CanvasDimensions, getAudioContext: () => AudioContext) => {
   const [chimes, setChimes] = useState<Chime[]>([]);

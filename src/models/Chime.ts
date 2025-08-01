@@ -62,14 +62,13 @@ export class Chime extends Clapper {
   ): void {
     const osc = this.audioCtx.createOscillator();
     const gain = this.audioCtx.createGain();
-    const normalisedLevel = level * 0.2;
 
     osc.type = wave;
     osc.frequency.value = freq;
 
     // Envelope
     gain.gain.setValueAtTime(0.0001, this.audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(normalisedLevel, this.audioCtx.currentTime + 0.01);
+    gain.gain.exponentialRampToValueAtTime(level, this.audioCtx.currentTime + 0.01);
     gain.gain.exponentialRampToValueAtTime(0.0001, this.audioCtx.currentTime + duration);
 
     osc.connect(gain);

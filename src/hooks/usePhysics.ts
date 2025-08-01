@@ -12,13 +12,20 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null) => {
       const distance = Math.sqrt(dx * dx + dy * dy);
       const minDistance = clapper.r + chime.r;
 
+      // Collision occurs
       if (distance < minDistance && distance > 0) {
-
-        // Collision physics (always apply)
         const overlap = minDistance - distance;
-        console.log(overlap);
         const separationX = (dx / distance) * overlap * 0.5;
         const separationY = (dy / distance) * overlap * 0.5;
+
+        // Calculate velocity for volume level
+        const velX = clapper.velocityX - chime.velocityX;
+        const velY = clapper.velocityY - chime.velocityY;
+        const collisionSpeed = Math.sqrt(velX * velX + velY * velY);
+
+        // Convert to volume level
+        const level = Math.min(collisionSpeed * 0.1, 0.8);
+        // console.log(level);
 
         // Separate objects
         clapper.x += separationX;
@@ -32,7 +39,7 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null) => {
         chime.applyForce(-separationX * bounceForce, -separationY * bounceForce);
 
         if (!chime.isColliding) {
-          chime.playSimpleChime(chime.freq, 5, overlap);
+          chime.playSimpleChime(chime.freq, 5, level);
           chime.isColliding = true;
           chime.collisionCooldown = 30;
         }
