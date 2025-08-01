@@ -24,13 +24,21 @@ export default function ChimeCanvas(): React.JSX.Element {
     (e) => {
       const canvas = canvasRef.current;
       if (!canvas) return;
-
       const rect = canvas.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
-
-      const clickedChime = chimes.find((obj: Chime) => obj.contains(mouseX, mouseY));
-
+      
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      
+      const mouseX = (e.clientX - rect.left) * scaleX;
+      const mouseY = (e.clientY - rect.top) * scaleY;
+      
+      const clickedChime = chimes.find((chime: Chime) => {
+        const dx = mouseX - chime.x;
+        const dy = mouseY - chime.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        return distance <= chime.r;
+      });
       if (clickedChime) {
         clickedChime.playSimpleChime(clickedChime.freq, 5);
       }
@@ -41,12 +49,10 @@ export default function ChimeCanvas(): React.JSX.Element {
   const applyGustOfWind = useCallback((): void => {
     if (clapper) {
       getAudioContext();
-  
+
       const windForceX = (Math.random() - 0.5) * 20;
       const windForceY = (Math.random() - 0.5) * 20;
-  
-      console.log(`Wind force X: ${windForceX}, Y: ${windForceY}`);
-  
+
       clapper.applyForce(windForceX, windForceY);
     }
   }, [clapper, getAudioContext]);
@@ -70,11 +76,12 @@ export default function ChimeCanvas(): React.JSX.Element {
           ref={canvasRef}
           width={canvasDimensions.width}
           height={canvasDimensions.height}
+          style={{ width: canvasDimensions.width, height: canvasDimensions.height }}
           onClick={handleCanvasClick}
           onMouseMove={handleMouseMove}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          className="h-full w-full cursor-crosshair bg-gradient-to-br from-sky-50 to-blue-100"
+          className="cursor-crosshair bg-gradient-to-br from-sky-50 to-blue-100"
         />
       </div>
     </div>

@@ -10,8 +10,8 @@ const useCanvasDimensions = (containerRef: React.RefObject<HTMLDivElement | null
   const updateDimensions = useCallback(() => {
     if (containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
-      const newWidth = Math.max(300, rect.width - 32);
-      const newHeight = Math.max(200, rect.height - 32);
+      const newWidth = Math.max(300, rect.width); 
+      const newHeight = Math.max(200, rect.height);
       setDimensions({ width: newWidth, height: newHeight });
     }
   }, [containerRef]);
