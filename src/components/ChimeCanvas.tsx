@@ -8,7 +8,11 @@ import useCanvasAnimation from '../hooks/useCanvasAnimation.ts';
 import useMouseTracking from '../hooks/useMouseTracking.ts';
 import { type MouseEventHandler } from '../hooks/useMouseTracking.ts';
 
-export default function ChimeCanvas(): React.JSX.Element {
+type Props = {
+  windSpeed: number | undefined;
+};
+
+export default function ChimeCanvas({ windSpeed }: Props): React.JSX.Element {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -36,7 +40,7 @@ export default function ChimeCanvas(): React.JSX.Element {
         const dx = mouseX - chime.x;
         const dy = mouseY - chime.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-        
+
         return distance <= chime.r;
       });
       if (clickedChime) {
@@ -50,12 +54,16 @@ export default function ChimeCanvas(): React.JSX.Element {
     if (clapper) {
       getAudioContext();
 
-      const windForceX = (Math.random() - 0.5) * 20;
-      const windForceY = (Math.random() - 0.5) * 20;
+      const speed = windSpeed ?? 15;
+
+      const windForceX = (Math.random() - 0.5) * speed;
+      const windForceY = (Math.random() - 0.5) * speed;
+      console.log(`windSpeed: ${speed}`);
+      console.log(`windForceX: ${windForceX}`);
 
       clapper.applyForce(windForceX, windForceY);
     }
-  }, [clapper, getAudioContext]);
+  }, [clapper, getAudioContext, windSpeed]);
 
   return (
     <div className="p-4">
