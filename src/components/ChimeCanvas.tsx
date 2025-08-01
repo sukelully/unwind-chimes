@@ -7,12 +7,13 @@ import usePhysics from '../hooks/usePhysics.ts';
 import useCanvasAnimation from '../hooks/useCanvasAnimation.ts';
 import useMouseTracking from '../hooks/useMouseTracking.ts';
 import { type MouseEventHandler } from '../hooks/useMouseTracking.ts';
+import { type Weather } from '../types/weather.ts';
 
 type Props = {
-  windSpeed: number | undefined;
+  weather: Weather
 };
 
-export default function ChimeCanvas({ windSpeed }: Props): React.JSX.Element {
+export default function ChimeCanvas({ weather }: Props): React.JSX.Element {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -20,9 +21,9 @@ export default function ChimeCanvas({ windSpeed }: Props): React.JSX.Element {
   const { getAudioContext } = useAudioContext();
   const { chimes, clapper } = useChimeObjects(canvasDimensions, getAudioContext);
   const { handleMouseMove, handleMouseEnter, handleMouseLeave } = useMouseTracking();
-  const { handleCollisions, applyRandomBreeze } = usePhysics(chimes, clapper);
+  const { handleCollisions, applyContinuousWeather } = usePhysics(chimes, clapper, weather);
 
-  useCanvasAnimation(canvasRef, chimes, clapper, handleCollisions, applyRandomBreeze);
+  useCanvasAnimation(canvasRef, chimes, clapper, handleCollisions, applyContinuousWeather);
 
   const handleCanvasClick: MouseEventHandler = useCallback(
     (e) => {
@@ -54,16 +55,24 @@ export default function ChimeCanvas({ windSpeed }: Props): React.JSX.Element {
     if (clapper) {
       getAudioContext();
 
-      const speed = windSpeed ?? 15;
+      const dirVariation = (Math.random() - 0.5) * 90;
+      const speedVariation = (Math.random() - 1) * 5;
 
-      const windForceX = (Math.random() - 0.5) * speed;
-      const windForceY = (Math.random() - 0.5) * speed;
-      console.log(`windSpeed: ${speed}`);
-      console.log(`windForceX: ${windForceX}`);
+      const speed = (weather.windspeed ?? 15) + speedVariation;
+      const direction = (weather.winddir ?? Math.random() * 360) + dirVariation;
 
+      // Convert to radians and calculate directional force components
+      const windRadians = ((direction - 90) * Math.PI) / 180;
+      const windForceX = Math.cos(windRadians) * speed;
+      const windForceY = Math.sin(windRadians) * speed;
+
+      // Apply force to clapper and lighter force to chimes
       clapper.applyForce(windForceX, windForceY);
+      chimes.forEach(chime => {
+        chime.applyForce(windForceX * 0.05, windForceY * 0.05);
+      })
     }
-  }, [clapper, getAudioContext, windSpeed]);
+  }, [getAudioContext, clapper, chimes, weather]);
 
   return (
     <div className="p-4">

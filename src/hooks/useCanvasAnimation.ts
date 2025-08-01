@@ -7,7 +7,7 @@ const useCanvasAnimation = (
   chimes: Chime[],
   clapper: Clapper | null,
   handleCollisions: () => void,
-  applyRandomBreeze: () => void
+  applyContinuousWeather: () => void,
 ) => {
   const animationRef = useRef<number | null>(null);
 
@@ -22,7 +22,7 @@ const useCanvasAnimation = (
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       handleCollisions();
-      applyRandomBreeze();
+      applyContinuousWeather();
 
       const allObjects = [...chimes, clapper];
       allObjects.forEach((obj) => {
@@ -40,7 +40,7 @@ const useCanvasAnimation = (
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [canvasRef, chimes, clapper, handleCollisions, applyRandomBreeze]);
+  }, [canvasRef, chimes, clapper, handleCollisions, applyContinuousWeather]);
 };
 
 export default useCanvasAnimation;

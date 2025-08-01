@@ -1,18 +1,12 @@
 import { useState } from 'react';
 import cities from '../data/cities.json';
+import { type Weather } from '../types/weather';
 
 const API_KEY: string = import.meta.env.VITE_API_KEY;
 
 type Location = {
   city: string | null;
   country: string | null;
-};
-
-type Weather = {
-  datetime: string;
-  windspeed: number;
-  winddir: number;
-  conditions: string;
 };
 
 const useWeatherLocation = () => {

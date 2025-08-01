@@ -10,7 +10,7 @@ export class Clapper {
   velocityX: number = 0;
   velocityY: number = 0;
   damping: number = 0.95; // Resistance to movement (0-1)
-  springStrength: number = 0.02; // How strong the pull back to rest position is
+  springStrength: number = 0.01; // How strong the pull back to rest position is
   maxDisplacement: number = 50; // Maximum distance from rest position
 
   constructor(x: number, y: number, color: string, r: number) {
