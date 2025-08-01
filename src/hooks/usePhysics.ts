@@ -52,7 +52,7 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
 
     let dampening = 1.0;
     let turbulence = 1.0;
-    let frequency = 1.0;
+    let frequency = 0.3;
 
     if (condition.includes('rain')) {
       dampening = 1.3; // Rain adds weight/dampening
@@ -85,7 +85,7 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
     const gustSpeed = weather.windspeed * gustMultiplier;
 
     // Directional variation - more variation with higher turbulence
-    const maxVariation = 120 * turbulence; // Up to 60 degrees in calm, 120 in storms
+    const maxVariation = 180 * turbulence; // Up to 60 degrees in calm, 120 in storms
     const dirVariation = (Math.random() - 0.5) * maxVariation;
     const gustDirection = direction + dirVariation;
     const gustRadians = ((gustDirection - 90) * Math.PI) / 180;
@@ -107,8 +107,8 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
     const windRadians = ((direction - 90) * Math.PI) / 180;
 
     // Base continuous wind force
-    const baseForceX = Math.cos(windRadians) * speed * 0.015;
-    const baseForceY = Math.sin(windRadians) * speed * 0.015;
+    const baseForceX = Math.cos(windRadians) * speed * 0.005;
+    const baseForceY = Math.sin(windRadians) * speed * 0.005;
 
     // Add turbulence to the continuous wind
     const turbulenceX = (Math.random() - 0.5) * speed * turbulence * 0.01;

@@ -27,16 +27,6 @@ export class Clapper {
     ctx.fillStyle = this.color;
     ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
     ctx.fill();
-
-    // Subtle line to show the rest position
-    ctx.strokeStyle = 'rgba(0,0,0,0.1)';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([2, 2]);
-    ctx.beginPath();
-    ctx.moveTo(this.restX + this.r, this.restY);
-    ctx.lineTo(this.x + this.r, this.y);
-    ctx.stroke();
-    ctx.setLineDash([]);
   }
 
   update(): void {

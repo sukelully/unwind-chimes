@@ -19,11 +19,11 @@ const useChimeObjects = (dimensions: CanvasDimensions, getAudioContext: () => Au
     const chimeRadius = Math.min(dimensions.width, dimensions.height) * 0.07;
 
     const colors = [
-      'hsl(7, 82%, 63%)', // Red
-      'hsl(13, 88%, 74%)', // Pink
-      'hsl(38, 94%, 67%)', // Yellow
-      'hsl(148, 54%, 58%)', // Green
-      'hsl(199, 65%, 54%)', // Blue
+      'hsl(305, 47%, 70%)',
+      'hsl(275, 72%, 74%)',
+      'hsl(256, 66%, 76%)',
+      'hsl(231, 63%, 76%)',
+      'hsl(183, 68%, 69%)',
     ];
 
     const starPoints = [];
@@ -38,7 +38,7 @@ const useChimeObjects = (dimensions: CanvasDimensions, getAudioContext: () => Au
     }
 
     setChimes(starPoints);
-    setClapper(new Clapper(centerX, centerY, 'rgba(120, 113, 108, 0.9)', chimeRadius * 1.5));
+    setClapper(new Clapper(centerX, centerY, 'rgba(120, 113, 108, 0.9)', chimeRadius * 1.6));
   }, [dimensions, getAudioContext]);
 
   return { chimes, clapper };
