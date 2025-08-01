@@ -58,7 +58,7 @@ export class Chime extends Clapper {
     freq: number,
     duration: number = 1,
     level: number = 0.5,
-    wave: OscillatorType = 'triangle',
+    wave: OscillatorType = 'triangle'
   ): void {
     const osc = this.audioCtx.createOscillator();
     const gain = this.audioCtx.createGain();

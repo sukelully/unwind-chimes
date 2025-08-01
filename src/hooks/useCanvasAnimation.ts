@@ -7,7 +7,7 @@ const useCanvasAnimation = (
   chimes: Chime[],
   clapper: Clapper | null,
   handleCollisions: () => void,
-  applyContinuousWeather: () => void,
+  applyContinuousWeather: () => void
 ) => {
   const animationRef = useRef<number | null>(null);
 

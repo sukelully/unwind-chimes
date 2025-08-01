@@ -10,7 +10,7 @@ import { type MouseEventHandler } from '../hooks/useMouseTracking.ts';
 import { type Weather } from '../types/weather.ts';
 
 type Props = {
-  weather: Weather
+  weather: Weather;
 };
 
 export default function ChimeCanvas({ weather }: Props): React.JSX.Element {
@@ -24,19 +24,20 @@ export default function ChimeCanvas({ weather }: Props): React.JSX.Element {
   const { handleCollisions, applyContinuousWeather } = usePhysics(chimes, clapper, weather);
 
   useCanvasAnimation(canvasRef, chimes, clapper, handleCollisions, applyContinuousWeather);
+  // Husky test
 
   const handleCanvasClick: MouseEventHandler = useCallback(
     (e) => {
       const canvas = canvasRef.current;
       if (!canvas) return;
       const rect = canvas.getBoundingClientRect();
-      
+
       const scaleX = canvas.width / rect.width;
       const scaleY = canvas.height / rect.height;
-      
+
       const mouseX = (e.clientX - rect.left) * scaleX;
       const mouseY = (e.clientY - rect.top) * scaleY;
-      
+
       const clickedChime = chimes.find((chime: Chime) => {
         const dx = mouseX - chime.x;
         const dy = mouseY - chime.y;
@@ -68,9 +69,9 @@ export default function ChimeCanvas({ weather }: Props): React.JSX.Element {
 
       // Apply force to clapper and lighter force to chimes
       clapper.applyForce(windForceX, windForceY);
-      chimes.forEach(chime => {
+      chimes.forEach((chime) => {
         chime.applyForce(windForceX * 0.05, windForceY * 0.05);
-      })
+      });
     }
   }, [getAudioContext, clapper, chimes, weather]);
 

@@ -96,7 +96,6 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
     // Apply to clapper with intensity variation based on turbulence
     const intensity = 0.8 + Math.random() * 0.4 * turbulence;
     clapper?.applyForce(gustForceX * intensity, gustForceY * intensity);
-
   }, [clapper, weather.windspeed, weather.winddir, getWeatherMultipliers]);
 
   const applyContinuousWeather = useCallback(() => {
@@ -118,8 +117,8 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
     // Apply to clapper with dampening and natural variation
     const variation = 0.8 + Math.random() * 0.4;
     clapper?.applyForce(
-      (baseForceX + turbulenceX) * variation / dampening,
-      (baseForceY + turbulenceY) * variation / dampening
+      ((baseForceX + turbulenceX) * variation) / dampening,
+      ((baseForceY + turbulenceY) * variation) / dampening
     );
 
     // Occasional stronger gusts - frequency affects probability
