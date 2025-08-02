@@ -95,7 +95,7 @@ const useWeatherLocation = () => {
   const useExampleWeather = (): void => {
     const exampleWeather: Weather = {
       datetime: '2025-08-02',
-      windspeed: 25,
+      windspeed: 15,
       winddir: 90.0,
       conditions: 'Partially cloudy',
     };

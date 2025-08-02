@@ -25,7 +25,7 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
         const collisionSpeed = Math.sqrt(velX * velX + velY * velY);
 
         // Convert to volume level
-        const volumeLimit = 0.6;
+        const volumeLimit = 0.5;
         const level = Math.min(collisionSpeed * 0.1, volumeLimit);
 
         // Separate objects
@@ -40,7 +40,7 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
         chime.applyForce(-separationX * bounceForce, -separationY * bounceForce);
 
         if (!chime.isColliding) {
-          chime.playSimpleChime(chime.freq, 5, level);
+          chime.playSimpleChime(chime.freq, level);
           chime.isColliding = true;
           chime.collisionCooldown = 30;
         }
