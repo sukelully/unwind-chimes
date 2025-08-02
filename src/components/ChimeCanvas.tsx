@@ -1,13 +1,13 @@
 import React, { useRef, useCallback } from 'react';
-import { Chime } from '../models/Chime.ts';
-import useChimeObjects from '../hooks/useChimeObjects.ts';
-import useAudioContext from '../hooks/useAudioContext.ts';
-import useCanvasDimensions from '../hooks/useCanvasDimensions.ts';
-import usePhysics from '../hooks/usePhysics.ts';
-import useCanvasAnimation from '../hooks/useCanvasAnimation.ts';
-import useMouseTracking from '../hooks/useMouseTracking.ts';
-import { type MouseEventHandler } from '../hooks/useMouseTracking.ts';
-import { type Weather } from '../types/weather.ts';
+import { Chime } from '@/models/Chime';
+import useChimeObjects from '@/hooks/useChimeObjects';
+import useAudioContext from '@/hooks/useAudioContext';
+import useCanvasDimensions from '@/hooks/useCanvasDimensions';
+import usePhysics from '@/hooks/usePhysics';
+import useCanvasAnimation from '@/hooks/useCanvasAnimation';
+import useMouseTracking from '@/hooks/useMouseTracking';
+import { type MouseEventHandler } from '@/hooks/useMouseTracking';
+import { type Weather } from '@/types/weather';
 
 type Props = {
   weather: Weather;

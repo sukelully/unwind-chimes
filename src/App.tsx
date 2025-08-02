@@ -1,7 +1,7 @@
-import './App.css';
-import useWeatherLocation from './hooks/useWeatherLocation';
-import Chime from './components/AudioChime';
-import ChimeCanvas from './components/ChimeCanvas';
+import '@/App.css';
+import useWeatherLocation from '@/hooks/useWeatherLocation';
+import Chime from '@/components/AudioChime';
+import ChimeCanvas from '@/components/ChimeCanvas';
 
 function App() {
   const {
@@ -13,6 +13,7 @@ function App() {
     locationError,
     loadRandomCity,
     handleLocationClick,
+    useExampleWeather,
   } = useWeatherLocation();
 
   return (
@@ -46,6 +47,9 @@ function App() {
         </button>
         <button className="btn" onClick={loadRandomCity}>
           Get random city
+        </button>
+        <button className="btn" onClick={useExampleWeather}>
+          Use example weather
         </button>
       </section>
       <section id="chimes" className="flex flex-col items-center gap-4">

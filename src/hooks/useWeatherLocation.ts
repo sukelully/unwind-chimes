@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import cities from '../data/cities.json';
-import { type Weather } from '../types/weather';
+import cities from '@/data/cities.json';
+import { type Weather } from '@/types/weather';
 
 const API_KEY: string = import.meta.env.VITE_API_KEY;
 
@@ -92,6 +92,16 @@ const useWeatherLocation = () => {
     }
   };
 
+  const useExampleWeather = (): void => {
+    const exampleWeather: Weather = {
+      datetime: '2025-08-02',
+      windspeed: 25,
+      winddir: 90.0,
+      conditions: 'Partially cloudy',
+    };
+    setWeather(exampleWeather);
+  };
+
   return {
     weather,
     location,
@@ -101,6 +111,7 @@ const useWeatherLocation = () => {
     locationError,
     loadRandomCity,
     handleLocationClick,
+    useExampleWeather,
   };
 };
 

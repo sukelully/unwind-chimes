@@ -1,7 +1,7 @@
-import { Chime } from '../models/Chime';
-import { Clapper } from '../models/Clapper';
+import { Chime } from '@/models/Chime';
+import { Clapper } from '@/models/Clapper';
 import { useCallback } from 'react';
-import { type Weather } from '../types/weather';
+import { type Weather } from '@/types/weather';
 
 const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) => {
   const handleCollisions = useCallback(() => {
@@ -25,7 +25,8 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
         const collisionSpeed = Math.sqrt(velX * velX + velY * velY);
 
         // Convert to volume level
-        const level = Math.min(collisionSpeed * 0.1, 0.8);
+        const volumeLimit = 0.6;
+        const level = Math.min(collisionSpeed * 0.1, volumeLimit);
 
         // Separate objects
         clapper.x += separationX;

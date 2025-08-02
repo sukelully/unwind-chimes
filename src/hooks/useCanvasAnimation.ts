@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
-import { Chime } from '../models/Chime';
-import { Clapper } from '../models/Clapper';
+import { Chime } from '@/models/Chime';
+import { Clapper } from '@/models/Clapper';
 
 const useCanvasAnimation = (
   canvasRef: React.RefObject<HTMLCanvasElement | null>,

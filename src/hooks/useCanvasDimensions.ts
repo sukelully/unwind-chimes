@@ -1,4 +1,4 @@
-import { type CanvasDimensions } from '../types/canvas';
+import { type CanvasDimensions } from '@/types/canvas';
 import React, { useEffect, useState, useCallback } from 'react';
 
 const useCanvasDimensions = (containerRef: React.RefObject<HTMLDivElement | null>) => {
