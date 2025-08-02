@@ -2,8 +2,8 @@ import type { CanvasDimensions } from '../types/canvas';
 import { Chime } from '../models/Chime';
 import { Clapper } from '../models/Clapper';
 import { useState, useEffect } from 'react';
-import { getScaleFrequncies } from '../utils/scales.ts';
-import { cMajPent } from '../utils/scales.ts';
+import { getScaleFrequncies, cMajPent } from '../utils/scales.ts';
+import { createGradientSteps } from '../utils/colors.ts';
 
 const useChimeObjects = (dimensions: CanvasDimensions, getAudioContext: () => AudioContext) => {
   const [chimes, setChimes] = useState<Chime[]>([]);
@@ -18,13 +18,16 @@ const useChimeObjects = (dimensions: CanvasDimensions, getAudioContext: () => Au
     const outerRadius = Math.min(dimensions.width, dimensions.height) * 0.2;
     const chimeRadius = Math.min(dimensions.width, dimensions.height) * 0.07;
 
-    const colors = [
-      'hsl(305, 47%, 70%)',
-      'hsl(275, 72%, 74%)',
-      'hsl(256, 66%, 76%)',
-      'hsl(231, 63%, 76%)',
-      'hsl(183, 68%, 69%)',
-    ];
+    // const colors = [
+    //   'hsl(305, 47%, 70%)',
+    //   'hsl(275, 72%, 74%)',
+    //   'hsl(256, 66%, 76%)',
+    //   'hsl(231, 63%, 76%)',
+    //   'hsl(183, 68%, 69%)',
+    // ];
+
+    // const colors = createGradientSteps('#d68fd0', '#7ae0e6');
+    const colors = createGradientSteps('#fca17d', '#9a348e');
 
     const starPoints = [];
     const freqs = getScaleFrequncies(cMajPent);

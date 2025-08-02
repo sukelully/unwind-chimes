@@ -24,7 +24,6 @@ export default function ChimeCanvas({ weather }: Props): React.JSX.Element {
   const { handleCollisions, applyContinuousWeather } = usePhysics(chimes, clapper, weather);
 
   useCanvasAnimation(canvasRef, chimes, clapper, handleCollisions, applyContinuousWeather);
-  // Husky test
 
   const handleCanvasClick: MouseEventHandler = useCallback(
     (e) => {
