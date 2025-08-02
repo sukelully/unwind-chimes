@@ -19,7 +19,7 @@ export default function ChimeCanvas({ weather }: Props): React.JSX.Element {
 
   const canvasDimensions = useCanvasDimensions(containerRef);
   const { getAudioContext } = useAudioContext();
-  const { chimes, clapper } = useChimeObjects(canvasDimensions, getAudioContext);
+  const { chimes, clapper } = useChimeObjects(canvasDimensions, getAudioContext, weather);
   const { handleMouseMove, handleMouseEnter, handleMouseLeave } = useMouseTracking();
   const { handleCollisions, applyContinuousWeather } = usePhysics(chimes, clapper, weather);
 

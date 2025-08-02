@@ -20,6 +20,15 @@ function App() {
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col bg-slate-100 p-6 dark:bg-neutral-900">
       {weather && <ChimeCanvas weather={weather} />}
       <section id="weather-data" className="my-4 flex flex-col items-center gap-4">
+        <button className="btn" onClick={handleLocationClick}>
+          Get local weather
+        </button>
+        <button className="btn" onClick={loadRandomCity}>
+          Get random city
+        </button>
+        <button className="btn" onClick={useExampleWeather}>
+          Use example weather
+        </button>
         <>
           {(weatherLoading || locationLoading) && 'Loading weather data...'}
           {(weatherError || locationError) && (
@@ -42,15 +51,6 @@ function App() {
             </>
           )}
         </>
-        <button className="btn" onClick={handleLocationClick}>
-          Get local weather
-        </button>
-        <button className="btn" onClick={loadRandomCity}>
-          Get random city
-        </button>
-        <button className="btn" onClick={useExampleWeather}>
-          Use example weather
-        </button>
       </section>
       <section id="chimes" className="flex flex-col items-center gap-4">
         <Chime />

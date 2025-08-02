@@ -29,9 +29,13 @@ const useWeatherLocation = () => {
       const today = json.days[0];
       // setWeather(json);
       setWeather({
-        datetime: today.datetime,
+        temp: today.temp,
+        humidity: today.humidity,
+        precip: today.precip,
         windspeed: today.windspeed,
         winddir: today.winddir,
+        cloudcover: today.cloudcover,
+        uvindex: today.uvindex,
         conditions: today.conditions,
       });
     } catch (error) {
@@ -94,9 +98,13 @@ const useWeatherLocation = () => {
 
   const useExampleWeather = (): void => {
     const exampleWeather: Weather = {
-      datetime: '2025-08-02',
+      temp: 100,
+      humidity: 77.9,
+      precip: 0,
       windspeed: 15,
       winddir: 90.0,
+      cloudcover: 44.6,
+      uvindex: 10,
       conditions: 'Partially cloudy',
     };
     setWeather(exampleWeather);

@@ -3,9 +3,14 @@ import { Chime } from '@/models/Chime';
 import { Clapper } from '@/models/Clapper';
 import { useState, useEffect } from 'react';
 import { getScaleFrequncies, cMajPent } from '@/utils/scales';
-import { createGradientSteps } from '@/utils/colors';
+import { createGradientSteps, getWeatherColors } from '@/utils/colors';
+import { type Weather } from '@/types/weather';
 
-const useChimeObjects = (dimensions: CanvasDimensions, getAudioContext: () => AudioContext) => {
+const useChimeObjects = (
+  dimensions: CanvasDimensions,
+  getAudioContext: () => AudioContext,
+  weather: Weather
+) => {
   const [chimes, setChimes] = useState<Chime[]>([]);
   const [clapper, setClapper] = useState<Clapper | null>(null);
 
@@ -26,8 +31,13 @@ const useChimeObjects = (dimensions: CanvasDimensions, getAudioContext: () => Au
     //   'hsl(183, 68%, 69%)',
     // ];
 
-    // const colors = createGradientSteps('#d68fd0', '#7ae0e6');
-    const colors = createGradientSteps('#fca17d', '#9a348e');
+    const [h1, h2, s, l1, l2] = getWeatherColors(
+      weather.temp,
+      weather.humidity,
+      weather.cloudcover,
+      weather.uvindex
+    );
+    const colors = createGradientSteps(h1, h2, s, l1, l2, 5);
 
     const starPoints = [];
     const freqs = getScaleFrequncies(cMajPent);
@@ -42,7 +52,7 @@ const useChimeObjects = (dimensions: CanvasDimensions, getAudioContext: () => Au
 
     setChimes(starPoints);
     setClapper(new Clapper(centerX, centerY, 'rgba(120, 113, 108, 0.9)', chimeRadius * 1.6));
-  }, [dimensions, getAudioContext]);
+  }, [dimensions, getAudioContext, weather]);
 
   return { chimes, clapper };
 };
