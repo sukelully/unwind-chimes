@@ -45,7 +45,8 @@ export default function ChimeCanvas({ weather }: Props): React.JSX.Element {
         return distance <= chime.r;
       });
       if (clickedChime) {
-        clickedChime.playSimpleChime(clickedChime.freq);
+        // clickedChime.playSimpleChime();
+        clickedChime.playPluckChime();
       }
     },
     [chimes]

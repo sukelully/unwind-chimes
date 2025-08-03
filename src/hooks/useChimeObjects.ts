@@ -23,21 +23,13 @@ const useChimeObjects = (
     const outerRadius = Math.min(dimensions.width, dimensions.height) * 0.2;
     const chimeRadius = Math.min(dimensions.width, dimensions.height) * 0.07;
 
-    // const colors = [
-    //   'hsl(305, 47%, 70%)',
-    //   'hsl(275, 72%, 74%)',
-    //   'hsl(256, 66%, 76%)',
-    //   'hsl(231, 63%, 76%)',
-    //   'hsl(183, 68%, 69%)',
-    // ];
-
     const [h1, h2, s, l1, l2] = getWeatherColors(
       weather.temp,
       weather.humidity,
       weather.cloudcover,
       weather.uvindex
     );
-    const colors = createGradientSteps(h1, h2, s, l1, l2, 5);
+    const colors = createGradientSteps(h1, h2, s, l1, l2, chimes.length);
 
     const starPoints = [];
     const freqs = getScaleFrequncies(cMajPent);
@@ -52,7 +44,7 @@ const useChimeObjects = (
 
     setChimes(starPoints);
     setClapper(new Clapper(centerX, centerY, 'rgba(120, 113, 108, 0.9)', chimeRadius * 1.6));
-  }, [dimensions, getAudioContext, weather]);
+  }, [dimensions, getAudioContext, weather, chimes.length]);
 
   return { chimes, clapper };
 };

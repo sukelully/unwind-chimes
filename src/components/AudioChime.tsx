@@ -1,5 +1,5 @@
 export default function Chime() {
-  const audioCtx: AudioContext = new AudioContext();
+  const audioContext: AudioContext = new AudioContext();
   const bufferCache = new Map<string, AudioBuffer>();
 
   function generatePluckBuffer(freq: number, octave: number = 1): AudioBuffer {
@@ -8,18 +8,22 @@ export default function Chime() {
       return bufferCache.get(cacheKey)!;
     }
 
-    const delaySamples: number = Math.round(audioCtx.sampleRate / (freq * octave));
+    const delaySamples: number = Math.round(audioContext.sampleRate / (freq * octave));
     const delayBuffer = new Float32Array(delaySamples);
     let dbIndex = 0;
 
-    const bufferSize = audioCtx.sampleRate * 7; // 7 second buffer
-    const outputBuffer: AudioBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const bufferSize = audioContext.sampleRate * 7; // 7 second buffer
+    const outputBuffer: AudioBuffer = audioContext.createBuffer(
+      1,
+      bufferSize,
+      audioContext.sampleRate
+    );
     const output: Float32Array = outputBuffer.getChannelData(0);
 
     for (let i = 0; i < bufferSize; i++) {
-      const variation = Math.round(((Math.random() * 10 - 5) * audioCtx.sampleRate) / 1000); // ±5ms noise burst
+      const variation = Math.round(((Math.random() * 10 - 5) * audioContext.sampleRate) / 1000); // ±5ms noise burst
       const dampening = 0.997;
-      const noiseBurst = Math.max(0, audioCtx.sampleRate / 100 + variation);
+      const noiseBurst = Math.max(0, audioContext.sampleRate / 100 + variation);
       const sample = i < noiseBurst ? Math.random() * 1 - 0.5 : 0; // Produce random noise during burst timeframe otherwise 0
 
       delayBuffer[dbIndex] =
@@ -38,14 +42,14 @@ export default function Chime() {
   function playPluckChime(freq: number, octave: number = 1): void {
     const buffer: AudioBuffer = generatePluckBuffer(freq, octave);
 
-    const source: AudioBufferSourceNode = audioCtx.createBufferSource();
-    const filter: BiquadFilterNode = audioCtx.createBiquadFilter();
+    const source: AudioBufferSourceNode = audioContext.createBufferSource();
+    const filter: BiquadFilterNode = audioContext.createBiquadFilter();
     filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(500, audioCtx.currentTime);
+    filter.frequency.setValueAtTime(500, audioContext.currentTime);
 
     source.buffer = buffer;
     source.connect(filter);
-    filter.connect(audioCtx.destination);
+    filter.connect(audioContext.destination);
 
     source.start();
     source.onended = () => {
@@ -55,22 +59,22 @@ export default function Chime() {
   }
 
   function playSimpleChime(freq: number, duration: number = 1): void {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
+    const osc = audioContext.createOscillator();
+    const gain = audioContext.createGain();
 
     osc.type = 'triangle';
     osc.frequency.value = freq;
 
     // Envelope
-    gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(1, audioCtx.currentTime + 0.01);
-    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+    gain.gain.setValueAtTime(0.0001, audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(1, audioContext.currentTime + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + duration);
 
     osc.connect(gain);
-    gain.connect(audioCtx.destination);
+    gain.connect(audioContext.destination);
 
     osc.start();
-    osc.stop(audioCtx.currentTime + duration);
+    osc.stop(audioContext.currentTime + duration);
   }
 
   function handleSimpleClick(): void {

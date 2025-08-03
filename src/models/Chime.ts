@@ -1,13 +1,15 @@
-import { Clapper } from './Clapper.ts';
+import { Clapper } from './Clapper';
+import { PluckBufferFactory } from '@/utils/PluckBufferFactory';
 
 export class Chime extends Clapper {
   freq: number;
-  audioCtx: AudioContext;
+  audioContext: AudioContext;
   isPlaying: boolean = false;
   isColliding: boolean = false;
   collisionCooldown: number = 0;
   currentOscillator: OscillatorNode | null = null;
   currentGain: GainNode | null = null;
+  bufferCache: Map<string, AudioBuffer> = new Map();
 
   constructor(
     x: number,
@@ -15,13 +17,14 @@ export class Chime extends Clapper {
     color: string,
     r: number,
     freq: number,
-    audioCtx: AudioContext
+    audioContext: AudioContext
   ) {
     super(x, y, color, r);
     this.freq = freq;
-    this.audioCtx = audioCtx;
+    this.audioContext = audioContext;
   }
 
+  // Update chime position
   update(): void {
     // Calculate spring force
     const springForceX = (this.restX - this.x) * this.springStrength;
@@ -48,6 +51,7 @@ export class Chime extends Clapper {
       this.y = this.restY + Math.sin(angle) * this.maxDisplacement;
     }
 
+    // Handle collisions
     if (this.collisionCooldown > 0) {
       this.collisionCooldown--;
     }
@@ -57,30 +61,33 @@ export class Chime extends Clapper {
     }
   }
 
-  // Stop the current chime if one is playing
-  stopCurrentChime(): void {
-    if (this.currentOscillator && this.currentGain) {
-      try {
-        // Smooth out clicks and pops
-        const currentGainValue = this.currentGain.gain.value;
-        this.currentGain.gain.cancelScheduledValues(this.audioCtx.currentTime);
-        this.currentGain.gain.setValueAtTime(currentGainValue, this.audioCtx.currentTime);
-        this.currentGain.gain.linearRampToValueAtTime(0, this.audioCtx.currentTime + 0.05);
+  playPluckChime(level: number = 0.5): void {
+    const buffer = PluckBufferFactory.getBuffer(this.freq, this.audioContext);
 
-        this.currentOscillator.stop(this.audioCtx.currentTime + 0.05);
-        // eslint-disable-next-line
-      } catch (e) {
-        // Oscillator might already be stopped
-      }
+    const source = this.audioContext.createBufferSource();
+    const gain = this.audioContext.createGain();
+    const filter = this.audioContext.createBiquadFilter();
 
-      this.currentOscillator = null;
-      this.currentGain = null;
-      this.isPlaying = false;
-    }
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(500, this.audioContext.currentTime);
+    gain.gain.setValueAtTime(level, this.audioContext.currentTime + 0.00001);
+
+    source.buffer = buffer;
+    source.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.audioContext.destination);
+
+    source.start();
+    source.onended = () => {
+      source.disconnect();
+      filter.disconnect();
+    };
+
+    this.saturateColor();
   }
 
+  // Play note at set frequency with a simple type of synthesis
   playSimpleChime(
-    freq: number,
     level: number = 0.5,
     duration: number = 5,
     wave: OscillatorType = 'triangle'
@@ -88,8 +95,8 @@ export class Chime extends Clapper {
     // Stop any currently playing chime
     this.stopCurrentChime();
 
-    const osc = this.audioCtx.createOscillator();
-    const gain = this.audioCtx.createGain();
+    const osc: OscillatorNode = this.audioContext.createOscillator();
+    const gain: GainNode = this.audioContext.createGain();
 
     // Store references to current nodes
     this.currentOscillator = osc;
@@ -97,20 +104,20 @@ export class Chime extends Clapper {
     this.isPlaying = true;
 
     osc.type = wave;
-    osc.frequency.value = freq;
+    osc.frequency.value = this.freq;
 
     // Envelope
-    gain.gain.setValueAtTime(0.0001, this.audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(level, this.audioCtx.currentTime + 0.01);
-    gain.gain.exponentialRampToValueAtTime(0.0001, this.audioCtx.currentTime + duration);
+    gain.gain.setValueAtTime(0.0001, this.audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(level, this.audioContext.currentTime + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, this.audioContext.currentTime + duration);
 
     osc.connect(gain);
-    gain.connect(this.audioCtx.destination);
+    gain.connect(this.audioContext.destination);
 
     this.saturateColor();
 
     osc.start();
-    osc.stop(this.audioCtx.currentTime + duration);
+    osc.stop(this.audioContext.currentTime + duration);
 
     // Clear references when the oscillator ends
     osc.onended = () => {
@@ -120,6 +127,28 @@ export class Chime extends Clapper {
         this.isPlaying = false;
       }
     };
+  }
+
+  // Stop the current chime if one is playing
+  stopCurrentChime(): void {
+    if (this.currentOscillator && this.currentGain) {
+      try {
+        // Smooth out clicks and pops
+        const currentGainValue = this.currentGain.gain.value;
+        this.currentGain.gain.cancelScheduledValues(this.audioContext.currentTime);
+        this.currentGain.gain.setValueAtTime(currentGainValue, this.audioContext.currentTime);
+        this.currentGain.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + 0.05);
+
+        this.currentOscillator.stop(this.audioContext.currentTime + 0.05);
+        // eslint-disable-next-line
+      } catch (e) {
+        // Oscillator might already be stopped
+      }
+
+      this.currentOscillator = null;
+      this.currentGain = null;
+      this.isPlaying = false;
+    }
   }
 
   // Saturate chime color briefly
