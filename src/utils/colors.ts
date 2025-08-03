@@ -46,7 +46,7 @@ export function getWeatherColors(
   uvindex: number
 ): [number, number, number, number, number] {
   // 🔥 Make temp map to full hue range for variety (cool to warm to hot)
-  const baseHue = map(temp, 50, 120, 0, 360); // blue → red → magenta
+  const baseHue = map(temp, 0, 100, 240, -30); // blue → red → magenta
 
   // 💧 Instead of tying humidity hue directly, offset baseHue to create contrast
   // Add a ±90° offset based on humidity level
@@ -54,10 +54,10 @@ export function getWeatherColors(
   const humidHue = (baseHue + humidityOffset + 360) % 360;
 
   // ☁️ Less cloud = more saturated
-  const saturation = map(cloudcover, 100, 0, 40, 95);
+  const saturation = map(cloudcover, 90, 0, 50, 90);
 
   // 🔆 Brighter days = brighter colors
-  const lightness = map(uvindex, 0, 10, 25, 75);
+  const lightness = map(uvindex, 1, 11, 25, 75);
 
   return [baseHue, humidHue, saturation, lightness, lightness];
 }
