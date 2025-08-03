@@ -1,24 +1,24 @@
 import { useRef, useEffect, useCallback } from 'react';
 
 const useAudioContext = () => {
-  const audioCtxRef = useRef<AudioContext | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
 
   const getAudioContext = useCallback(() => {
-    if (!audioCtxRef.current || audioCtxRef.current.state === 'closed') {
-      audioCtxRef.current = new AudioContext();
+    if (!audioContextRef.current || audioContextRef.current.state === 'closed') {
+      audioContextRef.current = new AudioContext();
     }
 
-    if (audioCtxRef.current.state === 'suspended') {
-      audioCtxRef.current.resume();
+    if (audioContextRef.current.state === 'suspended') {
+      audioContextRef.current.resume();
     }
 
-    return audioCtxRef.current;
+    return audioContextRef.current;
   }, []);
 
   useEffect(() => {
     const handleBeforeUnload = () => {
-      if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
-        audioCtxRef.current.close();
+      if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
+        audioContextRef.current.close();
       }
     };
 
@@ -28,7 +28,7 @@ const useAudioContext = () => {
     };
   }, []);
 
-  return { audioContext: audioCtxRef.current, getAudioContext };
+  return { audioContext: audioContextRef.current, getAudioContext };
 };
 
 export default useAudioContext;

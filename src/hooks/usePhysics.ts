@@ -40,7 +40,8 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
         chime.applyForce(-separationX * bounceForce, -separationY * bounceForce);
 
         if (!chime.isColliding) {
-          chime.playSimpleChime(chime.freq, level);
+          chime.playSimpleChime(level, 1200);
+          // chime.playPluckChime(level);
           chime.isColliding = true;
           chime.collisionCooldown = 30;
         }

@@ -4,6 +4,12 @@
 
 ---
 
+## Related Issues
+
+<!-- Link the issue(s) addressed by this PR -->
+
+---
+
 ## How to test
 
 1. Run the app with `pnpm dev`
