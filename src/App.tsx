@@ -1,6 +1,5 @@
 import '@/App.css';
 import useWeatherLocation from '@/hooks/useWeatherLocation';
-import Chime from '@/components/AudioChime';
 import ChimeCanvas from '@/components/ChimeCanvas';
 
 function App() {
@@ -51,9 +50,6 @@ function App() {
             </>
           )}
         </>
-      </section>
-      <section id="chimes" className="flex flex-col items-center gap-4">
-        <Chime />
       </section>
     </main>
   );

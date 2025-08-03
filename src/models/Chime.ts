@@ -21,20 +21,38 @@ export class Chime extends Clapper {
     this.audioContext = audioContext;
   }
 
-  private createEffectsChain(filterFreq: number): { input: AudioNode; output: GainNode } {
-    const gain = this.audioContext.createGain();
-    gain.gain.setValueAtTime(1, this.audioContext.currentTime);
+  private createEffectsChain(
+    filterFreq: number,
+    delayTime: number = 0.5,
+    delayFeedback: number = 0.5,
+    delayLevel: number = 0.5
+  ): { input: AudioNode; output: GainNode } {
+    const outputGain = this.audioContext.createGain();
+    outputGain.gain.setValueAtTime(1, this.audioContext.currentTime);
 
     const filter = this.audioContext.createBiquadFilter();
     filter.type = 'lowpass';
     filter.frequency.setValueAtTime(filterFreq, this.audioContext.currentTime);
 
-    // Add delay and reverb here
+    const delay = this.audioContext.createDelay();
+    const delayWet = this.audioContext.createGain();
+    const feedbackGain = this.audioContext.createGain();
+    delay.delayTime.setValueAtTime(delayTime, this.audioContext.currentTime);
 
-    filter.connect(gain);
-    gain.connect(this.audioContext.destination);
+    // Prevent infite feedback loop
+    feedbackGain.gain.setValueAtTime(Math.min(delayFeedback, 0.95), this.audioContext.currentTime);
+    delayWet.gain.setValueAtTime(delayLevel, this.audioContext.currentTime);
 
-    return { input: filter, output: gain };
+    // Routing
+    filter.connect(delayWet);
+    filter.connect(outputGain);
+    delayWet.connect(delay);
+    delay.connect(feedbackGain);
+    feedbackGain.connect(delay);
+    feedbackGain.connect(outputGain);
+    outputGain.connect(this.audioContext.destination);
+
+    return { input: filter, output: outputGain };
   }
 
   // Update chime position
