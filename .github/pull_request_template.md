@@ -1,12 +1,6 @@
-## Description
-
-Briefly explain what this PR does and why
-
----
-
 ## Changes
 
-- Bulleted list of changes introduced
+<!-- - Bulleted list of changes introduced -->
 
 ---
 
@@ -20,4 +14,4 @@ Briefly explain what this PR does and why
 
 ## Notes
 
-Add any future consierations, screenshots, or audio samples.
+<!-- Add any future considerations, screenshots, or audio samples. -->
