@@ -45,6 +45,7 @@ export default function ChimeCanvas({ weather }: Props): React.JSX.Element {
         return distance <= chime.r;
       });
       if (clickedChime) {
+        // Play chime
         // clickedChime.playSimpleChime();
         clickedChime.playPluckChime();
       }
@@ -67,13 +68,9 @@ export default function ChimeCanvas({ weather }: Props): React.JSX.Element {
       const windForceX = Math.cos(windRadians) * speed;
       const windForceY = Math.sin(windRadians) * speed;
 
-      // Apply force to clapper and lighter force to chimes
       clapper.applyForce(windForceX, windForceY);
-      chimes.forEach((chime) => {
-        chime.applyForce(windForceX * 0.05, windForceY * 0.05);
-      });
     }
-  }, [getAudioContext, clapper, chimes, weather]);
+  }, [getAudioContext, clapper, weather]);
 
   return (
     <div className="p-4">

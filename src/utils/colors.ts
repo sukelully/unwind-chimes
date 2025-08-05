@@ -45,21 +45,30 @@ export function getWeatherColors(
   cloudcover: number,
   uvindex: number
 ): [number, number, number, number, number] {
-  // 🔥 Make temp map to full hue range for variety (cool to warm to hot)
-  const baseHue = map(temp, 0, 100, 240, -30); // blue → red → magenta
+  // Temperature: Cool blues (200) to warm oranges/reds (20)
+  // Wrapping around the color wheel to hit warm colors
+  const tempHue =
+    temp > 50
+      ? map(temp, 50, 100, 40, 20) // Hot temps: orange to red
+      : map(temp, 0, 50, 200, 40); // Cool to warm: blue to orange
 
-  // 💧 Instead of tying humidity hue directly, offset baseHue to create contrast
-  // Add a ±90° offset based on humidity level
-  const humidityOffset = map(humidity, 0, 100, -120, 120);
-  const humidHue = (baseHue + humidityOffset + 360) % 360;
+  // Humidity: Dry conditions (low humidity) = warm colors
+  // High humidity = cooler purples/blues
+  const humidHue = map(humidity, 20, 90, 30, 260);
 
-  // ☁️ Less cloud = more saturated
-  const saturation = map(cloudcover, 90, 0, 50, 90);
+  // Cloud cover affects saturation more dramatically
+  const saturation = map(cloudcover, 90, 0, 40, 85);
 
-  // 🔆 Brighter days = brighter colors
-  const lightness = map(uvindex, 1, 11, 25, 75);
+  // UV index affects both lightness and shifts hue toward warmer colors
+  const lightness = map(uvindex, 1, 11, 45, 80);
 
-  return [baseHue, humidHue, saturation, lightness, lightness];
+  // High UV adds warmth by shifting toward yellows/oranges
+  const uvHueShift = map(uvindex, 1, 11, 0, -20);
+
+  const finalBaseHue = (tempHue + uvHueShift + 360) % 360;
+  const finalHumidHue = (humidHue + uvHueShift + 360) % 360;
+
+  return [finalBaseHue, finalHumidHue, saturation, lightness, lightness];
 }
 
 // Value remapping

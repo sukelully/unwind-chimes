@@ -64,7 +64,8 @@ export class Chime extends Clapper {
 
     const source = this.audioContext.createBufferSource();
     const gain = this.audioContext.createGain();
-    gain.gain.setValueAtTime(level, this.audioContext.currentTime);
+    const levelMultiplier = 2; // Pluck chime is quieter than simple chime
+    gain.gain.setValueAtTime(level * levelMultiplier, this.audioContext.currentTime);
     source.buffer = buffer;
 
     const { input } = this.createEffectsChain(filterFreq);
@@ -122,8 +123,11 @@ export class Chime extends Clapper {
     const feedbackGain = this.audioContext.createGain();
     delay.delayTime.setValueAtTime(delayTime, this.audioContext.currentTime);
 
-    // Prevent infite feedback loop
-    feedbackGain.gain.setValueAtTime(Math.min(delayFeedback, 0.95), this.audioContext.currentTime);
+    const feedbackLimit = 0.95; // Prevent infite feedback loop
+    feedbackGain.gain.setValueAtTime(
+      Math.min(delayFeedback, feedbackLimit),
+      this.audioContext.currentTime
+    );
     delayWet.gain.setValueAtTime(delayLevel, this.audioContext.currentTime);
 
     // Routing

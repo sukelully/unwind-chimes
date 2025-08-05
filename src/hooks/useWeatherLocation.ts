@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import cities from '@/data/cities.json';
 import { type Weather } from '@/types/weather';
 
@@ -16,7 +16,9 @@ const useWeatherLocation = () => {
   const [weatherError, setWeatherError] = useState<Error | null>(null);
   const [locationLoading, setLocationLoading] = useState(false);
   const [locationError, setLocationError] = useState<Error | null>(null);
+  const isThrottledRef = useRef(false);
 
+  // Fetch weather data
   const getWeatherData = async (lat: number, long: number) => {
     try {
       setWeatherLoading(true);
@@ -45,6 +47,7 @@ const useWeatherLocation = () => {
     }
   };
 
+  // Geolocation get coordinates and city/country name
   const getLocationFromCoords = async (lat: number, long: number): Promise<Location | null> => {
     try {
       setLocationLoading(true);
@@ -71,18 +74,31 @@ const useWeatherLocation = () => {
     }
   };
 
+  // Fetch weather data using coordinates
   const loadWeatherFromLocation = async (lat: number, long: number) => {
     const loc = await getLocationFromCoords(lat, long);
+
     if (loc) setLocation(loc);
     await getWeatherData(lat, long);
   };
 
+  // Get weathe data from a random city in data/cities.json
   const loadRandomCity = async () => {
+    // Time in ms before another API call can be made
+    const apiThrottle = 1000;
+    if (isThrottledRef.current) return;
+
+    isThrottledRef.current = true;
+    setTimeout(() => {
+      isThrottledRef.current = false;
+    }, apiThrottle);
+
     const randomCity = cities[Math.floor(Math.random() * cities.length)];
     setLocation({ city: randomCity.city, country: randomCity.country });
     await getWeatherData(randomCity.lat, randomCity.long);
   };
 
+  // Get coordinates
   const handleLocationClick = (): void => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -96,6 +112,7 @@ const useWeatherLocation = () => {
     }
   };
 
+  // Example weather data for testing
   const useExampleWeather = (): void => {
     const exampleWeather: Weather = {
       temp: 100,

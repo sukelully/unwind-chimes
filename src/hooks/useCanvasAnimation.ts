@@ -11,6 +11,7 @@ const useCanvasAnimation = (
 ) => {
   const animationRef = useRef<number | null>(null);
 
+  // Main animation loop
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || !clapper) return;
@@ -19,11 +20,14 @@ const useCanvasAnimation = (
     if (!ctx) return;
 
     const animate = (): void => {
+      // Clear the canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+      // Weather and collision logic
       handleCollisions();
       applyContinuousWeather();
 
+      // Update and draw objects to canvas
       const allObjects = [...chimes, clapper];
       allObjects.forEach((obj) => {
         obj.update();
@@ -35,6 +39,7 @@ const useCanvasAnimation = (
 
     animate();
 
+    // Clean up on unmount or change in dependencies
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);

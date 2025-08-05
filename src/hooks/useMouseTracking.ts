@@ -6,6 +6,7 @@ const useMouseTracking = () => {
   const mousePositionRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const isMouseOverCanvasRef = useRef<boolean>(false);
 
+  // Track mouse movement within canvas
   const handleMouseMove: MouseEventHandler = useCallback((e) => {
     const canvas = e.currentTarget;
     const rect = canvas.getBoundingClientRect();

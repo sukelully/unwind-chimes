@@ -22,6 +22,7 @@ export class Clapper {
     this.r = r;
   }
 
+  // Draw circle
   draw(ctx: CanvasRenderingContext2D): void {
     ctx.beginPath();
     ctx.fillStyle = this.color;
@@ -29,6 +30,7 @@ export class Clapper {
     ctx.fill();
   }
 
+  // Update position
   update(): void {
     // Calculate spring force
     const springForceX = (this.restX - this.x) * this.springStrength;
