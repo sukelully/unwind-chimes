@@ -1,3 +1,4 @@
+// Creates a Karplus-Strong audio buffer for the chosen frequency
 export class PluckBufferFactory {
   private static bufferCache: Map<string, AudioBuffer> = new Map();
 

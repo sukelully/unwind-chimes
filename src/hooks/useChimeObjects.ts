@@ -14,6 +14,7 @@ const useChimeObjects = (
   const [chimes, setChimes] = useState<Chime[]>([]);
   const [clapper, setClapper] = useState<Clapper | null>(null);
 
+  // Instantiate chimes and clapper
   useEffect(() => {
     const audioContext = getAudioContext();
     if (!audioContext) return;

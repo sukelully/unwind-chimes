@@ -4,6 +4,7 @@ import { useCallback } from 'react';
 import { type Weather } from '@/types/weather';
 
 const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) => {
+  // Determine whether a collision has occured and play chime if so
   const handleCollisions = useCallback(() => {
     if (!clapper || !chimes) return;
 
@@ -49,6 +50,7 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
     });
   }, [chimes, clapper]);
 
+  // Use weather conditions to modify existing weather variables
   const getWeatherMultipliers = useCallback(() => {
     const condition = weather.conditions?.toLowerCase() || '';
 
@@ -76,6 +78,7 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
     return { dampening, turbulence, frequency };
   }, [weather.conditions, weather.windspeed]);
 
+  // Apply a gust of wind to the clapper
   const applyGust = useCallback(() => {
     if (!weather.windspeed) return;
 
@@ -100,6 +103,7 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
     clapper?.applyForce(gustForceX * intensity, gustForceY * intensity);
   }, [clapper, weather.windspeed, weather.winddir, getWeatherMultipliers]);
 
+  // Continuous weather effects
   const applyContinuousWeather = useCallback(() => {
     if (!weather.windspeed || weather.windspeed < 1) return;
 

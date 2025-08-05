@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 
 const useCanvasDimensions = (containerRef: React.RefObject<HTMLDivElement | null>) => {
   const [dimensions, setDimensions] = useState<CanvasDimensions>({
+    //  Fallback dimensions
     width: 800,
     height: 500,
   });
@@ -16,11 +17,11 @@ const useCanvasDimensions = (containerRef: React.RefObject<HTMLDivElement | null
     }
   }, [containerRef]);
 
+  // Update dimensions on window resize
   useEffect(() => {
     updateDimensions();
-    const handleResize = () => updateDimensions();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
   }, [updateDimensions]);
 
   return dimensions;
