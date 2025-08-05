@@ -42,8 +42,7 @@ function App() {
                 <span className="text-center">
                   You're listening to{' '}
                   <span className="font-semibold">
-                    {location.city || 'an unknown city'},{' '}
-                    {location.country || 'in an unknown country'}
+                    {location.city || 'an unknown location'}, {location.country || null}
                   </span>
                 </span>
               )}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import cities from '@/data/cities.json';
 import { type Weather } from '@/types/weather';
 
@@ -16,6 +16,7 @@ const useWeatherLocation = () => {
   const [weatherError, setWeatherError] = useState<Error | null>(null);
   const [locationLoading, setLocationLoading] = useState(false);
   const [locationError, setLocationError] = useState<Error | null>(null);
+  const isThrottledRef = useRef(false);
 
   const getWeatherData = async (lat: number, long: number) => {
     try {
@@ -73,11 +74,21 @@ const useWeatherLocation = () => {
 
   const loadWeatherFromLocation = async (lat: number, long: number) => {
     const loc = await getLocationFromCoords(lat, long);
+
     if (loc) setLocation(loc);
     await getWeatherData(lat, long);
   };
 
   const loadRandomCity = async () => {
+    // Time in ms before another API call can be made
+    const apiThrottle = 1000;
+    if (isThrottledRef.current) return;
+
+    isThrottledRef.current = true;
+    setTimeout(() => {
+      isThrottledRef.current = false;
+    }, apiThrottle);
+
     const randomCity = cities[Math.floor(Math.random() * cities.length)];
     setLocation({ city: randomCity.city, country: randomCity.country });
     await getWeatherData(randomCity.lat, randomCity.long);
