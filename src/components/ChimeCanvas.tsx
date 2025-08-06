@@ -53,52 +53,22 @@ export default function ChimeCanvas({ weather }: Props): React.JSX.Element {
     [chimes]
   );
 
-  const applyGustOfWind = useCallback((): void => {
-    if (clapper) {
-      getAudioContext();
-
-      const dirVariation = (Math.random() - 0.5) * 90;
-      const speedVariation = (Math.random() - 1) * 5;
-
-      const speed = (weather.windspeed ?? 15) + speedVariation;
-      const direction = (weather.winddir ?? Math.random() * 360) + dirVariation;
-
-      // Convert to radians and calculate directional force components
-      const windRadians = ((direction - 90) * Math.PI) / 180;
-      const windForceX = Math.cos(windRadians) * speed;
-      const windForceY = Math.sin(windRadians) * speed;
-
-      clapper.applyForce(windForceX, windForceY);
-    }
-  }, [getAudioContext, clapper, weather]);
-
   return (
-    <div className="p-4">
-      <div className="mb-4 space-x-2">
-        <button
-          onClick={applyGustOfWind}
-          className="rounded bg-green-500 px-4 py-2 text-white transition-colors hover:bg-green-600"
-        >
-          Gust of Wind
-        </button>
-      </div>
-
-      <div
-        ref={containerRef}
-        className="h-96 w-full max-w-4xl overflow-hidden rounded-lg border-2 border-gray-300 shadow-lg md:h-[500px] lg:h-[600px]"
-      >
-        <canvas
-          ref={canvasRef}
-          width={canvasDimensions.width}
-          height={canvasDimensions.height}
-          style={{ width: canvasDimensions.width, height: canvasDimensions.height }}
-          onClick={handleCanvasClick}
-          onMouseMove={handleMouseMove}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          className="cursor-crosshair bg-gradient-to-br from-sky-50 to-blue-100"
-        />
-      </div>
+    <div
+      ref={containerRef}
+      className="h-92 w-full max-w-4xl overflow-hidden border border-indigo-900 md:h-[400px]"
+    >
+      <canvas
+        ref={canvasRef}
+        width={canvasDimensions.width}
+        height={canvasDimensions.height}
+        style={{ width: canvasDimensions.width, height: canvasDimensions.height }}
+        onClick={handleCanvasClick}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        className="cursor-crosshair"
+      />
     </div>
   );
 }
