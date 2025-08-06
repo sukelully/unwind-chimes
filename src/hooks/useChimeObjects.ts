@@ -21,8 +21,8 @@ const useChimeObjects = (
 
     const centerX = dimensions.width / 2;
     const centerY = dimensions.height / 2;
-    const outerRadius = Math.min(dimensions.width, dimensions.height) * 0.2;
-    const chimeRadius = Math.min(dimensions.width, dimensions.height) * 0.07;
+    const outerRadius = Math.min(dimensions.width, dimensions.height) * 0.3;
+    const chimeRadius = Math.min(dimensions.width, dimensions.height) * 0.1;
 
     const [h1, h2, s, l1, l2] = getWeatherColors(
       weather.temp,
