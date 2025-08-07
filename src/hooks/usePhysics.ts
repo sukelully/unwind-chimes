@@ -58,26 +58,8 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
     const frequency = map(speed, 0, 30, 0.5, 1);
     const dampening = 1.0;
 
-    // const condition = weather.conditions?.toLowerCase() || '';
-    // if (condition.includes('rain')) {
-    //   dampening = 1.3;
-    //   turbulence = 0.5;
-    //   frequency = 0.5;
-    // }
-
-    // if (condition.includes('storm') || condition.includes('heavy') || weather.windspeed > 25) {
-    //   turbulence = 1.5;
-    //   frequency = 0.7;
-    // }
-
-    // if (condition.includes('calm') || weather.windspeed < 3) {
-    //   dampening = 0.8;
-    //   turbulence = 0.3;
-    //   frequency = 0.1;
-    // }
-
     return { dampening, turbulence, frequency };
-  }, [weather.conditions, weather.windspeed]);
+  }, [weather.windspeed]);
 
   // Apply a gust of wind to the clapper
   const applyGust = useCallback(() => {

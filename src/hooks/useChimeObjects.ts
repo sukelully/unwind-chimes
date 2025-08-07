@@ -4,6 +4,7 @@ import { Clapper } from '@/models/Clapper';
 import { useState, useEffect } from 'react';
 import { getScaleFrequncies, cMajPent, cMaj7Pent, cMaj9 } from '@/utils/scales';
 import { createGradientSteps, getWeatherColors } from '@/utils/colors';
+import { map } from '@/utils/math';
 import { type Weather } from '@/types/weather';
 
 const useChimeObjects = (
@@ -36,10 +37,10 @@ const useChimeObjects = (
 
     let freqs: number[] = [];
     switch (true) {
-      case weather.windspeed < 12:
+      case weather.windspeed < 10:
         freqs = getScaleFrequncies(cMaj9);
         break;
-      case weather.windspeed >= 12 && weather.windspeed < 20:
+      case weather.windspeed >= 10 && weather.windspeed < 20:
         freqs = getScaleFrequncies(cMaj7Pent);
         break;
       case weather.windspeed >= 20 && weather.windspeed < 30:
@@ -50,7 +51,18 @@ const useChimeObjects = (
         break;
     }
 
-    const effectsChain = createEffectsChain(audioContext, 1200);
+    // Map weather conditions to effects parameters
+    const filterFreq = map(weather.humidity, 20, 95, 300, 1200);
+    const delayLevel = map(weather.cloudcover, 0, 95, 0.1, 0.6);
+    const delayTime = map(weather.precip, 0, 2, 0.1, 1.5);
+    const delayFeedback = map(weather.temp, 20, 120, 0.4, 0.9);
+    const effectsChain = createEffectsChain(
+      audioContext,
+      filterFreq,
+      delayLevel,
+      delayTime,
+      delayFeedback
+    );
 
     // Create chimes in star formation
     for (let i = 0; i < 5; i++) {
@@ -73,9 +85,9 @@ const useChimeObjects = (
   function createEffectsChain(
     audioContext: AudioContext,
     filterFreq: number,
+    delayLevel: number = 0.5,
     delayTime: number = 0.5,
-    delayFeedback: number = 0.5,
-    delayLevel: number = 0.5
+    delayFeedback: number = 0.5
   ): { input: AudioNode; output: GainNode } {
     const outputGain = audioContext.createGain();
     outputGain.gain.setValueAtTime(1, audioContext.currentTime);
