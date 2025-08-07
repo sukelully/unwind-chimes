@@ -21,7 +21,7 @@ const useChimeObjects = (
 
     const centerX = dimensions.width / 2;
     const centerY = dimensions.height / 2;
-    const outerRadius = Math.min(dimensions.width, dimensions.height) * 0.3;
+    const outerRadius = Math.min(dimensions.width, dimensions.height) * 0.28;
     const chimeRadius = Math.min(dimensions.width, dimensions.height) * 0.1;
 
     const [h1, h2, s, l1, l2] = getWeatherColors(
@@ -30,24 +30,68 @@ const useChimeObjects = (
       weather.cloudcover,
       weather.uvindex
     );
-    const colors = createGradientSteps(h1, h2, s, l1, l2, chimes.length);
+    const colors = createGradientSteps(h1, h2, s, l1, l2, 5);
 
     const starPoints = [];
     const freqs = getScaleFrequncies(cMajPent);
+
+    const effectsChain = createEffectsChain(audioContext, 1200);
 
     // Create chimes in star formation
     for (let i = 0; i < 5; i++) {
       const angle = ((i * 2) % 10) * ((Math.PI * 2) / 10) - Math.PI / 2;
       const x = centerX + outerRadius * Math.cos(angle);
       const y = centerY + outerRadius * Math.sin(angle);
-      starPoints.push(new Chime(x, y, colors[i], chimeRadius, freqs[i], audioContext));
+      const chime = new Chime(x, y, colors[i], chimeRadius, freqs[i], audioContext);
+
+      // Connect chimes to effects chain and set position
+      chime.setEffectsChain(effectsChain);
+      starPoints.push(chime);
     }
 
     setChimes(starPoints);
     setClapper(new Clapper(centerX, centerY, 'rgba(120, 113, 108, 0.9)', chimeRadius * 1.6));
-  }, [dimensions, getAudioContext, weather, chimes.length]);
+  }, [dimensions, getAudioContext, weather]);
 
   return { chimes, clapper };
+
+  function createEffectsChain(
+    audioContext: AudioContext,
+    filterFreq: number,
+    delayTime: number = 0.5,
+    delayFeedback: number = 0.5,
+    delayLevel: number = 0.5
+  ): { input: AudioNode; output: GainNode } {
+    const outputGain = audioContext.createGain();
+    outputGain.gain.setValueAtTime(1, audioContext.currentTime);
+
+    const filter = audioContext.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(filterFreq, audioContext.currentTime);
+
+    const delay = audioContext.createDelay();
+    const delayWet = audioContext.createGain();
+    const feedbackGain = audioContext.createGain();
+    delay.delayTime.setValueAtTime(delayTime, audioContext.currentTime);
+
+    const feedbackLimit = 0.5; // Prevent infite feedback loop
+    feedbackGain.gain.setValueAtTime(
+      Math.min(delayFeedback, feedbackLimit),
+      audioContext.currentTime
+    );
+    delayWet.gain.setValueAtTime(delayLevel, audioContext.currentTime);
+
+    // Routing
+    filter.connect(delayWet);
+    filter.connect(outputGain);
+    delayWet.connect(delay);
+    delay.connect(feedbackGain);
+    feedbackGain.connect(delay);
+    feedbackGain.connect(outputGain);
+    outputGain.connect(audioContext.destination);
+
+    return { input: filter, output: outputGain };
+  }
 };
 
 export default useChimeObjects;

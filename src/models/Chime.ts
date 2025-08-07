@@ -5,8 +5,8 @@ export class Chime extends Clapper {
   freq: number;
   isColliding: boolean = false;
   collisionCooldown: number = 0;
-
   private audioContext: AudioContext;
+  private effectsChain: { input: AudioNode; output: GainNode } | null = null;
 
   constructor(
     x: number,
@@ -58,8 +58,12 @@ export class Chime extends Clapper {
     }
   }
 
+  setEffectsChain(effectsChain: { input: AudioNode; output: GainNode }): void {
+    this.effectsChain = effectsChain;
+  }
+
   // Play pluck chime using computed buffer
-  playPluckChime(level: number = 0.5, filterFreq: number = 500): void {
+  playPluckChime(level: number = 0.5): void {
     const buffer = PluckBufferFactory.getBuffer(this.freq, this.audioContext);
 
     const source = this.audioContext.createBufferSource();
@@ -68,9 +72,14 @@ export class Chime extends Clapper {
     gain.gain.setValueAtTime(level * levelMultiplier, this.audioContext.currentTime);
     source.buffer = buffer;
 
-    const { input } = this.createEffectsChain(filterFreq);
     source.connect(gain);
-    gain.connect(input);
+
+    // Use effects chain if available, otherwise connect directly to output
+    if (this.effectsChain) {
+      gain.connect(this.effectsChain.input);
+    } else {
+      gain.connect(this.audioContext.destination);
+    }
 
     source.start();
     source.onended = () => {
@@ -83,7 +92,6 @@ export class Chime extends Clapper {
   // Play note at set frequency with a simple type of synthesis
   playSimpleChime(
     level: number = 0.5,
-    filterFreq: number = 500,
     duration: number = 5,
     wave: OscillatorType = 'triangle'
   ): void {
@@ -91,55 +99,26 @@ export class Chime extends Clapper {
     osc.type = wave;
     osc.frequency.value = this.freq;
 
-    const { input, output } = this.createEffectsChain(filterFreq);
+    const gain = this.audioContext.createGain();
 
     // Envelope
-    output.gain.setValueAtTime(0.0001, this.audioContext.currentTime);
-    output.gain.exponentialRampToValueAtTime(level, this.audioContext.currentTime + 0.01);
-    output.gain.exponentialRampToValueAtTime(0.0001, this.audioContext.currentTime + duration);
+    gain.gain.setValueAtTime(0.0001, this.audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(level, this.audioContext.currentTime + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, this.audioContext.currentTime + duration);
 
-    osc.connect(input);
+    osc.connect(gain);
+
+    // Use shared effects chain if available, otherwise connect directly to destination
+    if (this.effectsChain) {
+      gain.connect(this.effectsChain.input);
+    } else {
+      gain.connect(this.audioContext.destination);
+    }
+
     osc.start();
     osc.stop(this.audioContext.currentTime + duration);
 
     this.saturateColor();
-  }
-
-  private createEffectsChain(
-    filterFreq: number,
-    delayTime: number = 0.5,
-    delayFeedback: number = 0.5,
-    delayLevel: number = 0.5
-  ): { input: AudioNode; output: GainNode } {
-    const outputGain = this.audioContext.createGain();
-    outputGain.gain.setValueAtTime(1, this.audioContext.currentTime);
-
-    const filter = this.audioContext.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(filterFreq, this.audioContext.currentTime);
-
-    const delay = this.audioContext.createDelay();
-    const delayWet = this.audioContext.createGain();
-    const feedbackGain = this.audioContext.createGain();
-    delay.delayTime.setValueAtTime(delayTime, this.audioContext.currentTime);
-
-    const feedbackLimit = 0.95; // Prevent infite feedback loop
-    feedbackGain.gain.setValueAtTime(
-      Math.min(delayFeedback, feedbackLimit),
-      this.audioContext.currentTime
-    );
-    delayWet.gain.setValueAtTime(delayLevel, this.audioContext.currentTime);
-
-    // Routing
-    filter.connect(delayWet);
-    filter.connect(outputGain);
-    delayWet.connect(delay);
-    delay.connect(feedbackGain);
-    feedbackGain.connect(delay);
-    feedbackGain.connect(outputGain);
-    outputGain.connect(this.audioContext.destination);
-
-    return { input: filter, output: outputGain };
   }
 
   // Saturate chime color briefly

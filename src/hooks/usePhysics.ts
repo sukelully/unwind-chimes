@@ -36,12 +36,12 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
         chime.y -= separationY;
 
         // Apply bounce forces
-        const bounceForce = 0.3;
+        const bounceForce = 2;
         clapper.applyForce(separationX * bounceForce, separationY * bounceForce);
         chime.applyForce(-separationX * bounceForce, -separationY * bounceForce);
 
         if (!chime.isColliding) {
-          chime.playSimpleChime(level, 1200);
+          chime.playSimpleChime(level);
           // chime.playPluckChime(level);
           chime.isColliding = true;
           chime.collisionCooldown = 30;
@@ -113,8 +113,8 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
     const windRadians = ((direction - 90) * Math.PI) / 180;
 
     // Base continuous wind force
-    const baseForceX = Math.cos(windRadians) * speed * 0.005;
-    const baseForceY = Math.sin(windRadians) * speed * 0.005;
+    const baseForceX = Math.cos(windRadians) * speed * 0.0005;
+    const baseForceY = Math.sin(windRadians) * speed * 0.0005;
 
     // Add turbulence to the continuous wind
     const turbulenceX = (Math.random() - 0.5) * speed * turbulence * 0.01;

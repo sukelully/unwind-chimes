@@ -118,7 +118,7 @@ const useWeatherLocation = () => {
       temp: 100,
       humidity: 77.9,
       precip: 0,
-      windspeed: 15,
+      windspeed: 0,
       winddir: 90.0,
       cloudcover: 44.6,
       uvindex: 10,
