@@ -2,7 +2,7 @@ import type { CanvasDimensions } from '@/types/canvas';
 import { Chime } from '@/models/Chime';
 import { Clapper } from '@/models/Clapper';
 import { useState, useEffect } from 'react';
-import { getScaleFrequncies, cMajPent } from '@/utils/scales';
+import { getScaleFrequncies, cMajPent, cMaj7Pent, cMaj9 } from '@/utils/scales';
 import { createGradientSteps, getWeatherColors } from '@/utils/colors';
 import { type Weather } from '@/types/weather';
 
@@ -33,7 +33,22 @@ const useChimeObjects = (
     const colors = createGradientSteps(h1, h2, s, l1, l2, 5);
 
     const starPoints = [];
-    const freqs = getScaleFrequncies(cMajPent);
+
+    let freqs: number[] = [];
+    switch (true) {
+      case weather.windspeed < 12:
+        freqs = getScaleFrequncies(cMaj9);
+        break;
+      case weather.windspeed >= 12 && weather.windspeed < 20:
+        freqs = getScaleFrequncies(cMaj7Pent);
+        break;
+      case weather.windspeed >= 20 && weather.windspeed < 30:
+        freqs = getScaleFrequncies(cMajPent);
+        break;
+      default:
+        freqs = getScaleFrequncies(cMajPent);
+        break;
+    }
 
     const effectsChain = createEffectsChain(audioContext, 1200);
 

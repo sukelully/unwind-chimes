@@ -1,5 +1,4 @@
 import { Clapper } from './Clapper';
-import { PluckBufferFactory } from '@/utils/PluckBufferFactory';
 
 export class Chime extends Clapper {
   freq: number;
@@ -63,39 +62,8 @@ export class Chime extends Clapper {
     this.effectsChain = effectsChain;
   }
 
-  // Play pluck chime using computed buffer
-  playPluckChime(level: number = 0.5): void {
-    const buffer = PluckBufferFactory.getBuffer(this.freq, this.audioContext);
-
-    const source = this.audioContext.createBufferSource();
-    const gain = this.audioContext.createGain();
-    const levelMultiplier = 2; // Pluck chime is quieter than simple chime
-    gain.gain.setValueAtTime(level * levelMultiplier, this.audioContext.currentTime);
-    source.buffer = buffer;
-
-    source.connect(gain);
-
-    // Use effects chain if available, otherwise connect directly to output
-    if (this.effectsChain) {
-      gain.connect(this.effectsChain.input);
-    } else {
-      gain.connect(this.audioContext.destination);
-    }
-
-    source.start();
-    source.onended = () => {
-      source.disconnect();
-    };
-
-    this.saturateColor();
-  }
-
   // Play note at set frequency with a simple type of synthesis
-  playSimpleChime(
-    level: number = 0.5,
-    duration: number = 10,
-    wave: OscillatorType = 'triangle'
-  ): void {
+  playChime(level: number = 0.5, wave: OscillatorType = 'triangle', duration: number = 10): void {
     const osc: OscillatorNode = this.audioContext.createOscillator();
     osc.type = wave;
     osc.frequency.value = this.freq;
