@@ -27,8 +27,9 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
         const collisionSpeed = Math.sqrt(velX * velX + velY * velY);
 
         // Convert to volume level
-        const volumeLimit = 0.5;
-        const level = Math.min(collisionSpeed * 0.1, volumeLimit);
+        const volumeLimit = 0.3;
+        const level = Math.min(collisionSpeed * 0.05, volumeLimit);
+        console.log(level);
 
         // Separate objects
         clapper.x += separationX;
@@ -41,8 +42,7 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
         chime.applyForce(-separationX * chime.bounceForce, -separationY * chime.bounceForce);
 
         if (!chime.isColliding) {
-          chime.playSimpleChime(level);
-          // chime.playPluckChime(level);
+          chime.playChime(level);
           chime.isColliding = true;
           chime.collisionCooldown = 30;
         }
@@ -55,29 +55,11 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
     const speed = Math.min(weather.windspeed, 30);
 
     const turbulence = map(speed, 0, 30, 1, 1.5);
-    const frequency = map(speed, 0, 30, 0.2, 1);
+    const frequency = map(speed, 0, 30, 0.5, 1);
     const dampening = 1.0;
 
-    // const condition = weather.conditions?.toLowerCase() || '';
-    // if (condition.includes('rain')) {
-    //   dampening = 1.3;
-    //   turbulence = 0.5;
-    //   frequency = 0.5;
-    // }
-
-    // if (condition.includes('storm') || condition.includes('heavy') || weather.windspeed > 25) {
-    //   turbulence = 1.5;
-    //   frequency = 0.7;
-    // }
-
-    // if (condition.includes('calm') || weather.windspeed < 3) {
-    //   dampening = 0.8;
-    //   turbulence = 0.3;
-    //   frequency = 0.1;
-    // }
-
     return { dampening, turbulence, frequency };
-  }, [weather.conditions, weather.windspeed]);
+  }, [weather.windspeed]);
 
   // Apply a gust of wind to the clapper
   const applyGust = useCallback(() => {
@@ -102,7 +84,7 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
     // Apply to clapper with intensity variation based on turbulence
     const intensity = 0.8 + Math.random() * 0.01 * gustSpeed * turbulence;
 
-    console.log(`gustSpeed: ${gustSpeed}\nintensity: ${intensity}`);
+    // console.log(`gustSpeed: ${gustSpeed}\nintensity: ${intensity}`);
 
     clapper?.applyForce(gustForceX * intensity, gustForceY * intensity);
   }, [clapper, weather.windspeed, weather.winddir, getWeatherMultipliers]);
@@ -131,9 +113,9 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
       ((baseForceY + turbulenceY) * variation) / dampening
     );
 
-    console.log(
-      `turbulence: ${turbulence}\ndampening: ${dampening}\nfrequency: ${frequency}\nwindspeed: ${speed}`
-    );
+    // console.log(
+    //   `turbulence: ${turbulence}\ndampening: ${dampening}\nfrequency: ${frequency}\nwindspeed: ${speed}`
+    // );
 
     // Occasional stronger gusts
     const gustProbability = 0.01 * turbulence * frequency;
