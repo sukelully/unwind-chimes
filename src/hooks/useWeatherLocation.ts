@@ -114,17 +114,19 @@ const useWeatherLocation = () => {
 
   // Example weather data for testing
   const useExampleWeather = (): void => {
+    const testCity = { city: 'test city', country: 'test country' };
     const exampleWeather: Weather = {
-      temp: 100,
+      temp: 50,
       humidity: 77.9,
       precip: 0,
-      windspeed: 15,
+      windspeed: 10,
       winddir: 90.0,
       cloudcover: 44.6,
       uvindex: 10,
       conditions: 'Partially cloudy',
     };
     setWeather(exampleWeather);
+    setLocation(testCity);
   };
 
   return {
