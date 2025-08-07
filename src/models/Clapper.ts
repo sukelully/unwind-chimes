@@ -4,12 +4,13 @@ export class Clapper {
   r: number;
   color: string;
 
-  // Physics properties for wind chime effect
-  restX: number; // Original rest position
+  // Physics properties
+  restX: number;
   restY: number;
   velocityX: number = 0;
   velocityY: number = 0;
-  damping: number = 0.95; // Resistance to movement (0-1)
+  bounceForce: number = 2;
+  damping: number = 0.95;
   springStrength: number = 0.01; // How strong the pull back to rest position is
   maxDisplacement: number = 50; // Maximum distance from rest position
 

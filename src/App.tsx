@@ -1,7 +1,7 @@
 import '@/App.css';
 import useWeatherLocation from '@/hooks/useWeatherLocation';
 import ChimeCanvas from '@/components/ChimeCanvas';
-import { farenheightToCelsius } from '@/utils/weatherFunctions';
+import { farenheightToCelsius } from '@/utils/math';
 
 function App() {
   const {

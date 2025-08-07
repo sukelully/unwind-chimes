@@ -1,3 +1,5 @@
+import { map } from './math';
+
 function interpolate(start: number, end: number, factor: number): number {
   return start + (end - start) * factor;
 }
@@ -69,9 +71,4 @@ export function getWeatherColors(
   const finalHumidHue = (humidHue + uvHueShift + 360) % 360;
 
   return [finalBaseHue, finalHumidHue, saturation, lightness, lightness];
-}
-
-// Value remapping
-function map(value: number, inMin: number, inMax: number, outMin: number, outMax: number): number {
-  return ((value - inMin) / (inMax - inMin)) * (outMax - outMin) + outMin;
 }

@@ -5,6 +5,7 @@ export class Chime extends Clapper {
   freq: number;
   isColliding: boolean = false;
   collisionCooldown: number = 0;
+  bounceForce: number = 0.5;
   private audioContext: AudioContext;
   private effectsChain: { input: AudioNode; output: GainNode } | null = null;
 
@@ -92,7 +93,7 @@ export class Chime extends Clapper {
   // Play note at set frequency with a simple type of synthesis
   playSimpleChime(
     level: number = 0.5,
-    duration: number = 5,
+    duration: number = 10,
     wave: OscillatorType = 'triangle'
   ): void {
     const osc: OscillatorNode = this.audioContext.createOscillator();
