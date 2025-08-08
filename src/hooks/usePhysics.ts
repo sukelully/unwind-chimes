@@ -29,7 +29,7 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
         // Convert to volume level
         const volumeLimit = 0.3;
         const level = Math.min(collisionSpeed * 0.05, volumeLimit);
-        console.log(level);
+        // console.log(level);
 
         // Separate objects
         clapper.x += separationX;
