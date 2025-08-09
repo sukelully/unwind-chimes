@@ -9,10 +9,10 @@ const useAmbientAudio = (getAudioContext: () => AudioContext, play: boolean, wea
 
   useEffect(() => {
     const mp3Urls: string[] = [
-      '/sounds/weather/calm-rain.mp3',
-      '/sounds/weather/calm-wind.mp3',
-      '/sounds/weather/heavy-wind.mp3',
-      '/sounds/weather/thunder.mp3',
+      '/sounds/weather/calm-rain.wav',
+      '/sounds/weather/calm-wind.wav',
+      '/sounds/weather/heavy-wind.wav',
+      '/sounds/weather/thunder.wav',
     ];
 
     let url: string;
