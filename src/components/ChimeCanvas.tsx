@@ -6,6 +6,7 @@ import useCanvasDimensions from '@/hooks/useCanvasDimensions';
 import usePhysics from '@/hooks/usePhysics';
 import useCanvasAnimation from '@/hooks/useCanvasAnimation';
 import useMouseTracking from '@/hooks/useMouseTracking';
+import useAmbientAudio from '@/hooks/useAmbientAudio';
 import { type MouseEventHandler } from '@/hooks/useMouseTracking';
 import { type Weather } from '@/types/weather';
 
@@ -24,6 +25,7 @@ export default function ChimeCanvas({ weather }: Props): React.JSX.Element {
   const { handleCollisions, applyContinuousWeather } = usePhysics(chimes, clapper, weather);
 
   useCanvasAnimation(canvasRef, chimes, clapper, handleCollisions, applyContinuousWeather);
+  useAmbientAudio(getAudioContext, true, weather);
 
   const handleCanvasClick: MouseEventHandler = useCallback(
     (e) => {

@@ -7,6 +7,10 @@ export class Chime extends Clapper {
   bounceForce: number = 0.5;
   private audioContext: AudioContext;
   private effectsChain: { input: AudioNode; output: GainNode } | null = null;
+  private colorAnimationId: number | null = null;
+  private colorAnimationStart: number = 0;
+  private originalColor: string = '';
+  private targetColor: string = '';
 
   constructor(
     x: number,
@@ -90,8 +94,13 @@ export class Chime extends Clapper {
     this.saturateColor();
   }
 
-  // Saturate chime color briefly
+  // Briefly saturate color of chime
   private saturateColor(): void {
+    // Cancel any existing animation
+    if (this.colorAnimationId !== null) {
+      cancelAnimationFrame(this.colorAnimationId);
+    }
+
     const origColor = this.color;
     const hslRegex = /hsl\(\s*(\d+),\s*(\d+)%?,\s*(\d+)%?\)/;
     const match = origColor.match(hslRegex);
@@ -104,11 +113,71 @@ export class Chime extends Clapper {
       const boostedS = Math.min(s + 30, 100);
       const boostedColor = `hsl(${h}, ${boostedS}%, ${l}%)`;
 
+      // Set up animation variables
+      this.originalColor = origColor;
+      this.targetColor = boostedColor;
+      this.colorAnimationStart = Date.now();
+
+      // Immediately set to saturated color
       this.color = boostedColor;
 
+      // Start fade animation after a brief delay
       setTimeout(() => {
-        this.color = origColor;
-      }, 200);
+        this.animateColorFade();
+      }, 100);
     }
+  }
+
+  private animateColorFade(): void {
+    const elapsed = Date.now() - this.colorAnimationStart;
+    const duration = 1000; // 1 second fade duration
+
+    if (elapsed < duration) {
+      // Calculate progress (0 to 1)
+      const progress = elapsed / duration;
+
+      // Apply easing (ease-out curve for smoother animation)
+      const easedProgress = 1 - Math.pow(1 - progress, 3);
+
+      // Interpolate between colors
+      const interpolatedColor = this.interpolateHSLColors(
+        this.targetColor,
+        this.originalColor,
+        easedProgress
+      );
+
+      this.color = interpolatedColor;
+
+      // Continue animation
+      this.colorAnimationId = requestAnimationFrame(() => this.animateColorFade());
+    } else {
+      // Animation complete
+      this.color = this.originalColor;
+      this.colorAnimationId = null;
+    }
+  }
+
+  private interpolateHSLColors(color1: string, color2: string, t: number): string {
+    const hslRegex = /hsl\(\s*(\d+),\s*(\d+)%?,\s*(\d+)%?\)/;
+
+    const match1 = color1.match(hslRegex);
+    const match2 = color2.match(hslRegex);
+
+    if (!match1 || !match2) return color1;
+
+    const h1 = parseInt(match1[1], 10);
+    const s1 = parseInt(match1[2], 10);
+    const l1 = parseInt(match1[3], 10);
+
+    const h2 = parseInt(match2[1], 10);
+    const s2 = parseInt(match2[2], 10);
+    const l2 = parseInt(match2[3], 10);
+
+    // Interpolate each component
+    const h = Math.round(h1 + (h2 - h1) * t);
+    const s = Math.round(s1 + (s2 - s1) * t);
+    const l = Math.round(l1 + (l2 - l1) * t);
+
+    return `hsl(${h}, ${s}%, ${l}%)`;
   }
 }
