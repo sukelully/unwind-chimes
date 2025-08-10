@@ -84,8 +84,6 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
     // Apply to clapper with intensity variation based on turbulence
     const intensity = 0.8 + Math.random() * 0.01 * gustSpeed * turbulence;
 
-    // console.log(`gustSpeed: ${gustSpeed}\nintensity: ${intensity}`);
-
     clapper?.applyForce(gustForceX * intensity, gustForceY * intensity);
   }, [clapper, weather.windspeed, weather.winddir, getWeatherMultipliers]);
 
@@ -112,10 +110,6 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
       ((baseForceX + turbulenceX) * variation) / dampening,
       ((baseForceY + turbulenceY) * variation) / dampening
     );
-
-    // console.log(
-    //   `turbulence: ${turbulence}\ndampening: ${dampening}\nfrequency: ${frequency}\nwindspeed: ${speed}`
-    // );
 
     // Occasional stronger gusts
     const gustProbability = 0.01 * turbulence * frequency;

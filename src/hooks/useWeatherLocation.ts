@@ -117,7 +117,7 @@ const useWeatherLocation = () => {
     const testCity = { city: 'test city', country: 'test country' };
     const exampleWeather: Weather = {
       temp: 120,
-      humidity: 70,
+      humidity: 95,
       precip: 1,
       windspeed: 19,
       winddir: 90.0,
