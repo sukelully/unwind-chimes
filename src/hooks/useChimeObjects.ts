@@ -55,10 +55,10 @@ const useChimeObjects = (
     }
 
     // Map weather conditions to effects parameters
-    const filterFreq = map(weather.humidity, 20, 95, 100, 3500);
+    const filterFreq = map(weather.humidity, 0, 95, 100, 3500);
     const delayLevel = map(weather.cloudcover, 0, 95, 0.1, 0.9);
     const delayTime = map(weather.precip, 0, 2, 0.3, 1.5);
-    const delayFeedback = map(weather.temp, 20, 120, 0.4, 0.9);
+    const delayFeedback = map(weather.temp, -100, 135, 0.4, 0.9);
     const effectsChain = createEffectsChain(
       audioContext,
       filterFreq,

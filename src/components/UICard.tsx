@@ -64,7 +64,7 @@ export default function UICard({
                 </span>
               </span>
             )}
-            {/* <pre className="text-left dark:text-white">{JSON.stringify(weather, null, 2)}</pre> */}
+            {/* <pre className="text-left dark:text-white text-sm tracking-normal">{JSON.stringify(weather, null, 2)}</pre> */}
           </>
         )}
         {!location && <span className="font-normal">Click one of the buttons below to begin</span>}

@@ -13,10 +13,9 @@ function getWeatherIcon(weather: Weather): string {
   if (weather.windspeed >= 20) return '/icons/weather/wind.svg';
   if (lower.includes('clear')) return '/icons/weather/clear.svg';
   if (lower.includes('cloud') || lower.includes('overcast')) return '/icons/weather/cloudy.svg';
-  console.log(lower);
 
   // Fallback
-  return '/icons/weather/clear.svg';
+  return '/icons/weather/cloudy.svg';
 }
 
 export default function WeatherCard({ weather }: Props): React.JSX.Element {
