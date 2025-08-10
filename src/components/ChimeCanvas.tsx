@@ -55,10 +55,7 @@ export default function ChimeCanvas({ weather }: Props): React.JSX.Element {
   );
 
   return (
-    <div
-      ref={containerRef}
-      className="h-92 w-full max-w-4xl overflow-hidden border border-indigo-900 md:h-[400px]"
-    >
+    <div ref={containerRef} className="h-92 w-full max-w-4xl overflow-hidden md:h-[400px]">
       <canvas
         ref={canvasRef}
         width={canvasDimensions.width}

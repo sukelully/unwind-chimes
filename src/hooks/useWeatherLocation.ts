@@ -119,11 +119,11 @@ const useWeatherLocation = () => {
       temp: 120,
       humidity: 70,
       precip: 1,
-      windspeed: 10,
+      windspeed: 19,
       winddir: 90.0,
       cloudcover: 90,
       uvindex: 5,
-      conditions: 'Partially cloudy',
+      conditions: 'Rain,',
     };
     setWeather(exampleWeather);
     setLocation(testCity);

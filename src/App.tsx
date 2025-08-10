@@ -17,9 +17,9 @@ function App() {
   } = useWeatherLocation();
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-4xl flex-col bg-slate-100 p-6 dark:bg-neutral-900">
+    <main className="mx-auto flex min-h-screen max-w-4xl flex-col p-6">
       {weather && (
-        <>
+        <div className="open-sans dark:text-white">
           <p>{farenheightToCelsius(weather.temp)}&deg;C</p>
           <p>{weather.conditions}</p>
           <p>
@@ -33,7 +33,7 @@ function App() {
           </p>
           <p> </p>
           <ChimeCanvas weather={weather} />
-        </>
+        </div>
       )}
       <section id="weather-data" className="my-4 flex flex-col items-center gap-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:gap-6">
@@ -47,7 +47,7 @@ function App() {
             Use example weather
           </button>
         </div>
-        <>
+        <div className="text-center dark:text-white">
           {(weatherLoading || locationLoading) && 'Loading weather data...'}
           {(weatherError || locationError) && (
             <p className="font-semibold text-red-500">
@@ -57,16 +57,16 @@ function App() {
           {weather && !weatherLoading && !locationLoading && !weatherError && !locationError && (
             <>
               {location && (
-                <span className="text-center">
-                  <span className="font-semibold">
+                <span className="open-sans text-center dark:text-white">
+                  <span className="font-semibold dark:text-white">
                     {location.city || 'an unknown location'}, {location.country || null}
                   </span>
                 </span>
               )}
-              <pre>{JSON.stringify(weather, null, 2)}</pre>
+              <pre className="text-left dark:text-white">{JSON.stringify(weather, null, 2)}</pre>
             </>
           )}
-        </>
+        </div>
       </section>
     </main>
   );
