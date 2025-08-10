@@ -75,7 +75,7 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
     // Directional variation - more variation with higher turbulence
     const maxVariation = 180 * turbulence;
     const dirVariation = (Math.random() - 0.5) * maxVariation;
-    const gustDirection = direction + dirVariation;
+    const gustDirection = direction + 180 + dirVariation;
     const gustRadians = ((gustDirection - 90) * Math.PI) / 180;
 
     const gustForceX = Math.cos(gustRadians) * gustSpeed * 0.3;
@@ -94,7 +94,7 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
     const { dampening, turbulence, frequency } = getWeatherMultipliers();
     const direction = weather.winddir ?? 0;
     const speed = Math.min(weather.windspeed, 30);
-    const windRadians = ((direction - 90) * Math.PI) / 180;
+    const windRadians = ((direction + 180) * Math.PI) / 180;
 
     // Base continuous wind force
     const baseForceX = Math.cos(windRadians) * speed * 0.001;

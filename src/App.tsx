@@ -27,7 +27,7 @@ function App() {
             {weather.windspeed} m/s{'  '}
             <span
               className="inline-block"
-              style={{ transform: `rotate(${weather.winddir - 90}deg)` }}
+              style={{ transform: `rotate(${weather.winddir + 90}deg)` }}
             >
               &#10148;
             </span>
