@@ -1,7 +1,8 @@
 import '@/App.css';
 import useWeatherLocation from '@/hooks/useWeatherLocation';
 import ChimeCanvas from '@/components/ChimeCanvas';
-import { farenheightToCelsius } from '@/utils/math';
+import UICard from '@/components/UICard';
+import WeatherCard from './components/WeatherCard';
 
 function App() {
   const {
@@ -14,60 +15,36 @@ function App() {
     loadRandomCity,
     handleLocationClick,
     useExampleWeather,
+    defaultWeather,
   } = useWeatherLocation();
 
+  const chimeWeather = weather ?? defaultWeather;
+
   return (
-    <main className="mx-auto flex min-h-screen max-w-4xl flex-col bg-slate-100 p-6 dark:bg-neutral-900">
+    <main className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 px-4 py-10 sm:gap-4">
       {weather && (
-        <>
-          <p>{farenheightToCelsius(weather.temp)}&deg;C</p>
-          <p>{weather.conditions}</p>
-          <p>
-            {weather.windspeed} m/s{'  '}
-            <span
-              className="inline-block"
-              style={{ transform: `rotate(${weather.winddir - 90}deg)` }}
-            >
-              &#10148;
-            </span>
-          </p>
-          <p> </p>
-          <ChimeCanvas weather={weather} />
-        </>
-      )}
-      <section id="weather-data" className="my-4 flex flex-col items-center gap-4">
-        <div className="flex flex-col gap-3 sm:flex-row sm:gap-6">
-          <button className="btn" onClick={handleLocationClick}>
-            Get local weather
-          </button>
-          <button className="btn" onClick={loadRandomCity}>
-            Get random city
-          </button>
-          <button className="btn" onClick={useExampleWeather}>
-            Use example weather
-          </button>
+        <div className="flex flex-grow flex-col dark:text-white">
+          <WeatherCard weather={weather} />
         </div>
-        <>
-          {(weatherLoading || locationLoading) && 'Loading weather data...'}
-          {(weatherError || locationError) && (
-            <p className="font-semibold text-red-500">
-              {weatherError?.message || locationError?.message || 'Error fetching weather data'}
-            </p>
-          )}
-          {weather && !weatherLoading && !locationLoading && !weatherError && !locationError && (
-            <>
-              {location && (
-                <span className="text-center">
-                  <span className="font-semibold">
-                    {location.city || 'an unknown location'}, {location.country || null}
-                  </span>
-                </span>
-              )}
-              <pre>{JSON.stringify(weather, null, 2)}</pre>
-            </>
-          )}
-        </>
-      </section>
+      )}
+
+      <div className="flex flex-grow items-center justify-center">
+        <ChimeCanvas weather={chimeWeather} />
+      </div>
+
+      <div className="mt-auto">
+        <UICard
+          weather={weather}
+          location={location}
+          weatherLoading={weatherLoading}
+          weatherError={weatherError}
+          locationLoading={locationLoading}
+          locationError={locationError}
+          loadRandomCity={loadRandomCity}
+          handleLocationClick={handleLocationClick}
+          useExampleWeather={useExampleWeather}
+        />
+      </div>
     </main>
   );
 }

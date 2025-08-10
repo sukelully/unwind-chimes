@@ -17,6 +17,8 @@ const chromaticNotes: Record<string, number> = {
   D5: 587.33,
 };
 
+export const cMaj = ['C3', 'D4', 'E4', 'G4', 'C5'];
+export const cMaj6 = ['C3', 'D4', 'E4', 'G4', 'A4'];
 export const cMajPent = ['C3', 'E4', 'G4', 'A4', 'C5'];
 export const cMaj7Pent = ['C3', 'E4', 'G4', 'A4', 'B4'];
 export const cMaj9 = ['C3', 'E4', 'G4', 'B4', 'D5'];

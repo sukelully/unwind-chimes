@@ -2,10 +2,10 @@ import type { CanvasDimensions } from '@/types/canvas';
 import { Chime } from '@/models/Chime';
 import { Clapper } from '@/models/Clapper';
 import { useState, useEffect } from 'react';
-import { getScaleFrequncies, cMajPent, cMaj7Pent, cMaj9 } from '@/utils/scales';
+import { getScaleFrequncies, cMaj, cMaj6, cMajPent, cMaj7Pent, cMaj9 } from '@/utils/scales';
 import { createGradientSteps, getWeatherColors } from '@/utils/colors';
 import { map } from '@/utils/math';
-import { type Weather } from '@/types/weather';
+import type { Weather } from '@/types/weather';
 
 const useChimeObjects = (
   dimensions: CanvasDimensions,
@@ -37,24 +37,27 @@ const useChimeObjects = (
 
     let freqs: number[] = [];
     switch (true) {
-      case weather.windspeed < 10:
+      case weather.windspeed <= 6:
         freqs = getScaleFrequncies(cMaj9);
         break;
-      case weather.windspeed >= 10 && weather.windspeed < 20:
+      case weather.windspeed > 6 && weather.windspeed <= 12:
+        freqs = getScaleFrequncies(cMaj6);
+        break;
+      case weather.windspeed > 12 && weather.windspeed <= 18:
         freqs = getScaleFrequncies(cMaj7Pent);
         break;
-      case weather.windspeed >= 20 && weather.windspeed < 30:
+      case weather.windspeed > 18 && weather.windspeed <= 24:
         freqs = getScaleFrequncies(cMajPent);
         break;
       default:
-        freqs = getScaleFrequncies(cMajPent);
+        freqs = getScaleFrequncies(cMaj);
         break;
     }
 
     // Map weather conditions to effects parameters
-    const filterFreq = map(weather.humidity, 20, 95, 300, 1200);
-    const delayLevel = map(weather.cloudcover, 0, 95, 0.1, 0.6);
-    const delayTime = map(weather.precip, 0, 2, 0.1, 1.5);
+    const filterFreq = map(weather.humidity, 20, 95, 100, 3500);
+    const delayLevel = map(weather.cloudcover, 0, 95, 0.1, 0.9);
+    const delayTime = map(weather.precip, 0, 2, 0.3, 1.5);
     const delayFeedback = map(weather.temp, 20, 120, 0.4, 0.9);
     const effectsChain = createEffectsChain(
       audioContext,

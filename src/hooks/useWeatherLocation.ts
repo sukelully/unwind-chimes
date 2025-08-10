@@ -1,13 +1,9 @@
 import { useState, useRef } from 'react';
 import cities from '@/data/cities.json';
-import { type Weather } from '@/types/weather';
+import type { Weather } from '@/types/weather';
+import type { Location } from '@/types/locations';
 
 const API_KEY: string = import.meta.env.VITE_API_KEY;
-
-type Location = {
-  city: string | null;
-  country: string | null;
-};
 
 const useWeatherLocation = () => {
   const [weather, setWeather] = useState<Weather | null>(null);
@@ -17,6 +13,17 @@ const useWeatherLocation = () => {
   const [locationLoading, setLocationLoading] = useState(false);
   const [locationError, setLocationError] = useState<Error | null>(null);
   const isThrottledRef = useRef(false);
+
+  const defaultWeather: Weather = {
+    temp: 90,
+    humidity: 80,
+    precip: 0,
+    windspeed: 0,
+    winddir: 68,
+    cloudcover: 32.6,
+    uvindex: 9,
+    conditions: 'Rain, Partially cloudy',
+  };
 
   // Fetch weather data
   const getWeatherData = async (lat: number, long: number) => {
@@ -115,17 +122,7 @@ const useWeatherLocation = () => {
   // Example weather data for testing
   const useExampleWeather = (): void => {
     const testCity = { city: 'test city', country: 'test country' };
-    const exampleWeather: Weather = {
-      temp: 120,
-      humidity: 70,
-      precip: 1,
-      windspeed: 20,
-      winddir: 90.0,
-      cloudcover: 90,
-      uvindex: 5,
-      conditions: 'Partially cloudy',
-    };
-    setWeather(exampleWeather);
+    setWeather(defaultWeather);
     setLocation(testCity);
   };
 
@@ -139,6 +136,7 @@ const useWeatherLocation = () => {
     loadRandomCity,
     handleLocationClick,
     useExampleWeather,
+    defaultWeather,
   };
 };
 

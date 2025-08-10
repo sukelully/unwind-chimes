@@ -1,7 +1,7 @@
 import { Chime } from '@/models/Chime';
 import { Clapper } from '@/models/Clapper';
 import { useCallback } from 'react';
-import { type Weather } from '@/types/weather';
+import type { Weather } from '@/types/weather';
 import { map } from '@/utils/math';
 
 const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) => {
@@ -55,7 +55,7 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
     const speed = Math.min(weather.windspeed, 30);
 
     const turbulence = map(speed, 0, 30, 1, 1.5);
-    const frequency = map(speed, 0, 30, 0.5, 1);
+    const frequency = map(speed, 0, 30, 0.8, 1);
     const dampening = 1.0;
 
     return { dampening, turbulence, frequency };
@@ -75,7 +75,7 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
     // Directional variation - more variation with higher turbulence
     const maxVariation = 180 * turbulence;
     const dirVariation = (Math.random() - 0.5) * maxVariation;
-    const gustDirection = direction + dirVariation;
+    const gustDirection = direction + 180 + dirVariation;
     const gustRadians = ((gustDirection - 90) * Math.PI) / 180;
 
     const gustForceX = Math.cos(gustRadians) * gustSpeed * 0.3;
@@ -83,8 +83,6 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
 
     // Apply to clapper with intensity variation based on turbulence
     const intensity = 0.8 + Math.random() * 0.01 * gustSpeed * turbulence;
-
-    // console.log(`gustSpeed: ${gustSpeed}\nintensity: ${intensity}`);
 
     clapper?.applyForce(gustForceX * intensity, gustForceY * intensity);
   }, [clapper, weather.windspeed, weather.winddir, getWeatherMultipliers]);
@@ -96,7 +94,7 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
     const { dampening, turbulence, frequency } = getWeatherMultipliers();
     const direction = weather.winddir ?? 0;
     const speed = Math.min(weather.windspeed, 30);
-    const windRadians = ((direction - 90) * Math.PI) / 180;
+    const windRadians = ((direction + 180) * Math.PI) / 180;
 
     // Base continuous wind force
     const baseForceX = Math.cos(windRadians) * speed * 0.001;
@@ -112,10 +110,6 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
       ((baseForceX + turbulenceX) * variation) / dampening,
       ((baseForceY + turbulenceY) * variation) / dampening
     );
-
-    // console.log(
-    //   `turbulence: ${turbulence}\ndampening: ${dampening}\nfrequency: ${frequency}\nwindspeed: ${speed}`
-    // );
 
     // Occasional stronger gusts
     const gustProbability = 0.01 * turbulence * frequency;
