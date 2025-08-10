@@ -14,6 +14,17 @@ const useWeatherLocation = () => {
   const [locationError, setLocationError] = useState<Error | null>(null);
   const isThrottledRef = useRef(false);
 
+  const defaultWeather: Weather = {
+    temp: 90,
+    humidity: 80,
+    precip: 0,
+    windspeed: 0,
+    winddir: 68,
+    cloudcover: 32.6,
+    uvindex: 9,
+    conditions: 'Rain, Partially cloudy',
+  };
+
   // Fetch weather data
   const getWeatherData = async (lat: number, long: number) => {
     try {
@@ -111,29 +122,8 @@ const useWeatherLocation = () => {
   // Example weather data for testing
   const useExampleWeather = (): void => {
     const testCity = { city: 'test city', country: 'test country' };
-    const exampleWeather: Weather = {
-      temp: 120,
-      humidity: 95,
-      precip: 1,
-      windspeed: 19,
-      winddir: 90.0,
-      cloudcover: 90,
-      uvindex: 5,
-      conditions: 'Rain,',
-    };
-    setWeather(exampleWeather);
+    setWeather(defaultWeather);
     setLocation(testCity);
-  };
-
-  const defaultWeather: Weather = {
-    temp: 90,
-    humidity: 80,
-    precip: 0,
-    windspeed: 0,
-    winddir: 68,
-    cloudcover: 32.6,
-    uvindex: 9,
-    conditions: 'Rain, Partially cloudy',
   };
 
   return {
