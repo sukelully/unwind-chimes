@@ -67,6 +67,7 @@ export default function UICard({
             {/* <pre className="text-left dark:text-white">{JSON.stringify(weather, null, 2)}</pre> */}
           </>
         )}
+        {!location && <span className="font-normal">Click one of the buttons below to begin</span>}
       </div>
       <div className="flex flex-col gap-3 sm:flex-row sm:gap-6">
         <button className="btn" onClick={handleLocationClick}>

@@ -125,6 +125,17 @@ const useWeatherLocation = () => {
     setLocation(testCity);
   };
 
+  const defaultWeather: Weather = {
+    temp: 90,
+    humidity: 80,
+    precip: 0,
+    windspeed: 0,
+    winddir: 68,
+    cloudcover: 32.6,
+    uvindex: 9,
+    conditions: 'Rain, Partially cloudy',
+  };
+
   return {
     weather,
     location,
@@ -135,6 +146,7 @@ const useWeatherLocation = () => {
     loadRandomCity,
     handleLocationClick,
     useExampleWeather,
+    defaultWeather,
   };
 };
 

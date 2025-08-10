@@ -15,23 +15,26 @@ function App() {
     loadRandomCity,
     handleLocationClick,
     useExampleWeather,
+    defaultWeather,
   } = useWeatherLocation();
+
+  const chimeWeather = weather ?? defaultWeather;
 
   return (
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 px-4 py-10 sm:gap-4">
+      {/* WeatherCard only renders when weather exists */}
       {weather && (
         <div className="flex flex-grow flex-col dark:text-white">
-          {/* WeatherCard stays fixed inside itself, no changes */}
           <WeatherCard weather={weather} />
-
-          {/* Center ChimeCanvas vertically between WeatherCard and UICard */}
-          <div className="flex flex-grow items-center justify-center">
-            <ChimeCanvas weather={weather} />
-          </div>
         </div>
       )}
 
-      {/* Push UICard to bottom */}
+      {/* Always show ChimeCanvas in the middle */}
+      <div className="flex flex-grow items-center justify-center">
+        <ChimeCanvas weather={chimeWeather} />
+      </div>
+
+      {/* UICard stays at bottom */}
       <div className="mt-auto">
         <UICard
           weather={weather}
