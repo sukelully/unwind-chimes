@@ -19,7 +19,7 @@ function App() {
   return (
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col p-6">
       {weather && (
-        <div className="open-sans dark:text-white">
+        <div className="dark:text-white">
           <p>{farenheightToCelsius(weather.temp)}&deg;C</p>
           <p>{weather.conditions}</p>
           <p>
@@ -50,20 +50,20 @@ function App() {
         <div className="text-center dark:text-white">
           {(weatherLoading || locationLoading) && 'Loading weather data...'}
           {(weatherError || locationError) && (
-            <p className="font-semibold text-red-500">
+            <p className="open-sans font-semibold text-red-500">
               {weatherError?.message || locationError?.message || 'Error fetching weather data'}
             </p>
           )}
           {weather && !weatherLoading && !locationLoading && !weatherError && !locationError && (
             <>
               {location && (
-                <span className="open-sans text-center dark:text-white">
+                <span className="open-sans text-center text-2xl dark:text-white">
                   <span className="font-semibold dark:text-white">
                     {location.city || 'an unknown location'}, {location.country || null}
                   </span>
                 </span>
               )}
-              <pre className="text-left dark:text-white">{JSON.stringify(weather, null, 2)}</pre>
+              {/* <pre className="text-left dark:text-white">{JSON.stringify(weather, null, 2)}</pre> */}
             </>
           )}
         </div>

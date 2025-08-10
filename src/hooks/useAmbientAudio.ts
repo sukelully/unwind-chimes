@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { map } from '@/utils/math';
 import { type Weather } from '@/types/weather';
 
 const useAmbientAudio = (getAudioContext: () => AudioContext, play: boolean, weather: Weather) => {
@@ -64,8 +65,7 @@ const useAmbientAudio = (getAudioContext: () => AudioContext, play: boolean, wea
     if (play && bufferRef.current) {
       const source = audioContext.createBufferSource();
       const gain = audioContext.createGain();
-      const level = 0.2;
-
+      const level = map(weather.windspeed, 0, 50, 0.05, 0.3);
       gain.gain.setValueAtTime(0.0001, audioContext.currentTime);
       gain.gain.exponentialRampToValueAtTime(level, audioContext.currentTime + 1);
 
