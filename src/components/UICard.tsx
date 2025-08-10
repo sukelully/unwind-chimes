@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import type { Weather } from '@/types/weather';
 import type { Location } from '@/types/locations';
 
@@ -25,13 +25,31 @@ export default function UICard({
   handleLocationClick,
   useExampleWeather,
 }: Props): React.JSX.Element {
+  function LoadingDots() {
+    const [dots, setDots] = useState('');
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setDots((prev) => (prev.length < 3 ? prev + '.' : ''));
+      }, 200);
+      return () => clearInterval(interval);
+    }, []);
+
+    return <span>{dots}</span>;
+  }
+
   return (
     <section
       id="weather-data"
       className="flex flex-col items-center gap-4 rounded-md bg-slate-200 p-6 shadow-lg dark:bg-slate-800"
     >
-      <div className="text-center dark:text-white">
-        {(weatherLoading || locationLoading) && 'Loading weather data...'}
+      <div className="text-center text-2xl font-semibold tracking-widest dark:text-white">
+        {(weatherLoading || locationLoading) && (
+          <>
+            <wbr></wbr>
+            <LoadingDots />
+          </>
+        )}
         {(weatherError || locationError) && (
           <p className="open-sans font-semibold text-red-500">
             {weatherError?.message || locationError?.message || 'Error fetching weather data'}
@@ -40,8 +58,8 @@ export default function UICard({
         {weather && !weatherLoading && !locationLoading && !weatherError && !locationError && (
           <>
             {location && (
-              <span className="open-sans text-center text-2xl tracking-widest dark:text-white">
-                <span className="font-semibold dark:text-white">
+              <span>
+                <span>
                   {location.city || 'an unknown location'}, {location.country || null}
                 </span>
               </span>
