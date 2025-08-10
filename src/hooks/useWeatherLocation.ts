@@ -1,13 +1,9 @@
 import { useState, useRef } from 'react';
 import cities from '@/data/cities.json';
-import { type Weather } from '@/types/weather';
+import type { Weather } from '@/types/weather';
+import type { Location } from '@/types/locations';
 
 const API_KEY: string = import.meta.env.VITE_API_KEY;
-
-type Location = {
-  city: string | null;
-  country: string | null;
-};
 
 const useWeatherLocation = () => {
   const [weather, setWeather] = useState<Weather | null>(null);

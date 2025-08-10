@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { map } from '@/utils/math';
-import { type Weather } from '@/types/weather';
+import type { Weather } from '@/types/weather';
 
 const useAmbientAudio = (getAudioContext: () => AudioContext, play: boolean, weather: Weather) => {
   const sourceRef = useRef<AudioBufferSourceNode | null>(null);

@@ -1,7 +1,7 @@
 import { Chime } from '@/models/Chime';
 import { Clapper } from '@/models/Clapper';
 import { useCallback } from 'react';
-import { type Weather } from '@/types/weather';
+import type { Weather } from '@/types/weather';
 import { map } from '@/utils/math';
 
 const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) => {

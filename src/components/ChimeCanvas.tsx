@@ -8,7 +8,7 @@ import useCanvasAnimation from '@/hooks/useCanvasAnimation';
 import useMouseTracking from '@/hooks/useMouseTracking';
 import useAmbientAudio from '@/hooks/useAmbientAudio';
 import { type MouseEventHandler } from '@/hooks/useMouseTracking';
-import { type Weather } from '@/types/weather';
+import type { Weather } from '@/types/weather';
 
 type Props = {
   weather: Weather;

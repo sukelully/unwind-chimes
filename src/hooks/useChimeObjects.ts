@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { getScaleFrequncies, cMaj, cMaj6, cMajPent, cMaj7Pent, cMaj9 } from '@/utils/scales';
 import { createGradientSteps, getWeatherColors } from '@/utils/colors';
 import { map } from '@/utils/math';
-import { type Weather } from '@/types/weather';
+import type { Weather } from '@/types/weather';
 
 const useChimeObjects = (
   dimensions: CanvasDimensions,
