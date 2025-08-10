@@ -65,7 +65,7 @@ const useAmbientAudio = (getAudioContext: () => AudioContext, play: boolean, wea
     if (play && bufferRef.current) {
       const source = audioContext.createBufferSource();
       const gain = audioContext.createGain();
-      const level = map(weather.windspeed, 0, 50, 0.05, 0.3);
+      const level = map(weather.windspeed, 0, 50, 0.01, 0.3);
       gain.gain.setValueAtTime(0.0001, audioContext.currentTime);
       gain.gain.exponentialRampToValueAtTime(level, audioContext.currentTime + 1);
 
@@ -80,7 +80,7 @@ const useAmbientAudio = (getAudioContext: () => AudioContext, play: boolean, wea
     } else {
       gainRef.current?.gain.exponentialRampToValueAtTime(0, audioContext.currentTime + 1);
     }
-  }, [play, getAudioContext, isBufferReady]);
+  }, [play, getAudioContext, isBufferReady, weather.windspeed]);
 };
 
 export default useAmbientAudio;

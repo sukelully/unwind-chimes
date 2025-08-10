@@ -28,7 +28,7 @@ export default function UICard({
   return (
     <section
       id="weather-data"
-      className="flex flex-col items-center gap-4 rounded-md bg-slate-200 p-6 shadow-lg"
+      className="flex flex-col items-center gap-4 rounded-md bg-slate-200 p-6 shadow-lg dark:bg-slate-800"
     >
       <div className="text-center dark:text-white">
         {(weatherLoading || locationLoading) && 'Loading weather data...'}
@@ -46,7 +46,7 @@ export default function UICard({
                 </span>
               </span>
             )}
-            <pre className="text-left dark:text-white">{JSON.stringify(weather, null, 2)}</pre>
+            {/* <pre className="text-left dark:text-white">{JSON.stringify(weather, null, 2)}</pre> */}
           </>
         )}
       </div>

@@ -18,21 +18,19 @@ function App() {
   } = useWeatherLocation();
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 px-4 py-10 sm:gap-4">
-      {weather && (
-        <div className="flex flex-grow flex-col dark:text-white">
-          {/* WeatherCard stays fixed inside itself, no changes */}
-          <WeatherCard weather={weather} />
+    <main className="relative mx-auto flex h-screen max-w-4xl flex-col px-4 pt-12 sm:pt-4">
+      {/* Fixed WeatherCard at top */}
+      <div className="fixed top-0 right-0 left-0 z-50 bg-white dark:bg-neutral-900">
+        {weather && <WeatherCard weather={weather} />}
+      </div>
 
-          {/* Center ChimeCanvas vertically between WeatherCard and UICard */}
-          <div className="flex flex-grow items-center justify-center">
-            <ChimeCanvas weather={weather} />
-          </div>
-        </div>
-      )}
+      {/* Middle container fills remaining space */}
+      <div className="flex flex-grow items-center justify-center pb-[12rem] sm:pb-0">
+        {weather && <ChimeCanvas weather={weather} />}
+      </div>
 
-      {/* Push UICard to bottom */}
-      <div className="mt-auto">
+      {/* UICard container */}
+      <div className="bg-white sm:relative sm:mt-6 md:fixed md:right-0 md:bottom-0 md:left-0 md:z-50 dark:bg-neutral-900">
         <UICard
           weather={weather}
           location={location}
