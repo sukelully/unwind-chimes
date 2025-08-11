@@ -32,28 +32,28 @@ export class Clapper {
   }
 
   // Update position
-  update(): void {
+  update(deltaTime: number): void {
     // Calculate spring force
     const springForceX = (this.restX - this.x) * this.springStrength;
     const springForceY = (this.restY - this.y) * this.springStrength;
 
-    // Apply spring force and dampening
-    this.velocityX += springForceX;
-    this.velocityY += springForceY;
-    this.velocityX *= this.damping;
-    this.velocityY *= this.damping;
+    // Apply spring force and damping
+    this.velocityX += springForceX * deltaTime * 60;
+    this.velocityY += springForceY * deltaTime * 60;
+    this.velocityX *= Math.pow(this.damping, deltaTime * 60);
+    this.velocityY *= Math.pow(this.damping, deltaTime * 60);
 
     // Pull back to rest position
-    this.x += this.velocityX;
-    this.y += this.velocityY;
+    this.x += this.velocityX * deltaTime * 60;
+    this.y += this.velocityY * deltaTime * 60;
 
-    // Limit maximum displacement from rest position
-    const distanceFromRest = Math.sqrt(
-      Math.pow(this.x - this.restX, 2) + Math.pow(this.y - this.restY, 2)
-    );
+    // Limit displacement
+    const dx = this.x - this.restX;
+    const dy = this.y - this.restY;
+    const distanceFromRest = Math.sqrt(dx * dx + dy * dy);
 
     if (distanceFromRest > this.maxDisplacement) {
-      const angle = Math.atan2(this.y - this.restY, this.x - this.restX);
+      const angle = Math.atan2(dy, dx);
       this.x = this.restX + Math.cos(angle) * this.maxDisplacement;
       this.y = this.restY + Math.sin(angle) * this.maxDisplacement;
     }

@@ -26,20 +26,20 @@ export class Chime extends Clapper {
   }
 
   // Update chime position
-  update(): void {
+  update(deltaTime: number): void {
     // Calculate spring force
     const springForceX = (this.restX - this.x) * this.springStrength;
     const springForceY = (this.restY - this.y) * this.springStrength;
 
     // Apply spring force and dampening
-    this.velocityX += springForceX;
-    this.velocityY += springForceY;
-    this.velocityX *= this.damping;
-    this.velocityY *= this.damping;
+    this.velocityX += springForceX * deltaTime * 60;
+    this.velocityY += springForceY * deltaTime * 60;
+    this.velocityX *= Math.pow(this.damping, deltaTime * 60);
+    this.velocityY *= Math.pow(this.damping, deltaTime * 60);
 
     // Pull back to rest position
-    this.x += this.velocityX;
-    this.y += this.velocityY;
+    this.x += this.velocityX * deltaTime * 60;
+    this.y += this.velocityY * deltaTime * 60;
 
     // Limit maximum displacement from rest position
     const distanceFromRest = Math.sqrt(

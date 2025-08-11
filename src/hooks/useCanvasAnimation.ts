@@ -19,27 +19,28 @@ const useCanvasAnimation = (
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const animate = (): void => {
-      // Clear the canvas
+    let lastTime = performance.now();
+
+    const animate = (time: number): void => {
+      const deltaTime = (time - lastTime) / 1000; // seconds
+      lastTime = time;
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Weather and collision logic
       handleCollisions();
       applyContinuousWeather();
 
-      // Update and draw objects to canvas
       const allObjects = [...chimes, clapper];
       allObjects.forEach((obj) => {
-        obj.update();
+        obj.update(deltaTime); // Pass deltaTime to each object
         obj.draw(ctx);
       });
 
       animationRef.current = requestAnimationFrame(animate);
     };
 
-    animate();
+    animationRef.current = requestAnimationFrame(animate);
 
-    // Clean up on unmount or change in dependencies
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
