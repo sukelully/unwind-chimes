@@ -7,6 +7,7 @@ const API_KEY: string = import.meta.env.VITE_API_KEY;
 
 const useWeatherLocation = () => {
   const [weather, setWeather] = useState<Weather | null>(null);
+  // const [testWeather, setTestWeather] = useState<any>(null);
   const [location, setLocation] = useState<Location | null>(null);
   const [weatherLoading, setWeatherLoading] = useState(false);
   const [weatherError, setWeatherError] = useState<Error | null>(null);
@@ -15,11 +16,13 @@ const useWeatherLocation = () => {
   const isThrottledRef = useRef(false);
 
   const defaultWeather: Weather = {
+    timezone: 'America/Lima',
+    datetimeEpoch: 1754925554,
     temp: 90,
     humidity: 80,
     precip: 0,
-    windspeed: 0,
-    winddir: 68,
+    windspeed: 100,
+    winddir: 0,
     cloudcover: 32.6,
     uvindex: 9,
     conditions: 'Rain, Partially cloudy',
@@ -35,17 +38,19 @@ const useWeatherLocation = () => {
         { mode: 'cors' }
       );
       const json = await res.json();
-      const today = json.days[0];
-      // setWeather(json);
+      const currentConditions = json.currentConditions;
+      // setTestWeather(json);
       setWeather({
-        temp: today.temp,
-        humidity: today.humidity,
-        precip: today.precip,
-        windspeed: today.windspeed,
-        winddir: today.winddir,
-        cloudcover: today.cloudcover,
-        uvindex: today.uvindex,
-        conditions: today.conditions,
+        timezone: json.timezone,
+        datetimeEpoch: currentConditions.datetimeEpoch,
+        temp: currentConditions.temp,
+        humidity: currentConditions.humidity,
+        precip: currentConditions.precip,
+        windspeed: currentConditions.windspeed,
+        winddir: currentConditions.winddir,
+        cloudcover: currentConditions.cloudcover,
+        uvindex: currentConditions.uvindex,
+        conditions: currentConditions.conditions,
       });
     } catch (error) {
       setWeatherError(error instanceof Error ? error : new Error('Unknown weather error'));
@@ -128,6 +133,7 @@ const useWeatherLocation = () => {
 
   return {
     weather,
+    // testWeather,
     location,
     weatherLoading,
     weatherError,
