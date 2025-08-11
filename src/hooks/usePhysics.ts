@@ -68,20 +68,20 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
     const { turbulence } = getWeatherMultipliers();
     const direction = weather.winddir ?? Math.random() * 360;
 
-    // Gust strength varies from 1.5x to 3x base wind speed, modified by turbulence
     const gustMultiplier = (1 + Math.random()) * turbulence * 0.4;
     const gustSpeed = Math.min(weather.windspeed * gustMultiplier, 20);
 
-    // Directional variation - more variation with higher turbulence
+    // Higher turbulence means greater variation
     const maxVariation = 180 * turbulence;
     const dirVariation = (Math.random() - 0.5) * maxVariation;
     const gustDirection = direction + 180 + dirVariation;
-    const gustRadians = ((gustDirection - 90) * Math.PI) / 180;
+
+    const gustRadians = (gustDirection * Math.PI) / 180;
 
     const gustForceX = Math.cos(gustRadians) * gustSpeed * 0.3;
     const gustForceY = Math.sin(gustRadians) * gustSpeed * 0.3;
 
-    // Apply to clapper with intensity variation based on turbulence
+    // Apply to clapper with inensity variation based on turbulence
     const intensity = 0.8 + Math.random() * 0.01 * gustSpeed * turbulence;
 
     clapper?.applyForce(gustForceX * intensity, gustForceY * intensity);
@@ -92,31 +92,30 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
     if (!weather.windspeed || weather.windspeed < 1) return;
 
     const { dampening, turbulence, frequency } = getWeatherMultipliers();
-    const direction = weather.winddir ?? 0;
-    const speed = Math.min(weather.windspeed, 30);
-    const windRadians = ((direction + 180) * Math.PI) / 180;
 
-    // Base continuous wind force
+    const towardDirection = (weather.winddir ?? 0) + 180;
+    const windRadians = (towardDirection * Math.PI) / 180;
+    const speed = Math.min(weather.windspeed, 30);
+
     const baseForceX = Math.cos(windRadians) * speed * 0.001;
     const baseForceY = Math.sin(windRadians) * speed * 0.001;
 
-    // Add turbulence to the continuous wind
     const turbulenceX = (Math.random() - 0.5) * turbulence * 0.3;
     const turbulenceY = (Math.random() - 0.5) * turbulence * 0.3;
 
-    // Apply to clapper with dampening and natural variation
     const variation = 0.8 + Math.random() * 0.4;
+
+    // Apply final force to clapper
     clapper?.applyForce(
       ((baseForceX + turbulenceX) * variation) / dampening,
       ((baseForceY + turbulenceY) * variation) / dampening
     );
 
-    // Occasional stronger gusts
     const gustProbability = 0.01 * turbulence * frequency;
     if (Math.random() < gustProbability) {
       applyGust();
     }
-  }, [clapper, weather, applyGust, getWeatherMultipliers]);
+  }, [clapper, weather, getWeatherMultipliers, applyGust]);
 
   return { handleCollisions, applyContinuousWeather };
 };

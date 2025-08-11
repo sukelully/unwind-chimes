@@ -18,8 +18,18 @@ function getWeatherIcon(weather: Weather): string {
   return '/icons/weather/cloudy.svg';
 }
 
+function getLocalTime(timezone: string): string {
+  return new Date().toLocaleString('en-US', {
+    timeZone: timezone,
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+}
+
 export default function WeatherCard({ weather }: Props): React.JSX.Element {
   const iconSrc = getWeatherIcon(weather);
+  const localTime = getLocalTime(weather.timezone);
 
   return (
     <div className="absolute flex flex-col rounded-md bg-slate-200 px-8 py-4 shadow-lg sm:top-20 dark:bg-slate-800">
@@ -34,10 +44,11 @@ export default function WeatherCard({ weather }: Props): React.JSX.Element {
       {/* Wind */}
       <p>
         {weather.windspeed} m/s{' '}
-        <span className="inline-block" style={{ transform: `rotate(${weather.winddir + 90}deg)` }}>
+        <span className="inline-block" style={{ transform: `rotate(${weather.winddir + 180}deg)` }}>
           &#10148;
         </span>
       </p>
+      <p>{localTime}</p>
     </div>
   );
 }

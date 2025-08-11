@@ -4,6 +4,7 @@ import type { Location } from '@/types/locations';
 
 type Props = {
   weather: Weather | null;
+  // testWeather: any;
   location: Location | null;
   weatherLoading: boolean;
   weatherError: Error | null;
@@ -16,6 +17,7 @@ type Props = {
 
 export default function UICard({
   weather,
+  // testWeather,
   location,
   weatherLoading,
   weatherError,
@@ -64,7 +66,8 @@ export default function UICard({
                 </span>
               </span>
             )}
-            {/* <pre className="text-left dark:text-white text-sm tracking-normal">{JSON.stringify(weather, null, 2)}</pre> */}
+            {/* Data display - for development */}
+            {/* <pre className="text-left dark:text-white text-sm tracking-normal">{JSON.stringify(testWeather, null, 2)}</pre> */}
           </>
         )}
         {!location && <span className="font-normal">Click one of the buttons below to begin</span>}

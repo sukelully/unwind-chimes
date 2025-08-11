@@ -7,6 +7,7 @@ import WeatherCard from './components/WeatherCard';
 function App() {
   const {
     weather,
+    // testWeather,
     location,
     weatherLoading,
     weatherError,
@@ -35,6 +36,7 @@ function App() {
       <div className="mt-auto">
         <UICard
           weather={weather}
+          // testWeather={testWeather}
           location={location}
           weatherLoading={weatherLoading}
           weatherError={weatherError}
