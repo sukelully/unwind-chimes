@@ -130,7 +130,7 @@ export class Chime extends Clapper {
 
   private animateColorFade(): void {
     const elapsed = Date.now() - this.colorAnimationStart;
-    const duration = 2000; // 1 second fade duration
+    const duration = 3000; // 3 second fade duration
 
     if (elapsed < duration) {
       // Calculate progress (0 to 1)
