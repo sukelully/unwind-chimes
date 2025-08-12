@@ -25,7 +25,7 @@ export default function UICard({
   locationError,
   loadRandomCity,
   handleLocationClick,
-  useExampleWeather,
+  // useExampleWeather,
 }: Props): React.JSX.Element {
   function LoadingDots() {
     const [dots, setDots] = useState('');
@@ -79,9 +79,9 @@ export default function UICard({
         <button className="btn" onClick={loadRandomCity}>
           Get random city
         </button>
-        <button className="btn" onClick={useExampleWeather}>
+        {/* <button className="btn" onClick={useExampleWeather}>
           Use example weather
-        </button>
+        </button> */}
       </div>
     </section>
   );

@@ -34,6 +34,13 @@ function App() {
           <ChimeCanvas weather={chimeWeather} />
         </div>
 
+        {!location && (
+          <p className="mx-auto mt-4 max-w-xs text-center text-sm text-gray-600 dark:text-gray-400">
+            This app simulates wind chimes using weather data from your location or a random city
+            somewhere on Earth..!
+          </p>
+        )}
+
         <div className="mt-auto">
           <UICard
             weather={weather}
