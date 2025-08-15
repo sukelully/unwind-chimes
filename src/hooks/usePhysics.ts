@@ -55,7 +55,7 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
     const speed = Math.min(weather.windspeed, 30);
 
     const turbulence = map(speed, 0, 30, 1, 1.5);
-    const frequency = map(speed, 0, 30, 0.8, 1);
+    const frequency = map(speed, 0, 30, 0.9, 1.1);
     const dampening = 1.0;
 
     return { dampening, turbulence, frequency };
@@ -89,13 +89,19 @@ const usePhysics = (chimes: Chime[], clapper: Clapper | null, weather: Weather) 
 
   // Continuous weather effects
   const applyContinuousWeather = useCallback(() => {
-    if (!weather.windspeed || weather.windspeed < 1) return;
+    if (!weather.windspeed) return;
 
     const { dampening, turbulence, frequency } = getWeatherMultipliers();
 
     const towardDirection = (weather.winddir ?? 0) + 180;
     const windRadians = (towardDirection * Math.PI) / 180;
-    const speed = Math.min(weather.windspeed, 30);
+    let speed = Math.min(weather.windspeed, 30);
+
+    if (speed < 3) {
+      speed = 3;
+    } else if (speed < 6) {
+      speed = 5.9;
+    }
 
     const baseForceX = Math.cos(windRadians) * speed * 0.001;
     const baseForceY = Math.sin(windRadians) * speed * 0.001;
