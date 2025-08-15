@@ -59,7 +59,7 @@ export default function UICard({
       id="weather-data"
       className="flex min-h-[12rem] flex-col items-center justify-end gap-4 rounded-md bg-slate-200 p-6 shadow-lg sm:min-h-[9rem] dark:bg-slate-800"
     >
-      <div className="text-center text-2xl font-semibold tracking-widest dark:text-white">
+      <div className="text-center text-3xl font-semibold tracking-widest dark:text-white">
         {(weatherLoading || locationLoading) && (
           <>
             <wbr></wbr>

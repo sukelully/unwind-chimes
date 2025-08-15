@@ -1,10 +1,13 @@
 import '@/App.css';
 import { useState } from 'react';
 import useWeatherLocation from '@/hooks/useWeatherLocation';
+import { useDarkMode } from '@/hooks/useDarkMode';
 import ChimeCanvas from '@/components/ChimeCanvas';
 import UICard from '@/components/UICard';
 import WeatherCard from '@/components/WeatherCard';
-import GitHubIcon from '@/assets/github/gh-white.svg';
+
+import GitHubIcon from '@/assets/github/github.svg';
+import GitHubIconDark from '@/assets/github/github-dark.svg';
 
 function App() {
   const [btnPressed, setBtnPressed] = useState<boolean>(false);
@@ -23,6 +26,8 @@ function App() {
   } = useWeatherLocation();
 
   const chimeWeather = weather ?? defaultWeather;
+  const isDarkMode = useDarkMode();
+  const gitHubIcon = isDarkMode ? GitHubIconDark : GitHubIcon;
 
   function handleBtnPress(): void {
     setBtnPressed(true);
@@ -70,7 +75,7 @@ function App() {
         rel="noopener noreferrer"
         className="fixed bottom-2 left-2 z-50 flex items-center rounded bg-gray-800 px-3 py-1 text-xs text-white opacity-70 transition-opacity duration-300 hover:opacity-100 dark:bg-gray-200 dark:text-gray-900"
       >
-        <img src={GitHubIcon} alt="GitHub logo" className="mr-1 inline-block h-4 w-4" />
+        <img src={gitHubIcon} alt="GitHub logo" className="mr-1 inline-block h-4 w-4" />
         View Source
       </a>
     </>
