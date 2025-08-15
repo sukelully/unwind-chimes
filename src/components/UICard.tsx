@@ -89,11 +89,19 @@ export default function UICard({
         )}
       </div>
       <div className="flex flex-col gap-3 sm:flex-row sm:gap-6">
-        <button className="btn" onClick={handleLocalBtnPress}>
-          Get local weather
+        <button
+          className="btn"
+          onClick={handleLocalBtnPress}
+          aria-label="Generate chimes based on weather from your location"
+        >
+          Local Breeze
         </button>
-        <button className="btn" onClick={handleRandomCityBtnPress}>
-          Get random city
+        <button
+          className="btn"
+          onClick={handleRandomCityBtnPress}
+          aria-label="Generate chimes based on weather from a random city"
+        >
+          Surprise Me
         </button>
         {/* <button className="btn" onClick={useExampleWeather}>
           Use example weather
