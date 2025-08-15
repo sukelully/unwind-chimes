@@ -34,32 +34,27 @@
   
   <path
    d="M17,29.307l18,0"
-   style="fill:none;stroke:#222a33;stroke-width:1.5px;"
+   style="fill:none;stroke:#222a33;stroke-width:3px;"
    id="path3" />
 
   <path
    d="M39.5,29.307l10.848,0c1.499,0 2.937,-0.595 3.997,-1.655c1.06,-1.06 1.655,-2.498 1.655,-3.997c0,-0.001 0,-0.002 0,-0.003c0,-3.122 -2.53,-5.652 -5.652,-5.652l-4.372,0"
-   style="fill:none;stroke:#222a33;stroke-width:1.5px;"
+   style="fill:none;stroke:#222a33;stroke-width:3px;"
    id="path5" />
 
   <path
-   d="M17,34.693l8,0"
-   style="fill:none;stroke:#222a33;stroke-width:1.5px;"
-   id="path7" />
-
-  <path
    d="M33.446,34.693l16.902,0c3.122,0 5.652,2.53 5.652,5.652c0,0.001 0,0.002 0,0.003c0,3.122 -2.53,5.652 -5.652,5.652l-4.372,0"
-   style="fill:none;stroke:#222a33;stroke-width:1.5px;"
+   style="fill:none;stroke:#222a33;stroke-width:3px;"
    id="path9" />
 
   <path
    d="M8,17.921l22.726,0c1.503,0 2.72,-1.217 2.72,-2.72c0,0 0,-0.001 0,-0.001c0,-1.503 -1.217,-2.72 -2.72,-2.72c-1.177,0 -2.291,0 -2.291,0"
-   style="fill:none;stroke:#222a33;stroke-width:1.5px;"
+   style="fill:none;stroke:#222a33;stroke-width:3px;"
    id="path11" />
 
   <path
    d="M8,46.079l22.726,0c1.503,0 2.72,1.217 2.72,2.72c0,0 0,0.001 0,0.001c0,1.503 -1.217,2.72 -2.72,2.72c-1.177,0 -2.291,0 -2.291,0"
-   style="fill:none;stroke:#222a33;stroke-width:1.5px;"
+   style="fill:none;stroke:#222a33;stroke-width:3px;"
    id="path13" />
 
 </svg>
