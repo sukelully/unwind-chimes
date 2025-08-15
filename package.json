@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:v": "vercel dev & open http://localhost:3000",
     "build": "tsc -b && vite build",
     "clean": "rm -rf dist/",
     "lint": "eslint .",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
+    "@types/node": "^24.3.0",
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^4.7.0",

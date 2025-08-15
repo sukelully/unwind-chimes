@@ -1,67 +1,79 @@
 <!doctype html>
 <html lang="en" class="bg-neutral-100 dark:bg-black">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unwind Chimes - Wind Chime Simulator</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Unwind Chimes - Wind Chime Simulator</title>
+    <!-- SEO -->
+    <meta
+      name="keywords"
+      content="wind chime simulator, ambient sounds, relaxation, meditation, soundscape generator, weather"
+    />
+    <meta
+      name="description"
+      content="Unwind Chimes generates soothing, ambient soundscapes using the world's climate."
+    />
+    <meta name="author" content="Luke" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Unwind Chimes - Wind Chime Simulator" />
+    <meta
+      property="og:description"
+      content="Generate soothing, ambient soundscapes from the world's climate with Unwind Chimes."
+    />
+    <meta property="og:image" content="https://unwind-chimes.vercel.app/og-image.webp" />
+    <meta property="og:url" content="https://unwind-chimes.vercel.app" />
+    <meta property="og:site_name" content="Unwind Chimes" />
 
-  <!-- SEO -->
-  <meta name="keywords" content="wind chime simulator, ambient sounds, relaxation, meditation, soundscape generator" />
-  <meta name="description" content="Unwind Chimes generates soothing, ambient soundscapes using the world's climate." />
-  <meta name="author" content="Luke" />
-  <meta name="robots" content="index, follow" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Unwind Chimes - Wind Chime Simulator" />
-  <meta property="og:description"
-    content="Generate soothing, ambient soundscapes from the world's climate with Unwind Chimes." />
-  <meta property="og:image" content="https://unwind-chimes.vercel.app/og-image.webp" />
-  <meta property="og:url" content="https://unwind-chimes.vercel.app" />
-  <meta property="og:site_name" content="Unwind Chimes" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Unwind Chimes - Wind Chime Simulator" />
+    <meta
+      name="twitter:description"
+      content="Generate soothing, ambient soundscapes from the world's climate with Unwind Chimes."
+    />
+    <meta name="twitter:image" content="https://unwind-chimes.vercel.app/og-image.webp" />
 
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Unwind Chimes - Wind Chime Simulator" />
-  <meta name="twitter:description"
-    content="Generate soothing, ambient soundscapes from the world's climate with Unwind Chimes." />
-  <meta name="twitter:image" content="https://unwind-chimes.vercel.app/og-image.webp" />
+    <link rel="canonical" href="https://unwind-chimes.vercel.app/" />
+    <link rel="preload" as="image" href="https://unwind-chimes.vercel.app/og-image.webp" />
 
-  <link rel="canonical" href="https://unwind-chimes.vercel.app/" />
-  <link rel="preload" as="image" href="https://unwind-chimes.vercel.app/og-image.webp" />
+    <!-- Font awesome -->
+    <script src="https://kit.fontawesome.com/9ab3110fa7.js" crossorigin="anonymous"></script>
 
-  <!-- Font awesome -->
-  <script src="https://kit.fontawesome.com/9ab3110fa7.js" crossorigin="anonymous"></script>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+    <link rel="shortcut icon" href="favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="favicon/site.webmanifest" />
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
-  <link rel="shortcut icon" href="favicon/favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
-  <link rel="manifest" href="favicon/site.webmanifest" />
+    <!-- Umami analytics -->
+    <script
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="cfcae731-c318-4de0-83ea-55fb7f92e707"
+    ></script>
 
-  <!-- Umami analytics -->
-  <script defer src="https://cloud.umami.is/script.js" data-website-id="cfcae731-c318-4de0-83ea-55fb7f92e707"></script>
-
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Unwind Chimes",
-      "url": "https://unwind-chimes.vercel.app/",
-      "description": "Generate soothing, ambient soundscapes from the world's climate with Unwind Chimes.",
-      "applicationCategory": "EntertainmentApplication",
-      "operatingSystem": "All",
-      "image": "https://unwind-chimes.vercel.app/og-image.webp",
-      "author": {
-        "@type": "Person",
-        "name": "Luke Sullivan"
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Unwind Chimes",
+        "url": "https://unwind-chimes.vercel.app/",
+        "description": "Generate soothing, ambient soundscapes from the world's climate with Unwind Chimes.",
+        "applicationCategory": "EntertainmentApplication",
+        "operatingSystem": "All",
+        "image": "https://unwind-chimes.vercel.app/og-image.webp",
+        "author": {
+          "@type": "Person",
+          "name": "Luke Sullivan"
+        }
       }
-    }
     </script>
-</head>
+  </head>
 
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
-</body>
-
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

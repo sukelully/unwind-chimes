@@ -1,6 +1,10 @@
 import React from 'react';
 import type { Weather } from '@/types/weather';
 import { farenheightToCelsius } from '@/utils/math';
+import RainIcon from '@/assets/weather/rain.svg';
+import WindIcon from '@/assets/weather/wind.svg';
+import ClearIcon from '@/assets/weather/clear.svg';
+import CloudyIcon from '@/assets/weather/cloudy.svg';
 
 type Props = {
   weather: Weather;
@@ -9,13 +13,13 @@ type Props = {
 function getWeatherIcon(weather: Weather): string {
   const lower = weather.conditions.toLowerCase();
 
-  if (lower.includes('rain')) return '/icons/weather/rain.svg';
-  if (weather.windspeed >= 20) return '/icons/weather/wind.svg';
-  if (lower.includes('clear')) return '/icons/weather/clear.svg';
-  if (lower.includes('cloud') || lower.includes('overcast')) return '/icons/weather/cloudy.svg';
+  if (lower.includes('rain')) return RainIcon;
+  if (weather.windspeed >= 20) return WindIcon;
+  if (lower.includes('clear')) return ClearIcon;
+  if (lower.includes('cloud') || lower.includes('overcast')) return CloudyIcon;
 
   // Fallback
-  return '/icons/weather/cloudy.svg';
+  return CloudyIcon;
 }
 
 function getLocalTime(timezone: string): string {

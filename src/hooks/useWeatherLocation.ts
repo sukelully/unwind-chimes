@@ -3,8 +3,6 @@ import cities from '@/data/cities.json';
 import type { Weather } from '@/types/weather';
 import type { Location } from '@/types/locations';
 
-const API_KEY: string = import.meta.env.VITE_API_KEY;
-
 const useWeatherLocation = () => {
   const [weather, setWeather] = useState<Weather | null>(null);
   // const [testWeather, setTestWeather] = useState<any>(null);
@@ -33,10 +31,7 @@ const useWeatherLocation = () => {
     try {
       setWeatherLoading(true);
       setWeatherError(null);
-      const res = await fetch(
-        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${lat},${long}/today?key=${API_KEY}`,
-        { mode: 'cors' }
-      );
+      const res = await fetch(`/api/weather?lat=${lat}&long=${long}`);
       const json = await res.json();
       const currentConditions = json.currentConditions;
       // setTestWeather(json);
@@ -64,16 +59,14 @@ const useWeatherLocation = () => {
     try {
       setLocationLoading(true);
       setLocationError(null);
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${long}&zoom=10&addressdetails=1`,
-        {
-          headers: {
-            'User-Agent': 'UnwindChimes (luke@sukelully.dev)',
-          },
-        }
-      );
+      const res = await fetch(`/api/geolocate?lat=${lat}&long=${long}`);
       const data = await res.json();
       const address = data.address;
+
+      if (!data.address) {
+        throw new Error('No address found for these coordinates');
+      }
+
       return {
         city: address.city || address.town || address.village || address.county || null,
         country: address.country || null,
