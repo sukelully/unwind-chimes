@@ -2,7 +2,7 @@ import '@/App.css';
 import useWeatherLocation from '@/hooks/useWeatherLocation';
 import ChimeCanvas from '@/components/ChimeCanvas';
 import UICard from '@/components/UICard';
-import WeatherCard from './components/WeatherCard';
+import WeatherCard from '@/components/WeatherCard';
 import GitHubIcon from '@/assets/github/gh-white.svg';
 
 function App() {
@@ -24,28 +24,26 @@ function App() {
 
   return (
     <>
-      <main className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 px-4 py-10 sm:gap-4">
+      <main className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 px-4 py-10.5 sm:gap-4">
         {weather && (
           <div className="flex flex-grow flex-col dark:text-white">
             <WeatherCard weather={weather} />
           </div>
         )}
 
-        <div className="flex flex-grow items-center justify-center">
+        <div className="relative flex flex-grow items-center justify-center">
           <ChimeCanvas weather={chimeWeather} />
         </div>
 
-        {!location && (
-          <p className="mx-auto mt-4 max-w-xs text-center text-sm text-gray-600 dark:text-gray-400">
-            This app simulates wind chimes using weather data from your location or a random city
-            somewhere on Earth..!
-          </p>
-        )}
-
-        <div className="mt-auto">
+        <div className="relative mt-auto">
+          {!location && (
+            <p className="absolute bottom-full left-1/2 mb-4 w-[90%] max-w-80 -translate-x-1/2 text-center text-gray-600 sm:max-w-110 dark:text-gray-400">
+              Unwind Chimes is a wind chime simulator that uses the world's climate to generate
+              soothing, dynamic soundscapes.
+            </p>
+          )}
           <UICard
             weather={weather}
-            // testWeather={testWeather}
             location={location}
             weatherLoading={weatherLoading}
             weatherError={weatherError}
