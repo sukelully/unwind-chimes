@@ -13,6 +13,8 @@ type Props = {
   loadRandomCity: () => void;
   handleLocationClick: () => void;
   useExampleWeather: () => void;
+  onBtnPress: () => void;
+  btnPressed: boolean;
 };
 
 export default function UICard({
@@ -26,6 +28,8 @@ export default function UICard({
   loadRandomCity,
   handleLocationClick,
   // useExampleWeather,
+  onBtnPress,
+  btnPressed,
 }: Props): React.JSX.Element {
   function LoadingDots() {
     const [dots, setDots] = useState('');
@@ -38,6 +42,16 @@ export default function UICard({
     }, []);
 
     return <span>{dots}</span>;
+  }
+
+  function handleLocalBtnPress(): void {
+    onBtnPress();
+    handleLocationClick();
+  }
+
+  function handleRandomCityBtnPress(): void {
+    onBtnPress();
+    loadRandomCity();
   }
 
   return (
@@ -70,13 +84,15 @@ export default function UICard({
             {/* <pre className="text-left dark:text-white text-sm tracking-normal">{JSON.stringify(testWeather, null, 2)}</pre> */}
           </>
         )}
-        {!location && <span className="font-normal">Click one of the buttons below to begin</span>}
+        {!btnPressed && (
+          <span className="font-normal">Click one of the buttons below to begin</span>
+        )}
       </div>
       <div className="flex flex-col gap-3 sm:flex-row sm:gap-6">
-        <button className="btn" onClick={handleLocationClick}>
+        <button className="btn" onClick={handleLocalBtnPress}>
           Get local weather
         </button>
-        <button className="btn" onClick={loadRandomCity}>
+        <button className="btn" onClick={handleRandomCityBtnPress}>
           Get random city
         </button>
         {/* <button className="btn" onClick={useExampleWeather}>

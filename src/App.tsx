@@ -1,4 +1,5 @@
 import '@/App.css';
+import { useState } from 'react';
 import useWeatherLocation from '@/hooks/useWeatherLocation';
 import ChimeCanvas from '@/components/ChimeCanvas';
 import UICard from '@/components/UICard';
@@ -6,6 +7,7 @@ import WeatherCard from '@/components/WeatherCard';
 import GitHubIcon from '@/assets/github/gh-white.svg';
 
 function App() {
+  const [btnPressed, setBtnPressed] = useState<boolean>(false);
   const {
     weather,
     // testWeather,
@@ -22,6 +24,10 @@ function App() {
 
   const chimeWeather = weather ?? defaultWeather;
 
+  function handleBtnPress(): void {
+    setBtnPressed(true);
+  }
+
   return (
     <>
       <main className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 px-4 py-10.5 sm:gap-4">
@@ -36,7 +42,7 @@ function App() {
         </div>
 
         <div className="relative mt-auto">
-          {!location && (
+          {!btnPressed && (
             <p className="absolute bottom-full left-1/2 mb-4 w-[90%] max-w-80 -translate-x-1/2 text-center text-gray-600 sm:max-w-110 dark:text-gray-400">
               Unwind Chimes is a wind chime simulator that uses the world's climate to generate
               soothing, dynamic soundscapes.
@@ -52,6 +58,8 @@ function App() {
             loadRandomCity={loadRandomCity}
             handleLocationClick={handleLocationClick}
             useExampleWeather={useExampleWeather}
+            onBtnPress={handleBtnPress}
+            btnPressed={btnPressed}
           />
         </div>
       </main>
