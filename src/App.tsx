@@ -3,6 +3,7 @@ import useWeatherLocation from '@/hooks/useWeatherLocation';
 import ChimeCanvas from '@/components/ChimeCanvas';
 import UICard from '@/components/UICard';
 import WeatherCard from './components/WeatherCard';
+import GitHubIcon from '@/assets/github/gh-white.svg';
 
 function App() {
   const {
@@ -61,9 +62,9 @@ function App() {
         href="https://github.com/sukelully/unwind-chimes"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-2 left-2 z-50 rounded bg-gray-800 px-3 py-1 text-xs text-white opacity-70 transition-opacity hover:opacity-100 dark:bg-gray-200 dark:text-gray-900"
+        className="fixed bottom-2 left-2 z-50 flex items-center rounded bg-gray-800 px-3 py-1 text-xs text-white opacity-70 transition-opacity duration-300 hover:opacity-100 dark:bg-gray-200 dark:text-gray-900"
       >
-        <i className="fa-brands fa-github mr-1" aria-hidden="true"></i>
+        <img src={GitHubIcon} alt="GitHub logo" className="mr-1 inline-block h-4 w-4" />
         View Source
       </a>
     </>
