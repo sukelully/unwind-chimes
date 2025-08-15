@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import { useRef, useCallback } from 'react';
 import { Chime } from '@/models/Chime';
 import useChimeObjects from '@/hooks/useChimeObjects';
 import useAudioContext from '@/hooks/useAudioContext';
@@ -14,7 +14,7 @@ type Props = {
   weather: Weather;
 };
 
-export default function ChimeCanvas({ weather }: Props): React.JSX.Element {
+export default function ChimeCanvas({ weather }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
