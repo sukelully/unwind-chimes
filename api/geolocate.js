@@ -11,7 +11,7 @@ export default async function handler(req, res) {
 
   try {
     const response = await fetch(url, {
-      headers: { 'User-Agent': 'UnwindChimes (luke@sukelully.dev)' },
+      headers: { 'User-Agent': 'UnwindChimes/1.0 (https://github.com/sukelully/unwind-chimes)' },
     });
     const data = await response.json();
     res.status(200).json(data);

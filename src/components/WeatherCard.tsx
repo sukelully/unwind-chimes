@@ -71,7 +71,7 @@ export default function WeatherCard({ weather }: Props) {
         </div>
       </div>
 
-      <div className="flex flex-row justify-between px-4">
+      <div className="flex flex-row justify-between gap-2 px-4">
         <div className="flex flex-row items-center gap-1">
           <img src={windIcon} alt={'Wind speed icon'} className="h-6 w-6" />
           <p className="flex flex-row items-center">
