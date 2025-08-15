@@ -26,7 +26,7 @@ const useWeatherLocation = () => {
     winddir: 0,
     cloudcover: 32.6,
     uvindex: 9,
-    conditions: 'Rain, Partially cloudy',
+    conditions: '-',
   };
 
   // Load cached local weather from sessionStorage on mount
