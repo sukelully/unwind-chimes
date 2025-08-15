@@ -1,12 +1,15 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import cities from '@/data/cities.json';
 import type { Weather } from '@/types/weather';
 import type { Location } from '@/types/locations';
 
 const useWeatherLocation = () => {
-  const [weather, setWeather] = useState<Weather | null>(null);
   // const [testWeather, setTestWeather] = useState<any>(null);
+  const [weather, setWeather] = useState<Weather | null>(null);
   const [location, setLocation] = useState<Location | null>(null);
+  const [localWeather, setLocalWeather] = useState<Weather | null>(null);
+  const [localLocation, setLocalLocation] = useState<Location | null>(null);
+
   const [weatherLoading, setWeatherLoading] = useState(false);
   const [weatherError, setWeatherError] = useState<Error | null>(null);
   const [locationLoading, setLocationLoading] = useState(false);
@@ -26,7 +29,17 @@ const useWeatherLocation = () => {
     conditions: 'Rain, Partially cloudy',
   };
 
-  // Fetch weather data
+  // Load cached local weather from sessionStorage on mount
+  useEffect(() => {
+    const cachedWeather = sessionStorage.getItem('localWeather');
+    const cachedLocation = sessionStorage.getItem('localLocation');
+
+    if (cachedWeather && cachedLocation) {
+      setLocalWeather(JSON.parse(cachedWeather));
+      setLocalLocation(JSON.parse(cachedLocation));
+    }
+  }, []);
+
   const getWeatherData = async (lat: number, long: number) => {
     try {
       setWeatherLoading(true);
@@ -35,7 +48,8 @@ const useWeatherLocation = () => {
       const json = await res.json();
       const currentConditions = json.currentConditions;
       // setTestWeather(json);
-      setWeather({
+
+      const fetchedWeather: Weather = {
         timezone: json.timezone,
         datetimeEpoch: currentConditions.datetimeEpoch,
         temp: currentConditions.temp,
@@ -46,15 +60,18 @@ const useWeatherLocation = () => {
         cloudcover: currentConditions.cloudcover,
         uvindex: currentConditions.uvindex,
         conditions: currentConditions.conditions,
-      });
+      };
+
+      setWeather(fetchedWeather);
+      return fetchedWeather;
     } catch (error) {
       setWeatherError(error instanceof Error ? error : new Error('Unknown weather error'));
+      return null;
     } finally {
       setWeatherLoading(false);
     }
   };
 
-  // Geolocation get coordinates and city/country name
   const getLocationFromCoords = async (lat: number, long: number): Promise<Location | null> => {
     try {
       setLocationLoading(true);
@@ -63,9 +80,7 @@ const useWeatherLocation = () => {
       const data = await res.json();
       const address = data.address;
 
-      if (!data.address) {
-        throw new Error('No address found for these coordinates');
-      }
+      if (!address) throw new Error('No address found for these coordinates');
 
       return {
         city: address.city || address.town || address.village || address.county || null,
@@ -79,17 +94,14 @@ const useWeatherLocation = () => {
     }
   };
 
-  // Fetch weather data using coordinates
   const loadWeatherFromLocation = async (lat: number, long: number) => {
     const loc = await getLocationFromCoords(lat, long);
-
     if (loc) setLocation(loc);
-    await getWeatherData(lat, long);
+    const fetchedWeather = await getWeatherData(lat, long);
+    return { loc, fetchedWeather };
   };
 
-  // Get weathe data from a random city in data/cities.json
   const loadRandomCity = async () => {
-    // Time in ms before another API call can be made
     const apiThrottle = 1000;
     if (isThrottledRef.current) return;
 
@@ -103,21 +115,38 @@ const useWeatherLocation = () => {
     await getWeatherData(randomCity.lat, randomCity.long);
   };
 
-  // Get coordinates
-  const handleLocationClick = (): void => {
+  const handleLocationClick = async (): Promise<void> => {
+    // Use cached localWeather if available
+    if (localWeather && localLocation) {
+      setWeather(localWeather);
+      setLocation(localLocation);
+      return;
+    }
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          loadWeatherFromLocation(pos.coords.latitude, pos.coords.longitude);
+        async (pos) => {
+          const { loc, fetchedWeather } = await loadWeatherFromLocation(
+            pos.coords.latitude,
+            pos.coords.longitude
+          );
+
+          if (fetchedWeather && loc) {
+            setLocalWeather(fetchedWeather);
+            setLocalLocation(loc);
+
+            // Persist in sessionStorage
+            sessionStorage.setItem('localWeather', JSON.stringify(fetchedWeather));
+            sessionStorage.setItem('localLocation', JSON.stringify(loc));
+          }
         },
         () => {
-          console.error('Could not get getlocation');
+          console.error('Could not get location');
         }
       );
     }
   };
 
-  // Example weather data for testing
   const useExampleWeather = (): void => {
     const testCity = { city: 'test city', country: 'test country' };
     setWeather(defaultWeather);
@@ -126,7 +155,6 @@ const useWeatherLocation = () => {
 
   return {
     weather,
-    // testWeather,
     location,
     weatherLoading,
     weatherError,
