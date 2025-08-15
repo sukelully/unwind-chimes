@@ -1,3 +1,5 @@
+// Vercel serverless function for proxying request to visual crossing weather API
+
 const API_KEY = process.env.VITE_API_KEY;
 
 export default async function handler(req, res) {

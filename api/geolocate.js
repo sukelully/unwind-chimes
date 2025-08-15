@@ -1,3 +1,5 @@
+// Vercel serverless function for proxying request to nominatim geolocation API
+
 export default async function handler(req, res) {
   const { lat, long } = req.query;
 
