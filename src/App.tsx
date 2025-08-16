@@ -37,7 +37,7 @@ function App() {
     <>
       <main className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 px-4 py-10.5 sm:gap-4">
         {weather && (
-          <div className="flex flex-grow flex-col dark:text-white">
+          <div className="z-10 flex flex-grow flex-col dark:text-white">
             <WeatherCard weather={weather} />
           </div>
         )}
@@ -46,7 +46,7 @@ function App() {
           <ChimeCanvas weather={chimeWeather} />
         </div>
 
-        <div className="relative mt-auto">
+        <div className="relative z-10 mt-auto">
           {!btnPressed && (
             <p className="absolute bottom-full left-1/2 mb-4 w-[90%] max-w-80 -translate-x-1/2 text-center text-gray-600 sm:max-w-110 dark:text-gray-400">
               Unwind Chimes is a wind chime simulator that uses the world's climate to generate
