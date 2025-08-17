@@ -40,7 +40,7 @@ const useWeatherLocation = () => {
     }
   }, []);
 
-  const getWeatherData = async (lat: number, long: number) => {
+  const getWeatherData = async (lat: number, long: number): Promise<Weather | null> => {
     try {
       setWeatherLoading(true);
       setWeatherError(null);
@@ -94,14 +94,17 @@ const useWeatherLocation = () => {
     }
   };
 
-  const loadWeatherFromLocation = async (lat: number, long: number) => {
+  const loadWeatherFromLocation = async (
+    lat: number,
+    long: number
+  ): Promise<{ loc: Location | null; fetchedWeather: Weather | null }> => {
     const loc = await getLocationFromCoords(lat, long);
     if (loc) setLocation(loc);
     const fetchedWeather = await getWeatherData(lat, long);
     return { loc, fetchedWeather };
   };
 
-  const loadRandomCity = async () => {
+  const loadRandomCity = async (): Promise<void> => {
     const apiThrottle = 1000;
     if (isThrottledRef.current) return;
 
