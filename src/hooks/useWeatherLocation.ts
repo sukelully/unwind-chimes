@@ -119,35 +119,51 @@ const useWeatherLocation = () => {
   };
 
   const handleLocationClick = async (): Promise<void> => {
-    // Use cached localWeather if available
+    // Use cached weather if available
     if (localWeather && localLocation) {
       setWeather(localWeather);
       setLocation(localLocation);
       return;
     }
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (pos) => {
-          const { loc, fetchedWeather } = await loadWeatherFromLocation(
-            pos.coords.latitude,
-            pos.coords.longitude
-          );
-
-          if (fetchedWeather && loc) {
-            setLocalWeather(fetchedWeather);
-            setLocalLocation(loc);
-
-            // Persist in sessionStorage
-            sessionStorage.setItem('localWeather', JSON.stringify(fetchedWeather));
-            sessionStorage.setItem('localLocation', JSON.stringify(loc));
-          }
-        },
-        () => {
-          console.error('Could not get location');
-        }
-      );
+    if (!navigator.geolocation) {
+      console.error('Geolocation not supported on this device.');
+      return;
     }
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const { loc, fetchedWeather } = await loadWeatherFromLocation(
+          pos.coords.latitude,
+          pos.coords.longitude
+        );
+
+        if (fetchedWeather && loc) {
+          setLocalWeather(fetchedWeather);
+          setLocalLocation(loc);
+
+          sessionStorage.setItem('localWeather', JSON.stringify(fetchedWeather));
+          sessionStorage.setItem('localLocation', JSON.stringify(loc));
+        }
+      },
+      (error) => {
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            console.error('User denied the request for Geolocation.');
+            break;
+          case error.POSITION_UNAVAILABLE:
+            console.error('Location information is unavailable.');
+            break;
+          case error.TIMEOUT:
+            console.error('The request to get user location timed out.');
+            break;
+          default:
+            console.error('An unknown error occurred.', error);
+            break;
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
   };
 
   const useExampleWeather = (): void => {
