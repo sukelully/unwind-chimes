@@ -5,7 +5,7 @@ import json
 from zipfile import ZipFile
 from csv import reader
 
-# Download and parse cites data, output to json
+# Download and output cites data to JSON file
 
 def get_country_name(code):
     country = pycountry.countries.get(alpha_2=code)
@@ -51,8 +51,8 @@ if not os.path.exists(json_path):
 
     # Read the extracted file and build JSON array
     cities = []
-    with open(f"{output_path}{txt_file}", newline='') as f:
-        for row in reader(f, delimiter='\t'):
+    with open(f"{output_path}{txt_file}", newline='') as file:
+        for row in reader(file, delimiter='\t'):
             city_data = {
                 "city": row[1],
                 "country": get_country_name(row[8]),
