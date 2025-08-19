@@ -32,7 +32,6 @@ updated_countries = {
     "Virgin Islands, U.S.": "U.S. Virgin Islands",
 }
 
-
 if os.path.exists(file_path):
     with open(file_path, "r", encoding="utf-8") as file:
         cities = json.load(file)
