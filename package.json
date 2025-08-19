@@ -8,6 +8,7 @@
     "dev:v": "vercel dev --listen 3000",
     "build": "tsc -b && vite build",
     "clean": "rm -rf dist/",
+    "fetch_cities": "python3 scripts/fetch_cities.py",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prettier": "prettier . --write",
