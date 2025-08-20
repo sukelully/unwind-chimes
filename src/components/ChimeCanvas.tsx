@@ -65,7 +65,6 @@ export default function ChimeCanvas({ weather }: Props) {
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="cursor-crosshair"
       />
     </div>
   );
